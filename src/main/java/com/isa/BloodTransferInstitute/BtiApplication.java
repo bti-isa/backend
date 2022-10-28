@@ -1,4 +1,4 @@
-package com.isa.bti;
+package com.isa.BloodTransferInstitute;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
