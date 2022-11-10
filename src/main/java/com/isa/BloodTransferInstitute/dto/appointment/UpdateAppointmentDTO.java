@@ -1,7 +1,6 @@
-package com.isa.BloodTransferInstitute.dto;
+package com.isa.BloodTransferInstitute.dto.appointment;
 
-import com.isa.BloodTransferInstitute.enums.Gender;
-import com.isa.BloodTransferInstitute.enums.Role;
+import java.time.LocalDateTime;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -15,20 +14,13 @@ import lombok.experimental.FieldDefaults;
 @Builder(toBuilder = true)
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class NewUserDTO {
+public class UpdateAppointmentDTO {
 
-	String firstname;
+	Long id;
 
-	String lastname;
+	LocalDateTime dateTime;
 
-	String email;
+	Long patientId;
 
-	String password;
-
-	String jmbg;
-
-	Gender gender;
-
-	Role role;
-
+	Long reportId;
 }

@@ -1,5 +1,6 @@
-package com.isa.BloodTransferInstitute.dto;
+package com.isa.BloodTransferInstitute.dto.user;
 
+import com.isa.BloodTransferInstitute.dto.appointment.AppointmentDTO;
 import com.isa.BloodTransferInstitute.enums.Gender;
 import com.isa.BloodTransferInstitute.enums.Role;
 
@@ -17,7 +18,7 @@ import lombok.experimental.FieldDefaults;
 @Builder(toBuilder = true)
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class UpdateUserDTO {
+public class UserDTO {
 
 	Long id;
 
@@ -27,17 +28,13 @@ public class UpdateUserDTO {
 
 	String email;
 
-	String password;
-
 	String jmbg;
 
 	Gender gender;
 
 	Role role;
 
-	Boolean active;
-
 	Integer penalties;
 
-	List<Long> appointmentIds;
+	List<AppointmentDTO> appointments;
 }
