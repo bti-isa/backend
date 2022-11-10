@@ -1,15 +1,12 @@
 package com.isa.BloodTransferInstitute.mapper.impl;
 
-import static java.util.stream.Collectors.toList;
-
-import com.isa.BloodTransferInstitute.dto.NewUserDTO;
-import com.isa.BloodTransferInstitute.dto.UpdateUserDTO;
+import com.isa.BloodTransferInstitute.dto.user.NewUserDTO;
+import com.isa.BloodTransferInstitute.dto.user.UpdateUserDTO;
 import com.isa.BloodTransferInstitute.mapper.UserMapper;
 import com.isa.BloodTransferInstitute.model.Appointment;
 import com.isa.BloodTransferInstitute.model.User;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class UserMapperImpl implements UserMapper {
 

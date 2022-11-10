@@ -4,6 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -14,6 +15,7 @@ import lombok.experimental.FieldDefaults;
 @Entity
 @Data
 @NoArgsConstructor
+@Table(name = "Addresses")
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Address {

@@ -1,5 +1,7 @@
 package com.isa.BloodTransferInstitute.dto;
 
+import com.isa.BloodTransferInstitute.dto.appointment.AppointmentDTO;
+
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

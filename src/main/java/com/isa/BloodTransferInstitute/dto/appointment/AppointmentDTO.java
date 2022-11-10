@@ -1,4 +1,7 @@
-package com.isa.BloodTransferInstitute.dto;
+package com.isa.BloodTransferInstitute.dto.appointment;
+
+import com.isa.BloodTransferInstitute.dto.AppointmentDetailsDTO;
+import com.isa.BloodTransferInstitute.dto.user.UserDTO;
 
 import java.time.LocalDateTime;
 
@@ -14,13 +17,15 @@ import lombok.experimental.FieldDefaults;
 @Builder(toBuilder = true)
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class UpdateAppointmentDTO {
+public class AppointmentDTO {
 
 	Long id;
 
 	LocalDateTime dateTime;
 
-	Long patientId;
+	Double duration;
 
-	Long reportId;
+	UserDTO patient;
+
+	AppointmentDetailsDTO appointmentDetails;
 }

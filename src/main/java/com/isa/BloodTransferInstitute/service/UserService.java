@@ -1,7 +1,7 @@
 package com.isa.BloodTransferInstitute.service;
 
-import com.isa.BloodTransferInstitute.dto.NewUserDTO;
-import com.isa.BloodTransferInstitute.dto.UpdateUserDTO;
+import com.isa.BloodTransferInstitute.dto.user.NewUserDTO;
+import com.isa.BloodTransferInstitute.dto.user.UpdateUserDTO;
 import com.isa.BloodTransferInstitute.model.User;
 
 import java.util.List;

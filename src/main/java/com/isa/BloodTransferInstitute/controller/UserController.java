@@ -1,18 +1,15 @@
 package com.isa.BloodTransferInstitute.controller;
 
-import com.isa.BloodTransferInstitute.dto.NewUserDTO;
-import com.isa.BloodTransferInstitute.dto.UpdateUserDTO;
-import com.isa.BloodTransferInstitute.dto.UserDTO;
-import com.isa.BloodTransferInstitute.exception.NotFoundException;
+import com.isa.BloodTransferInstitute.dto.user.NewUserDTO;
+import com.isa.BloodTransferInstitute.dto.user.UpdateUserDTO;
+import com.isa.BloodTransferInstitute.dto.user.UserDTO;
 import com.isa.BloodTransferInstitute.mapper.GetUserMapper;
-import com.isa.BloodTransferInstitute.model.User;
 import com.isa.BloodTransferInstitute.service.UserService;
 
 import java.util.List;
 
 import javax.validation.Valid;
 
-import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;

@@ -1,10 +1,9 @@
 package com.isa.BloodTransferInstitute.service.impl;
 
-import com.isa.BloodTransferInstitute.dto.NewUserDTO;
-import com.isa.BloodTransferInstitute.dto.UpdateUserDTO;
+import com.isa.BloodTransferInstitute.dto.user.NewUserDTO;
+import com.isa.BloodTransferInstitute.dto.user.UpdateUserDTO;
 import com.isa.BloodTransferInstitute.exception.NotFoundException;
 import com.isa.BloodTransferInstitute.mapper.UserMapper;
-import com.isa.BloodTransferInstitute.model.Appointment;
 import com.isa.BloodTransferInstitute.model.User;
 import com.isa.BloodTransferInstitute.repository.UserRepository;
 import com.isa.BloodTransferInstitute.service.UserService;

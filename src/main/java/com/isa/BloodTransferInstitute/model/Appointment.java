@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -23,6 +24,7 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @Builder
 @Data
+@Table(name = "Appointments")
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Appointment {
 
