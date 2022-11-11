@@ -53,7 +53,7 @@ public class User {
 	Boolean active;
 
 	@Column(nullable = false)
-	Integer penalties;
+	int penalties;
 
 	@OneToMany(mappedBy = "patient")
 	List<Appointment> appointments;
