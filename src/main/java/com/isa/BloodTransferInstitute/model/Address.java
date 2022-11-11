@@ -1,16 +1,14 @@
 package com.isa.BloodTransferInstitute.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
+
+import java.util.List;
 
 @Entity
 @Data
@@ -41,4 +39,9 @@ public class Address {
 
 	@OneToOne(mappedBy = "address")
 	Location location;
+
+	@OneToOne
+	@JoinColumn(name = "bloodbank_id", nullable = false)
+	BloodBank bloodBank;
+
 }
