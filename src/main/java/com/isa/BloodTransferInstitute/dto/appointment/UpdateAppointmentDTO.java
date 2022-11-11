@@ -1,5 +1,7 @@
 package com.isa.BloodTransferInstitute.dto.appointment;
 
+import com.isa.BloodTransferInstitute.enums.AppointmentStatus;
+
 import java.time.LocalDateTime;
 
 import lombok.AccessLevel;
@@ -22,5 +24,8 @@ public class UpdateAppointmentDTO {
 
 	Long patientId;
 
-	Long reportId;
+	AppointmentStatus status;
+
+	Long bloodBankId;
+
 }

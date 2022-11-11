@@ -1,5 +1,7 @@
 package com.isa.BloodTransferInstitute.dto.appointment;
 
+import com.isa.BloodTransferInstitute.model.BloodBank;
+
 import java.time.LocalDateTime;
 
 import lombok.AccessLevel;
@@ -18,8 +20,5 @@ public class NewAppointmentDTO {
 
 	LocalDateTime dateTime;
 
-	Long patientId;
-
-	Long reportId;
-
+	BloodBank bloodBankId;
 }

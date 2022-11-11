@@ -37,4 +37,6 @@ public class UserDTO {
 	Integer penalties;
 
 	List<AppointmentDTO> appointments;
+
+	Long bloodBankId;
 }

@@ -1,7 +1,8 @@
 package com.isa.BloodTransferInstitute.dto.appointment;
 
-import com.isa.BloodTransferInstitute.dto.AppointmentDetailsDTO;
+import com.isa.BloodTransferInstitute.dto.ReportDTO;
 import com.isa.BloodTransferInstitute.dto.user.UserDTO;
+import com.isa.BloodTransferInstitute.enums.AppointmentStatus;
 
 import java.time.LocalDateTime;
 
@@ -27,5 +28,9 @@ public class AppointmentDTO {
 
 	UserDTO patient;
 
-	AppointmentDetailsDTO appointmentDetails;
+	ReportDTO reportDTO;
+
+	AppointmentStatus status;
+
+	Long bloodBankId;
 }
