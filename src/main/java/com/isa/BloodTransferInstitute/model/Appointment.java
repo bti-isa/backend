@@ -12,6 +12,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.isa.BloodTransferInstitute.enums.AppointmentStatus;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -48,4 +49,11 @@ public class Appointment {
 
 	@OneToOne(mappedBy = "appointment")
 	Report report;
+
+	@Column(nullable = false)
+	AppointmentStatus status;
+
+	@ManyToOne
+	@JoinColumn(name = "bloodbank_id", nullable = false)
+	BloodBank bloodBank;
 }
