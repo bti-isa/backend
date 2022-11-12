@@ -58,6 +58,9 @@ public class User {
 	@OneToMany(mappedBy = "patient")
 	List<Appointment> appointments;
 
+	@OneToOne(mappedBy = "user")
+	Address address;
+
 	@ManyToOne
 	@JoinColumn(name = "bloodbank_id", nullable = false)
 	BloodBank bloodBank;

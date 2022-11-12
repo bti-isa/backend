@@ -41,7 +41,11 @@ public class Address {
 	Location location;
 
 	@OneToOne
-	@JoinColumn(name = "bloodbank_id", nullable = false)
+	@JoinColumn(name = "user_id")
+	User user;
+
+	@OneToOne
+	@JoinColumn(name = "bloodbank_id")
 	BloodBank bloodBank;
 
 }
