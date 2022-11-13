@@ -1,4 +1,4 @@
-package com.isa.BloodTransferInstitute.dto.user;
+package com.isa.BloodTransferInstitute.dto.user.patient;
 
 import com.isa.BloodTransferInstitute.dto.address.NewAddressDTO;
 import com.isa.BloodTransferInstitute.enums.Gender;
@@ -6,7 +6,6 @@ import com.isa.BloodTransferInstitute.enums.Role;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -22,7 +21,7 @@ import lombok.experimental.FieldDefaults;
 @Builder(toBuilder = true)
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class NewUserDTO {
+public class NewPatientDTO {
 
 	@NotBlank
 	String firstname;

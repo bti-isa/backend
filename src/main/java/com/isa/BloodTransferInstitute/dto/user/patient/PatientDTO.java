@@ -1,12 +1,9 @@
-package com.isa.BloodTransferInstitute.dto.user;
+package com.isa.BloodTransferInstitute.dto.user.patient;
 
 import com.isa.BloodTransferInstitute.dto.address.AddressDTO;
-import com.isa.BloodTransferInstitute.dto.appointment.AppointmentDTO;
 import com.isa.BloodTransferInstitute.dto.bloodbank.BloodBankDTO;
 import com.isa.BloodTransferInstitute.enums.Gender;
 import com.isa.BloodTransferInstitute.enums.Role;
-
-import java.util.List;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -20,7 +17,7 @@ import lombok.experimental.FieldDefaults;
 @Builder(toBuilder = true)
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class UserDTO {
+public class PatientDTO {
 
 	Long id;
 

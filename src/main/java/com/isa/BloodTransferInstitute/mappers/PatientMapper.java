@@ -1,19 +1,17 @@
 package com.isa.BloodTransferInstitute.mappers;
 
-import com.isa.BloodTransferInstitute.dto.user.NewUserDTO;
-import com.isa.BloodTransferInstitute.dto.user.UpdateUserDTO;
+import com.isa.BloodTransferInstitute.dto.user.patient.NewPatientDTO;
+import com.isa.BloodTransferInstitute.dto.user.patient.UpdatePatientDTO;
 import com.isa.BloodTransferInstitute.model.Address;
 import com.isa.BloodTransferInstitute.model.Location;
 import com.isa.BloodTransferInstitute.model.User;
 
-import java.util.ArrayList;
-
 import org.springframework.stereotype.Component;
 
 @Component
-public class UserMapper {
+public class PatientMapper {
 
-	public static User NewDTOToEntity(final NewUserDTO dto) {
+	public static User NewDTOToEntity(final NewPatientDTO dto) {
 
 		final var location = Location.builder()
 			.latitude(dto.getAddress().getLatitude())
@@ -49,7 +47,7 @@ public class UserMapper {
 		return newUser;
 	}
 
-	public static User UpdateDTOToEntity(final UpdateUserDTO dto) {
+	public static User UpdateDTOToEntity(final UpdatePatientDTO dto) {
 
 
 		final var updatedLocation = Location.builder()

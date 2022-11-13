@@ -2,7 +2,7 @@ package com.isa.BloodTransferInstitute.dto.bloodbank;
 
 import com.isa.BloodTransferInstitute.dto.address.AddressDTO;
 import com.isa.BloodTransferInstitute.dto.appointment.AppointmentDTO;
-import com.isa.BloodTransferInstitute.dto.user.UserDTO;
+import com.isa.BloodTransferInstitute.dto.user.patient.PatientDTO;
 
 import java.util.List;
 
@@ -32,6 +32,6 @@ public class BloodBankDTO {
 
 	List<AppointmentDTO> appointmentList;
 
-	List<UserDTO> bankAdmins;
+	List<PatientDTO> bankAdmins;
 
 }
