@@ -34,6 +34,12 @@ public class UserDTO {
 
 	Role role;
 
+	String phoneNumber;
+
+	String occupation;
+
+	String education;
+
 	Integer penalties;
 
 	List<AppointmentDTO> appointments;

@@ -2,7 +2,7 @@ package com.isa.BloodTransferInstitute.controller;
 
 import com.isa.BloodTransferInstitute.dto.SearchDTO;
 import com.isa.BloodTransferInstitute.dto.bloodbank.BloodBankDTO;
-import com.isa.BloodTransferInstitute.mapper.BloodBankMapper;
+import com.isa.BloodTransferInstitute.mappers.BloodBankMapper;
 import com.isa.BloodTransferInstitute.service.BloodBankService;
 
 import java.util.List;

@@ -4,6 +4,7 @@ import javax.persistence.*;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -16,10 +17,12 @@ import java.util.List;
 @Table(name = "Addresses")
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@Builder(toBuilder = true)
 public class Address {
 
 	@Id
-	@Column(nullable = false, unique = true, updatable = false)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(nullable = false, updatable = false, unique = true)
 	Long id;
 
 	@Column(nullable = false)
@@ -37,15 +40,8 @@ public class Address {
 	@Column(nullable = false)
 	String number;
 
-	@OneToOne(mappedBy = "address")
+	@OneToOne
+	@JoinColumn(name = "location_id", referencedColumnName = "id")
 	Location location;
-
-	@OneToOne
-	@JoinColumn(name = "user_id")
-	User user;
-
-	@OneToOne
-	@JoinColumn(name = "bloodbank_id")
-	BloodBank bloodBank;
 
 }

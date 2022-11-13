@@ -28,7 +28,4 @@ public class Report {
 	@Column
 	String description;
 
-	@OneToOne
-	@JoinColumn(name = "appointment_id")
-	Appointment appointment;
 }

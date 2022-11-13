@@ -24,7 +24,8 @@ public class BloodBank {
     @Column(nullable = false, unique = true)
     String name;
 
-    @OneToOne(mappedBy = "bloodBank")
+    @OneToOne
+    @JoinColumn(name = "address_id", referencedColumnName = "id")
     Address address;
 
     @Column
@@ -33,9 +34,4 @@ public class BloodBank {
     @Column(nullable = false)
     String description;
 
-    @OneToMany(mappedBy = "bloodBank")
-    List<Appointment> appointmentList;
-
-    @OneToMany(mappedBy = "bloodBank")
-    List<User> bankAdmins;
 }
