@@ -1,5 +1,6 @@
 package com.isa.BloodTransferInstitute.dto.user;
 
+import com.isa.BloodTransferInstitute.dto.address.NewAddressDTO;
 import com.isa.BloodTransferInstitute.enums.Gender;
 import com.isa.BloodTransferInstitute.enums.Role;
 
@@ -38,6 +39,14 @@ public class NewUserDTO {
 	String password;
 
 	@NotBlank
+	@Size(min = 9, message = "Please, enter at least 9 digits for phone number.")
+	String phoneNumber;
+
+	String occupation;
+
+	String education;
+
+	@NotBlank
 	@Size(min = 13, message = "Please, enter at least 13 characters for jmbg.")
 	String jmbg;
 
@@ -46,5 +55,8 @@ public class NewUserDTO {
 
 	@NotNull
 	Role role;
+
+	@NotNull
+	NewAddressDTO address;
 
 }

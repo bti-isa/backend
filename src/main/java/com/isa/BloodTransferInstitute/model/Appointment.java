@@ -41,19 +41,20 @@ public class Appointment {
 	Double duration;
 
 	@ManyToOne
-	@JoinColumn(name = "patient_id", nullable = false)
+	@JoinColumn(name = "patient_id", referencedColumnName = "id")
 	User patient;
 
 	@Column(nullable = false)
 	Boolean finished;
 
-	@OneToOne(mappedBy = "appointment")
+	@OneToOne
+	@JoinColumn(name = "report_id", referencedColumnName = "id")
 	Report report;
 
 	@Column(nullable = false)
 	AppointmentStatus status;
 
 	@ManyToOne
-	@JoinColumn(name = "bloodbank_id", nullable = false)
+	@JoinColumn(name = "bloodbank_id", referencedColumnName = "id")
 	BloodBank bloodBank;
 }

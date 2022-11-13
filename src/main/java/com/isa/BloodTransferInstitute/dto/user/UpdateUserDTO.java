@@ -1,5 +1,7 @@
 package com.isa.BloodTransferInstitute.dto.user;
 
+import com.isa.BloodTransferInstitute.dto.address.NewAddressDTO;
+import com.isa.BloodTransferInstitute.dto.address.UpdateAddressDTO;
 import com.isa.BloodTransferInstitute.enums.Gender;
 import com.isa.BloodTransferInstitute.enums.Role;
 
@@ -28,6 +30,9 @@ public class UpdateUserDTO {
 	@NotNull
 	Long id;
 
+	@NotNull
+	Boolean deleted;
+
 	@NotBlank
 	String firstname;
 
@@ -37,6 +42,14 @@ public class UpdateUserDTO {
 	@NotBlank
 	@Email
 	String email;
+
+	@NotBlank
+	@Size(min = 9, message = "Please, enter at least 9 digits for phone number.")
+	String phoneNumber;
+
+	String education;
+
+	String occupation;
 
 	@NotBlank
 	@Size(min = 8, message = "Please, enter at least 8 characters for password.")
@@ -53,10 +66,15 @@ public class UpdateUserDTO {
 	Role role;
 
 	@NotNull
-	Boolean active;
+	Boolean accountActivated;
 
 	@NotNull
 	Integer penalties;
 
 	List<Long> appointmentIds;
+
+	@NotNull
+	UpdateAddressDTO address;
+
+	Long bloodBankId;
 }

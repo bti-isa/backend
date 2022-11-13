@@ -11,6 +11,7 @@ import javax.persistence.Table;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -21,6 +22,7 @@ import lombok.experimental.FieldDefaults;
 @Data
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@Builder(toBuilder = true)
 public class Location {
 
 	@Id
@@ -33,9 +35,5 @@ public class Location {
 
 	@Column(nullable = false)
 	Double latitude;
-
-	@OneToOne
-	@JoinColumn(name = "address_id", nullable = false)
-	Address address;
 
 }

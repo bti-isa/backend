@@ -3,7 +3,7 @@ package com.isa.BloodTransferInstitute.controller;
 import com.isa.BloodTransferInstitute.dto.user.NewUserDTO;
 import com.isa.BloodTransferInstitute.dto.user.UpdateUserDTO;
 import com.isa.BloodTransferInstitute.dto.user.UserDTO;
-import com.isa.BloodTransferInstitute.mapper.GetUserMapper;
+import com.isa.BloodTransferInstitute.mappers.GetUserMapper;
 import com.isa.BloodTransferInstitute.service.UserService;
 
 import java.util.List;

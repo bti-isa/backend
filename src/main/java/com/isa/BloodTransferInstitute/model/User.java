@@ -7,16 +7,19 @@ import java.util.List;
 
 import javax.persistence.*;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.FieldDefaults;
 
 @Entity
 @Table(name = "Users")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 @Builder
 public class User {
 
@@ -41,6 +44,15 @@ public class User {
 	String password;
 
 	@Column(nullable = false, unique = true)
+	String phoneNumber;
+
+	@Column
+	String occupation;
+
+	@Column
+	String education;
+
+	@Column(nullable = false, unique = true)
 	String jmbg;
 
 	@Column(nullable = false)
@@ -49,19 +61,17 @@ public class User {
 	@Column(nullable = false)
 	Role role;
 
-	@Column(nullable = false)
-	Boolean active;
+	@Column
+	Boolean accountActivated;
 
-	@Column(nullable = false)
+	@Column
 	int penalties;
 
-	@OneToMany(mappedBy = "patient")
-	List<Appointment> appointments;
-
-	@OneToOne(mappedBy = "user")
+	@OneToOne
+	@JoinColumn(name = "address_id", referencedColumnName = "id")
 	Address address;
 
 	@ManyToOne
-	@JoinColumn(name = "bloodbank_id", nullable = false)
+	@JoinColumn(name = "bloodbank_id", referencedColumnName = "id")
 	BloodBank bloodBank;
 }
