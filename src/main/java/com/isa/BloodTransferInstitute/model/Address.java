@@ -40,7 +40,7 @@ public class Address {
 	@Column(nullable = false)
 	String number;
 
-	@OneToOne
+	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "location_id", referencedColumnName = "id")
 	Location location;
 

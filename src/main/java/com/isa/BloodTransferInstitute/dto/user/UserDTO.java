@@ -1,6 +1,8 @@
 package com.isa.BloodTransferInstitute.dto.user;
 
+import com.isa.BloodTransferInstitute.dto.address.AddressDTO;
 import com.isa.BloodTransferInstitute.dto.appointment.AppointmentDTO;
+import com.isa.BloodTransferInstitute.dto.bloodbank.BloodBankDTO;
 import com.isa.BloodTransferInstitute.enums.Gender;
 import com.isa.BloodTransferInstitute.enums.Role;
 
@@ -42,7 +44,7 @@ public class UserDTO {
 
 	Integer penalties;
 
-	List<AppointmentDTO> appointments;
+	AddressDTO address;
 
-	Long bloodBankId;
+	BloodBankDTO bloodBank;
 }

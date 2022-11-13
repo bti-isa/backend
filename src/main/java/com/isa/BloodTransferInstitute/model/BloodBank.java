@@ -24,7 +24,7 @@ public class BloodBank {
     @Column(nullable = false, unique = true)
     String name;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id", referencedColumnName = "id")
     Address address;
 

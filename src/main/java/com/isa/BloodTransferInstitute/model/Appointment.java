@@ -2,6 +2,7 @@ package com.isa.BloodTransferInstitute.model;
 
 import java.time.LocalDateTime;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -40,21 +41,21 @@ public class Appointment {
 	@Column(nullable = false)
 	Double duration;
 
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "patient_id", referencedColumnName = "id")
 	User patient;
 
 	@Column(nullable = false)
 	Boolean finished;
 
-	@OneToOne
+	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "report_id", referencedColumnName = "id")
 	Report report;
 
 	@Column(nullable = false)
 	AppointmentStatus status;
 
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "bloodbank_id", referencedColumnName = "id")
 	BloodBank bloodBank;
 }
