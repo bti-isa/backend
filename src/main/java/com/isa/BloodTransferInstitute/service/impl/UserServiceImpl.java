@@ -17,6 +17,7 @@ import java.util.Optional;
 
 import org.mapstruct.control.MappingControl.Use;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 
@@ -30,6 +31,7 @@ public class UserServiceImpl implements UserService {
 	private final BloodBankRepository bloodBankRepository;
 
 	@Override
+	@Transactional
 	public User add(final NewUserDTO dto) {
 			User newUser = UserMapper.NewDTOToEntity(dto);
 			locationRepository.save(newUser.getAddress().getLocation());
@@ -38,6 +40,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	@Transactional
 	public User update(final UpdateUserDTO dto) {
 		//Treba pozvati servis i pokupiti listu appointment-a
 		//Bloodbank kad se upise u bazu onda otkomentarisati
