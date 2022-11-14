@@ -29,20 +29,18 @@ public class PatientServiceImpl implements PatientService {
 	@Override
 	@Transactional
 	public User add(final NewPatientDTO dto) {
-			User newUser = PatientMapper.NewDTOToEntity(dto);
-			return userRepository.save(newUser);
+		return userRepository.save(PatientMapper.NewDTOToEntity(dto));
 	}
 
 	@Override
 	@Transactional
 	public User update(final UpdatePatientDTO dto) {
 		//Treba pozvati servis i pokupiti listu appointment-a
-		User updatedUser = PatientMapper.UpdateDTOToEntity(dto);
 		//final var appointments = originalAppointments.stream()
 		//		.filter(originalAppointment -> dto.getAppointmentIds().contains(originalAppointment.getId())).toList();
 		//updatedUser.setAppointments(dto.getAppointmentIds());
 		
-		return userRepository.save(updatedUser);
+		return userRepository.save(PatientMapper.UpdateDTOToEntity(dto));
 	}
 
 	@Override
