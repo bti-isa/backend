@@ -37,18 +37,11 @@ public class PatientServiceImpl implements PatientService {
 	@Transactional
 	public User update(final UpdatePatientDTO dto) {
 		//Treba pozvati servis i pokupiti listu appointment-a
-		//Bloodbank kad se upise u bazu onda otkomentarisati
-//		BloodBank bloodBank = new BloodBank();
-//		if(bloodBankRepository.findById(dto.getBloodBankId()).isPresent()) {
-//			bloodBank = bloodBankRepository.findById(dto.getBloodBankId()).get();
-//		}
-
 		User updatedUser = PatientMapper.UpdateDTOToEntity(dto);
-		//updatedUser.setBloodBank(bloodBank);
 		//final var appointments = originalAppointments.stream()
 		//		.filter(originalAppointment -> dto.getAppointmentIds().contains(originalAppointment.getId())).toList();
 		//updatedUser.setAppointments(dto.getAppointmentIds());
-
+		
 		return userRepository.save(updatedUser);
 	}
 
