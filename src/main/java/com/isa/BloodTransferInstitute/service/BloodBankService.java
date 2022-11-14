@@ -9,4 +9,6 @@ public interface BloodBankService {
 
 	List<BloodBank> search(SearchDTO searchDTO);
 
+	List<BloodBank> getAll();
+
 }

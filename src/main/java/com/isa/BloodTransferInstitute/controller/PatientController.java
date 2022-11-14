@@ -19,7 +19,7 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/User")
+@RequestMapping("/api/Patient")
 @CrossOrigin(origins = "*")
 public class PatientController {
 

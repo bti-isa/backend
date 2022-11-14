@@ -63,4 +63,10 @@ public class BloodBankServiceImpl implements BloodBankService {
 
 		return query.getResultList();
 	}
+
+	@Override
+	public List<BloodBank> getAll() {
+		return bloodBankRepository.findAll();
+	}
+
 }

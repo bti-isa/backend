@@ -2,6 +2,7 @@ package com.isa.BloodTransferInstitute.service.impl;
 
 import com.isa.BloodTransferInstitute.dto.user.patient.NewPatientDTO;
 import com.isa.BloodTransferInstitute.dto.user.patient.UpdatePatientDTO;
+import com.isa.BloodTransferInstitute.enums.Role;
 import com.isa.BloodTransferInstitute.exception.NotFoundException;
 import com.isa.BloodTransferInstitute.mappers.PatientMapper;
 import com.isa.BloodTransferInstitute.model.User;
@@ -50,7 +51,7 @@ public class PatientServiceImpl implements PatientService {
 
 	@Override
 	public List<User> getAll() {
-		return userRepository.findAll();
+		return userRepository.findByRole(Role.PATIENT);
 	}
 
 	@Override
