@@ -33,5 +33,4 @@ public class BloodBank {
 
     @Column(nullable = false)
     String description;
-
 }

@@ -1,12 +1,16 @@
 package com.isa.BloodTransferInstitute.service.impl;
 
 import com.isa.BloodTransferInstitute.dto.SearchDTO;
+import com.isa.BloodTransferInstitute.dto.bloodbank.UpdateBloodBankDTO;
+import com.isa.BloodTransferInstitute.exception.NotFoundException;
+import com.isa.BloodTransferInstitute.mappers.BloodBankMapper;
 import com.isa.BloodTransferInstitute.model.BloodBank;
 import com.isa.BloodTransferInstitute.repository.BloodBankRepository;
 import com.isa.BloodTransferInstitute.service.BloodBankService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -25,6 +29,16 @@ public class BloodBankServiceImpl implements BloodBankService {
 
 	private final BloodBankRepository bloodBankRepository;
 	private final EntityManager em;
+
+	@Override
+	public Optional<BloodBank> getById(final Long id) {
+		return Optional.ofNullable(bloodBankRepository.findById(id).orElseThrow(NotFoundException::new));
+	}
+
+	@Override
+	public BloodBank update(final UpdateBloodBankDTO dto) {
+		return bloodBankRepository.save(BloodBankMapper.UpdateDTOtoEntity(dto));
+	}
 
 	@Override
 	public List<BloodBank> search(final SearchDTO searchDTO) {
