@@ -43,5 +43,4 @@ public class PatientDTO {
 
 	AddressDTO address;
 
-	BloodBankDTO bloodBank;
 }

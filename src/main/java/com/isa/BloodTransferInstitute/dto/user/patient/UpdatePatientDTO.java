@@ -74,5 +74,4 @@ public class UpdatePatientDTO {
 	@NotNull
 	UpdateAddressDTO address;
 
-	Long bloodBankId;
 }
