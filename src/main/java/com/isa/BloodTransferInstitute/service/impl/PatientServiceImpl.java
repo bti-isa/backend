@@ -24,16 +24,12 @@ import lombok.RequiredArgsConstructor;
 public class PatientServiceImpl implements PatientService {
 
 	private final UserRepository userRepository;
-	private final LocationRepository locationRepository;
-	private final AddressRepository addressRepository;
 	private final BloodBankRepository bloodBankRepository;
 
 	@Override
 	@Transactional
 	public User add(final NewPatientDTO dto) {
 			User newUser = PatientMapper.NewDTOToEntity(dto);
-			locationRepository.save(newUser.getAddress().getLocation());
-			addressRepository.save(newUser.getAddress());
 			return userRepository.save(newUser);
 	}
 
@@ -53,8 +49,6 @@ public class PatientServiceImpl implements PatientService {
 		//		.filter(originalAppointment -> dto.getAppointmentIds().contains(originalAppointment.getId())).toList();
 		//updatedUser.setAppointments(dto.getAppointmentIds());
 
-		locationRepository.save(updatedUser.getAddress().getLocation());
-		addressRepository.save(updatedUser.getAddress());
 		return userRepository.save(updatedUser);
 	}
 
