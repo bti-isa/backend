@@ -67,7 +67,8 @@ public class User {
 	@Column
 	Integer penalties;
 
-	@OneToOne(cascade = {CascadeType.REMOVE, CascadeType.DETACH, CascadeType.PERSIST, CascadeType.REFRESH})
+	//@OneToOne(cascade = {CascadeType.REMOVE, CascadeType.DETACH, CascadeType.PERSIST, CascadeType.REFRESH})
+	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "address_id", referencedColumnName = "id")
 	Address address;
 
