@@ -1,11 +1,13 @@
 package com.isa.BloodTransferInstitute.controller;
 
+import com.isa.BloodTransferInstitute.dto.user.patient.CheckUniquePatientDTO;
 import com.isa.BloodTransferInstitute.dto.user.patient.NewPatientDTO;
 import com.isa.BloodTransferInstitute.dto.user.patient.PatientDTO;
 import com.isa.BloodTransferInstitute.dto.user.patient.UpdatePatientDTO;
 import com.isa.BloodTransferInstitute.mappers.GetUserMapper;
 import com.isa.BloodTransferInstitute.service.PatientService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -62,4 +64,9 @@ public class PatientController {
 		return ResponseEntity.status(HttpStatus.OK).body(getUserMapper.entityListToDTOlist(users));
 	}
 
+	@PostMapping("/checkUnique")
+	public ResponseEntity<List<Boolean>> checkUnique(@Valid @NotNull @RequestBody CheckUniquePatientDTO dto){
+		List<Boolean> retVal = patientService.checkUnique(dto);
+		return ResponseEntity.status(HttpStatus.OK).body(retVal);
+	}
 }

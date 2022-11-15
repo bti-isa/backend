@@ -1,5 +1,6 @@
 package com.isa.BloodTransferInstitute.service.impl;
 
+import com.isa.BloodTransferInstitute.dto.user.patient.CheckUniquePatientDTO;
 import com.isa.BloodTransferInstitute.dto.user.patient.NewPatientDTO;
 import com.isa.BloodTransferInstitute.dto.user.patient.UpdatePatientDTO;
 import com.isa.BloodTransferInstitute.enums.Role;
@@ -12,6 +13,7 @@ import com.isa.BloodTransferInstitute.repository.LocationRepository;
 import com.isa.BloodTransferInstitute.repository.UserRepository;
 import com.isa.BloodTransferInstitute.service.PatientService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -57,5 +59,27 @@ public class PatientServiceImpl implements PatientService {
 	@Override
 	public void delete(final Long id) {
 		userRepository.deleteById(id);
+	}
+
+	@Override
+	public ArrayList<Boolean> checkUnique(CheckUniquePatientDTO dto){
+		ArrayList<Boolean> retVal = new ArrayList<>();
+
+		if(userRepository.findByEmail(dto.getEmail())==null)
+			retVal.add(false);
+		else
+			retVal.add(true);
+
+		if(userRepository.findByJmbg(dto.getJmbg())==null)
+			retVal.add(false);
+		else
+			retVal.add(true);
+
+		if(userRepository.findByPhoneNumber(dto.getPhoneNumber())==null)
+			retVal.add(false);
+		else
+			retVal.add(true);
+
+		return retVal;
 	}
 }
