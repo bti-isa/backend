@@ -10,6 +10,9 @@ import java.util.Optional;
 public interface BloodBankService {
 
 	List<BloodBank> search(SearchDTO searchDTO);
+
 	Optional<BloodBank> getById(Long id);
 	BloodBank update(UpdateBloodBankDTO dto);
+	List<BloodBank> getAll();
+
 }

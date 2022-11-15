@@ -2,6 +2,7 @@ package com.isa.BloodTransferInstitute.service.impl;
 
 import com.isa.BloodTransferInstitute.dto.user.patient.NewPatientDTO;
 import com.isa.BloodTransferInstitute.dto.user.patient.UpdatePatientDTO;
+import com.isa.BloodTransferInstitute.enums.Role;
 import com.isa.BloodTransferInstitute.exception.NotFoundException;
 import com.isa.BloodTransferInstitute.mappers.PatientMapper;
 import com.isa.BloodTransferInstitute.model.User;
@@ -24,38 +25,23 @@ import lombok.RequiredArgsConstructor;
 public class PatientServiceImpl implements PatientService {
 
 	private final UserRepository userRepository;
-	private final LocationRepository locationRepository;
-	private final AddressRepository addressRepository;
 	private final BloodBankRepository bloodBankRepository;
 
 	@Override
 	@Transactional
 	public User add(final NewPatientDTO dto) {
-			User newUser = PatientMapper.NewDTOToEntity(dto);
-			locationRepository.save(newUser.getAddress().getLocation());
-			addressRepository.save(newUser.getAddress());
-			return userRepository.save(newUser);
+		return userRepository.save(PatientMapper.NewDTOToEntity(dto));
 	}
 
 	@Override
 	@Transactional
 	public User update(final UpdatePatientDTO dto) {
 		//Treba pozvati servis i pokupiti listu appointment-a
-		//Bloodbank kad se upise u bazu onda otkomentarisati
-//		BloodBank bloodBank = new BloodBank();
-//		if(bloodBankRepository.findById(dto.getBloodBankId()).isPresent()) {
-//			bloodBank = bloodBankRepository.findById(dto.getBloodBankId()).get();
-//		}
-
-		User updatedUser = PatientMapper.UpdateDTOToEntity(dto);
-		//updatedUser.setBloodBank(bloodBank);
 		//final var appointments = originalAppointments.stream()
 		//		.filter(originalAppointment -> dto.getAppointmentIds().contains(originalAppointment.getId())).toList();
 		//updatedUser.setAppointments(dto.getAppointmentIds());
-
-		locationRepository.save(updatedUser.getAddress().getLocation());
-		addressRepository.save(updatedUser.getAddress());
-		return userRepository.save(updatedUser);
+		
+		return userRepository.save(PatientMapper.UpdateDTOToEntity(dto));
 	}
 
 	@Override
@@ -65,7 +51,7 @@ public class PatientServiceImpl implements PatientService {
 
 	@Override
 	public List<User> getAll() {
-		return userRepository.findAll();
+		return userRepository.findByRole(Role.PATIENT);
 	}
 
 	@Override
