@@ -20,7 +20,7 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@Builder
+@Builder(toBuilder = true)
 public class User {
 
 	@Id
@@ -65,8 +65,9 @@ public class User {
 	Boolean accountActivated;
 
 	@Column
-	int penalties;
+	Integer penalties;
 
+	//@OneToOne(cascade = {CascadeType.REMOVE, CascadeType.DETACH, CascadeType.PERSIST, CascadeType.REFRESH})
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "address_id", referencedColumnName = "id")
 	Address address;

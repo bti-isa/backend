@@ -2,6 +2,7 @@ package com.isa.BloodTransferInstitute.mappers;
 
 import com.isa.BloodTransferInstitute.dto.LocationDTO;
 import com.isa.BloodTransferInstitute.dto.address.AddressDTO;
+import com.isa.BloodTransferInstitute.dto.user.admin.AdminDTO;
 import com.isa.BloodTransferInstitute.dto.user.patient.PatientDTO;
 import com.isa.BloodTransferInstitute.model.Address;
 import com.isa.BloodTransferInstitute.model.Location;
@@ -18,4 +19,5 @@ public interface GetUserMapper {
 	AddressDTO addressToDTO(Address address);
 	LocationDTO locationToDTO(Location location);
 	List<PatientDTO> entityListToDTOlist(List<User> users);
+	AdminDTO EntityToEntityDTO(User admin);
 }
