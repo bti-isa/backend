@@ -21,6 +21,6 @@ public interface GetUserMapper {
 	AddressDTO addressToDTO(Address address);
 	LocationDTO locationToDTO(Location location);
 	List<PatientDTO> entityListToDTOlist(List<User> users);
-	AdminDTO EntityToEntityDTO(User admin);
-	BloodBankDTO EntityToEntityDTO(BloodBank bloodBank);
+	AdminDTO AdminToAdminDTO(User admin);
+	BloodBankDTO BloodBankToBloodBankDTO(BloodBank bloodBank);
 }
