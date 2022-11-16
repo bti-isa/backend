@@ -1,6 +1,8 @@
 package com.isa.BloodTransferInstitute.service.impl;
 
 import com.isa.BloodTransferInstitute.dto.SearchDTO;
+import com.isa.BloodTransferInstitute.dto.bloodbank.BloodBankDTO;
+import com.isa.BloodTransferInstitute.dto.bloodbank.NewBloodBankDTO;
 import com.isa.BloodTransferInstitute.dto.bloodbank.UpdateBloodBankDTO;
 import com.isa.BloodTransferInstitute.exception.NotFoundException;
 import com.isa.BloodTransferInstitute.mappers.BloodBankMapper;
@@ -29,6 +31,10 @@ public class BloodBankServiceImpl implements BloodBankService {
 
 	private final BloodBankRepository bloodBankRepository;
 	private final EntityManager em;
+
+	public BloodBank add(NewBloodBankDTO dto) {
+		return bloodBankRepository.save(BloodBankMapper.NewDTOToEntity(dto));
+	}
 
 	@Override
 	public Optional<BloodBank> getById(final Long id) {
