@@ -30,6 +30,7 @@ import javax.validation.constraints.NotNull;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/BloodBank")
+@CrossOrigin(origins = "*")
 public class BloodBankController {
 
 	private final BloodBankService bloodBankService;
