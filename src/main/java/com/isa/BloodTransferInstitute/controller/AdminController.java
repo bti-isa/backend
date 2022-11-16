@@ -26,13 +26,13 @@ public class AdminController {
     @PostMapping("/add")
     public ResponseEntity<AdminDTO> addNewAdmin(@Valid @NotNull @RequestBody final NewAdminDTO dto) {
         final var admin = adminService.add(dto);
-        return ResponseEntity.status(HttpStatus.OK).body(adminMapper.EntityToDTO(admin));
+        return ResponseEntity.status(HttpStatus.OK).body(getUserMapper.AdminToAdminDTO(admin));
     }
 
     @PutMapping("/update")
     public ResponseEntity<AdminDTO> update(@Valid @NonNull @RequestBody final UpdateAdminDTO dto){
         final var updatedUser = adminService.update(dto);
-        return ResponseEntity.status(HttpStatus.OK).body(getUserMapper.EntityToEntityDTO(updatedUser));
+        return ResponseEntity.status(HttpStatus.OK).body(getUserMapper.AdminToAdminDTO(updatedUser));
     }
 
 }

@@ -24,35 +24,6 @@ import java.util.Optional;
 public class AdminMapper {
     private final BloodBankService bloodBankService;
 
-    public static AdminDTO EntityToDTO(User admin) {
-        final var locationDTO = LocationDTO.builder()
-                .id(admin.getAddress().getLocation().getId())
-                .longitude(admin.getAddress().getLocation().getLongitude())
-                .latitude(admin.getAddress().getLocation().getLatitude())
-                .build();
-        final var addressDTO = AddressDTO.builder()
-                .id(admin.getAddress().getId())
-                .city(admin.getAddress().getCity())
-                .street(admin.getAddress().getStreet())
-                .postalCode(admin.getAddress().getPostalCode())
-                .number(admin.getAddress().getNumber())
-                .country(admin.getAddress().getCountry())
-                .location(locationDTO)
-                .build();
-        final var adminDTO = AdminDTO.builder()
-                .id(admin.getId())
-                .address(addressDTO)
-                .firstname(admin.getFirstname())
-                .lastname(admin.getLastname())
-                .email(admin.getEmail())
-                .jmbg(admin.getJmbg())
-                .gender(admin.getGender())
-                .role(admin.getRole())
-                .phoneNumber(admin.getPhoneNumber())
-                .bloodBankId(admin.getBloodBank().getId())
-                .build();
-        return adminDTO;
-    }
     public User DTOtoEntity(final NewAdminDTO dto){
         final var newLocation = Location.builder()
                 .longitude(dto.getAddress().getLongitude())
