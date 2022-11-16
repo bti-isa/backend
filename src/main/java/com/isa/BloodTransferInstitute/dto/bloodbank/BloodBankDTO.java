@@ -32,6 +32,4 @@ public class BloodBankDTO {
 
 	List<AppointmentDTO> appointmentList;
 
-	List<PatientDTO> bankAdmins;
-
 }

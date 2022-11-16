@@ -50,6 +50,5 @@ public class UpdateAdminDTO {
     @NotNull
     UpdateAddressDTO address;
 
-    @NotNull
     Long bloodBankId;
 }
