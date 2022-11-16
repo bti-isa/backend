@@ -2,6 +2,7 @@ package com.isa.BloodTransferInstitute.service.impl;
 
 import com.isa.BloodTransferInstitute.dto.user.admin.UpdateAdminDTO;
 import com.isa.BloodTransferInstitute.mappers.AdminMapper;
+import com.isa.BloodTransferInstitute.model.BloodBank;
 import com.isa.BloodTransferInstitute.model.User;
 import com.isa.BloodTransferInstitute.repository.BloodBankRepository;
 import com.isa.BloodTransferInstitute.repository.UserRepository;
@@ -19,7 +20,10 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public User update(final UpdateAdminDTO dto) {
-        var bloodBank = bankRepository.findById(dto.getBloodBankId()).get();
+        BloodBank bloodBank = null;
+        if(dto.getBloodBankId() != null) {
+            bloodBank = bankRepository.findById(dto.getBloodBankId()).get();
+        }
         var password = userRepository.findById(dto.getId()).get().getPassword();
         return userRepository.save(AdminMapper.UpdateDTOtoEntity(dto, password, bloodBank));
     }

@@ -23,6 +23,6 @@ public class AdminDTO {
     Role role;
     String phoneNumber;
     AddressDTO address;
-    Long bloodBankId;
+    BloodBankDTO bloodBank;
 
 }
