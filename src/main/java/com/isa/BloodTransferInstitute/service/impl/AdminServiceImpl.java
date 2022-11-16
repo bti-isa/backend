@@ -1,5 +1,6 @@
 package com.isa.BloodTransferInstitute.service.impl;
 
+import com.isa.BloodTransferInstitute.dto.user.admin.NewAdminDTO;
 import com.isa.BloodTransferInstitute.dto.user.admin.UpdateAdminDTO;
 import com.isa.BloodTransferInstitute.mappers.AdminMapper;
 import com.isa.BloodTransferInstitute.model.User;
@@ -15,7 +16,12 @@ import org.springframework.stereotype.Service;
 public class AdminServiceImpl implements AdminService {
 
     private final UserRepository userRepository;
+    private final AdminMapper adminMapper;
     private final BloodBankRepository bankRepository;
+
+    public User add(NewAdminDTO dto) {
+        return userRepository.save(adminMapper.DTOtoEntity(dto));
+    }
 
     @Override
     public User update(final UpdateAdminDTO dto) {

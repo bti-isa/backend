@@ -1,5 +1,6 @@
 package com.isa.BloodTransferInstitute.mappers;
 
+import com.isa.BloodTransferInstitute.dto.bloodbank.NewBloodBankDTO;
 import com.isa.BloodTransferInstitute.dto.bloodbank.UpdateBloodBankDTO;
 import com.isa.BloodTransferInstitute.model.Address;
 import com.isa.BloodTransferInstitute.model.BloodBank;
@@ -8,6 +9,27 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class BloodBankMapper {
+
+    public static BloodBank NewDTOToEntity(final NewBloodBankDTO dto) {
+        final var location = Location.builder()
+                .latitude(dto.getAddress().getLatitude())
+                .longitude(dto.getAddress().getLongitude())
+                .build();
+        final var address = Address.builder()
+                .city(dto.getAddress().getCity())
+                .street(dto.getAddress().getStreet())
+                .country(dto.getAddress().getCountry())
+                .postalCode(dto.getAddress().getPostalCode())
+                .number(dto.getAddress().getNumber())
+                .location(location)
+                .build();
+        final var bloodBank = BloodBank.builder()
+                .name(dto.getName())
+                .address(address)
+                .description(dto.getDescription())
+                .build();
+        return bloodBank;
+    }
     public static BloodBank UpdateDTOtoEntity(final UpdateBloodBankDTO dto){
         final var updatedLocation = Location.builder()
                 .id(dto.getUpdateAddressDTO().getLocationId())

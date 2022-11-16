@@ -2,7 +2,9 @@ package com.isa.BloodTransferInstitute.controller;
 
 import com.isa.BloodTransferInstitute.dto.SearchDTO;
 import com.isa.BloodTransferInstitute.dto.bloodbank.BloodBankDTO;
+import com.isa.BloodTransferInstitute.dto.bloodbank.NewBloodBankDTO;
 import com.isa.BloodTransferInstitute.dto.bloodbank.UpdateBloodBankDTO;
+import com.isa.BloodTransferInstitute.dto.user.patient.NewPatientDTO;
 import com.isa.BloodTransferInstitute.mappers.BloodBankMapper;
 import com.isa.BloodTransferInstitute.mappers.GetBloodBankMapper;
 import com.isa.BloodTransferInstitute.model.BloodBank;
@@ -23,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.RequiredArgsConstructor;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 @RestController
 @RequiredArgsConstructor
@@ -32,6 +35,12 @@ public class BloodBankController {
 	private final BloodBankService bloodBankService;
 
 	private final GetBloodBankMapper getBloodBankMapper;
+
+	@PostMapping("/add")
+	public ResponseEntity<BloodBankDTO> addBloodBank(@Valid @NotNull @RequestBody final NewBloodBankDTO dto) {
+		final var bloodBank = bloodBankService.add(dto);
+		return ResponseEntity.status(HttpStatus.OK).body(getBloodBankMapper.EntityToEntityDTO(bloodBank));
+	}
 
 	@PostMapping("/search")
 	public ResponseEntity<List<BloodBankDTO>> search(@RequestBody final SearchDTO searchDTO) {
