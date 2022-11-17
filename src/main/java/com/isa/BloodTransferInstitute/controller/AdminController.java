@@ -19,6 +19,7 @@ import javax.validation.constraints.NotNull;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/Admin")
+@CrossOrigin(origins = "*")
 public class AdminController {
     private final AdminService adminService;
     private final AdminMapper adminMapper;

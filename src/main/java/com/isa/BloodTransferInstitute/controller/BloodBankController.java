@@ -3,6 +3,7 @@ package com.isa.BloodTransferInstitute.controller;
 import com.isa.BloodTransferInstitute.dto.SearchDTO;
 import com.isa.BloodTransferInstitute.dto.bloodbank.BloodBankDTO;
 import com.isa.BloodTransferInstitute.dto.bloodbank.NewBloodBankDTO;
+import com.isa.BloodTransferInstitute.dto.bloodbank.SimpleBloodBankDTO;
 import com.isa.BloodTransferInstitute.dto.bloodbank.UpdateBloodBankDTO;
 import com.isa.BloodTransferInstitute.dto.user.patient.NewPatientDTO;
 import com.isa.BloodTransferInstitute.mappers.BloodBankMapper;
@@ -10,6 +11,7 @@ import com.isa.BloodTransferInstitute.mappers.GetBloodBankMapper;
 import com.isa.BloodTransferInstitute.model.BloodBank;
 import com.isa.BloodTransferInstitute.service.BloodBankService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import lombok.NonNull;
@@ -30,6 +32,7 @@ import javax.validation.constraints.NotNull;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/BloodBank")
+@CrossOrigin(origins = "*")
 public class BloodBankController {
 
 	private final BloodBankService bloodBankService;
@@ -62,5 +65,14 @@ public class BloodBankController {
 		}
 
 		return ResponseEntity.status(HttpStatus.OK).body(getBloodBankMapper.ListToListDTO(bloodBanks));
+	}
+	@GetMapping("/simple")
+	public ResponseEntity<List<SimpleBloodBankDTO>> getSimpleInformation() {
+		List<SimpleBloodBankDTO> returnList = new ArrayList<SimpleBloodBankDTO>();
+		for(BloodBank bloodBank : bloodBankService.getAll()) {
+			var simple = BloodBankMapper.EntityToSimpleDTO(bloodBank);
+			returnList.add(simple);
+		}
+		return ResponseEntity.status(HttpStatus.OK).body(returnList);
 	}
 }
