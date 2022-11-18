@@ -1,6 +1,7 @@
 package com.isa.BloodTransferInstitute.mappers;
 
 import com.isa.BloodTransferInstitute.dto.bloodbank.NewBloodBankDTO;
+import com.isa.BloodTransferInstitute.dto.bloodbank.SimpleBloodBankDTO;
 import com.isa.BloodTransferInstitute.dto.bloodbank.UpdateBloodBankDTO;
 import com.isa.BloodTransferInstitute.model.Address;
 import com.isa.BloodTransferInstitute.model.BloodBank;
@@ -56,6 +57,13 @@ public class BloodBankMapper {
                 .build();
 
         return  updatedBank;
+    }
+    public static SimpleBloodBankDTO EntityToSimpleDTO(BloodBank bloodBank) {
+        var simple = SimpleBloodBankDTO.builder()
+                .id(bloodBank.getId())
+                .name(bloodBank.getName())
+                .build();
+        return simple;
     }
 
 
