@@ -76,7 +76,12 @@ public class BloodBankServiceImpl implements BloodBankService {
 			predicates.add(cb.equal(bloodBank.get("rating"), searchDTO.getRating()));
 		}
 
-		criteriaQuery.where(cb.or(predicates.toArray(new Predicate[0])));
+		if(predicates.isEmpty()) {
+			criteriaQuery.where(predicates.toArray(new Predicate[0]));
+		} else {
+			criteriaQuery.where(cb.or(predicates.toArray(new Predicate[0])));
+		}
+
 		final TypedQuery<BloodBank> query = em.createQuery(criteriaQuery);
 //		query.setFirstResult((searchDTO.getPageNumber()) * searchDTO.getPageSize());
 //		query.setMaxResults(searchDTO.getPageSize());
