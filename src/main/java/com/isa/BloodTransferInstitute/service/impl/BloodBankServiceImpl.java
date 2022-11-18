@@ -54,32 +54,32 @@ public class BloodBankServiceImpl implements BloodBankService {
 		final Root<BloodBank> bloodBank = criteriaQuery.from(BloodBank.class);
 		final List<Predicate> predicates = new ArrayList<>();
 
-		if (searchDTO.getName() != null) {
-			predicates.add(cb.equal(bloodBank.get("name"), searchDTO.getName()));
+		if (searchDTO.getName() != null && !searchDTO.getName().isEmpty()) {
+			predicates.add(cb.like(bloodBank.get("name"), "%" + searchDTO.getName() + "%"));
 		}
-		if (searchDTO.getCity() != null) {
-			predicates.add(cb.equal(bloodBank.get("city"), searchDTO.getCity()));
+		if (searchDTO.getCity() != null && !searchDTO.getCity().isEmpty()) {
+			predicates.add(cb.like(bloodBank.get("address").get("city"), "%" + searchDTO.getCity() + "%"));
 		}
-		if (searchDTO.getCountry() != null) {
-			predicates.add(cb.equal(bloodBank.get("country"), searchDTO.getCountry()));
+		if (searchDTO.getCountry() != null && !searchDTO.getCountry().isEmpty()) {
+			predicates.add(cb.like(bloodBank.get("address").get("country"), "%" + searchDTO.getCountry() + "%"));
 		}
-		if (searchDTO.getNumber() != null) {
-			predicates.add(cb.equal(bloodBank.get("number"), searchDTO.getNumber()));
+		if (searchDTO.getNumber() != null && !searchDTO.getNumber().isEmpty()) {
+			predicates.add(cb.like(bloodBank.get("address").get("number"), "%" + searchDTO.getNumber() + "%"));
 		}
-		if (searchDTO.getStreet() != null) {
-			predicates.add(cb.equal(bloodBank.get("street"), searchDTO.getStreet()));
+		if (searchDTO.getStreet() != null && !searchDTO.getStreet().isEmpty()) {
+			predicates.add(cb.like(bloodBank.get("address").get("street"), "%" + searchDTO.getStreet() + "%"));
 		}
 		if (searchDTO.getPostalCode() != null) {
-			predicates.add(cb.equal(bloodBank.get("postalCode"), searchDTO.getPostalCode()));
+			predicates.add(cb.equal(bloodBank.get("address").get("postalCode"), searchDTO.getPostalCode()));
 		}
 		if (searchDTO.getRating() != null) {
 			predicates.add(cb.equal(bloodBank.get("rating"), searchDTO.getRating()));
 		}
 
-		criteriaQuery.where(predicates.toArray(new Predicate[0]));
+		criteriaQuery.where(cb.or(predicates.toArray(new Predicate[0])));
 		final TypedQuery<BloodBank> query = em.createQuery(criteriaQuery);
-		query.setFirstResult((searchDTO.getPageNumber()) * searchDTO.getPageSize());
-		query.setMaxResults(searchDTO.getPageSize());
+//		query.setFirstResult((searchDTO.getPageNumber()) * searchDTO.getPageSize());
+//		query.setMaxResults(searchDTO.getPageSize());
 
 		return query.getResultList();
 	}
