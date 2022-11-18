@@ -14,9 +14,9 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class SearchDTO {
 
-	int pageSize;
-
-	int pageNumber;
+//	int pageSize;
+//
+//	int pageNumber;
 
 	String name;
 

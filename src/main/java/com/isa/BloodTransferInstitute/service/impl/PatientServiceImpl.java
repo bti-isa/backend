@@ -42,8 +42,11 @@ public class PatientServiceImpl implements PatientService {
 		//final var appointments = originalAppointments.stream()
 		//		.filter(originalAppointment -> dto.getAppointmentIds().contains(originalAppointment.getId())).toList();
 		//updatedUser.setAppointments(dto.getAppointmentIds());
-		
-		return userRepository.save(PatientMapper.UpdateDTOToEntity(dto));
+		final var user = userRepository.findById(dto.getId());
+		if(user.isEmpty()) {
+			return null;
+		}
+		return userRepository.save(PatientMapper.UpdateDTOToEntity(dto, user.get()));
 	}
 
 	@Override
