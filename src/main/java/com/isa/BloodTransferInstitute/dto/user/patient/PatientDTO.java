@@ -21,6 +21,10 @@ public class PatientDTO {
 
 	Long id;
 
+	Boolean accountActivated;
+
+	Boolean deleted;
+
 	String firstname;
 
 	String lastname;

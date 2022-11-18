@@ -47,16 +47,15 @@ public class PatientMapper {
 		return newUser;
 	}
 
-	public static User UpdateDTOToEntity(final UpdatePatientDTO dto) {
+	public static User UpdateDTOToEntity(final UpdatePatientDTO dto, final User user) {
 
-
-		final var updatedLocation = Location.builder()
+		final var updatedLocation = user.getAddress().getLocation().toBuilder()
 			.id(dto.getAddress().getLocationId())
 			.longitude(dto.getAddress().getLongitude())
 			.latitude(dto.getAddress().getLatitude())
 			.build();
 
-		final var updatedAddress = Address.builder()
+		final var updatedAddress = user.getAddress().toBuilder()
 			.id(dto.getAddress().getId())
 			.city(dto.getAddress().getCity())
 			.country(dto.getAddress().getCountry())
@@ -66,13 +65,11 @@ public class PatientMapper {
 			.location(updatedLocation)
 			.build();
 
-		final var updateUser = User.builder()
+		return user.toBuilder()
 			.id(dto.getId())
 			.deleted(dto.getDeleted())
 			.firstname(dto.getFirstname())
 			.lastname(dto.getLastname())
-			.email(dto.getEmail())
-			.password(dto.getPassword())
 			.phoneNumber(dto.getPhoneNumber())
 			.occupation(dto.getOccupation())
 			.education(dto.getEducation())
@@ -80,11 +77,8 @@ public class PatientMapper {
 			.gender(dto.getGender())
 			.role(dto.getRole())
 			.accountActivated(dto.getAccountActivated())
-			.penalties(dto.getPenalties())
 			.address(updatedAddress)
 			.build();
-
-		return updateUser;
 	}
 
 }

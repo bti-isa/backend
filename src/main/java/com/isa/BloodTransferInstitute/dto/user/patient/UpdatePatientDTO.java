@@ -38,20 +38,12 @@ public class UpdatePatientDTO {
 	String lastname;
 
 	@NotBlank
-	@Email
-	String email;
-
-	@NotBlank
 	@Size(min = 9, message = "Please, enter at least 9 digits for phone number.")
 	String phoneNumber;
 
 	String education;
 
 	String occupation;
-
-	@NotBlank
-	@Size(min = 8, message = "Please, enter at least 8 characters for password.")
-	String password;
 
 	@NotBlank
 	@Size(min = 13, message = "Please, enter at least 13 characters for jmbg.")
@@ -65,9 +57,6 @@ public class UpdatePatientDTO {
 
 	@NotNull
 	Boolean accountActivated;
-
-	@NotNull
-	Integer penalties;
 
 	List<Long> appointmentIds;
 
