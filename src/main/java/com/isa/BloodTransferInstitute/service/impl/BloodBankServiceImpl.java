@@ -55,19 +55,19 @@ public class BloodBankServiceImpl implements BloodBankService {
 		final List<Predicate> predicates = new ArrayList<>();
 
 		if (searchDTO.getName() != null && !searchDTO.getName().isEmpty()) {
-			predicates.add(cb.like(bloodBank.get("name"), "%" + searchDTO.getName() + "%"));
+			predicates.add(cb.like(bloodBank.get("name"), searchDTO.getName() + "%"));
 		}
 		if (searchDTO.getCity() != null && !searchDTO.getCity().isEmpty()) {
-			predicates.add(cb.like(bloodBank.get("address").get("city"), "%" + searchDTO.getCity() + "%"));
+			predicates.add(cb.like(bloodBank.get("address").get("city"), searchDTO.getCity() + "%"));
 		}
 		if (searchDTO.getCountry() != null && !searchDTO.getCountry().isEmpty()) {
-			predicates.add(cb.like(bloodBank.get("address").get("country"), "%" + searchDTO.getCountry() + "%"));
+			predicates.add(cb.like(bloodBank.get("address").get("country"), searchDTO.getCountry() + "%"));
 		}
 		if (searchDTO.getNumber() != null && !searchDTO.getNumber().isEmpty()) {
-			predicates.add(cb.like(bloodBank.get("address").get("number"), "%" + searchDTO.getNumber() + "%"));
+			predicates.add(cb.like(bloodBank.get("address").get("number"), searchDTO.getNumber() + "%"));
 		}
 		if (searchDTO.getStreet() != null && !searchDTO.getStreet().isEmpty()) {
-			predicates.add(cb.like(bloodBank.get("address").get("street"), "%" + searchDTO.getStreet() + "%"));
+			predicates.add(cb.like(bloodBank.get("address").get("street"), searchDTO.getStreet() + "%"));
 		}
 		if (searchDTO.getPostalCode() != null) {
 			predicates.add(cb.equal(bloodBank.get("address").get("postalCode"), searchDTO.getPostalCode()));
@@ -79,7 +79,7 @@ public class BloodBankServiceImpl implements BloodBankService {
 		if(predicates.isEmpty()) {
 			criteriaQuery.where(predicates.toArray(new Predicate[0]));
 		} else {
-			criteriaQuery.where(cb.or(predicates.toArray(new Predicate[0])));
+			criteriaQuery.where(cb.and(predicates.toArray(new Predicate[0])));
 		}
 
 		final TypedQuery<BloodBank> query = em.createQuery(criteriaQuery);
