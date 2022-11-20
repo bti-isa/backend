@@ -1,8 +1,9 @@
 package com.isa.BloodTransferInstitute.service;
 
-import com.isa.BloodTransferInstitute.dto.appointment.NewAppointmentDTO;
-import com.isa.BloodTransferInstitute.dto.appointment.FinishedAppointmentDTO;
-import com.isa.BloodTransferInstitute.dto.appointment.ScheduleAppointmentDTO;
+import com.isa.BloodTransferInstitute.enums.AppointmentStatus;
+import com.isa.BloodTransferInstitute.repository.dto.appointment.NewAppointmentDTO;
+import com.isa.BloodTransferInstitute.repository.dto.appointment.FinishedAppointmentDTO;
+import com.isa.BloodTransferInstitute.repository.dto.appointment.ScheduleAppointmentDTO;
 import com.isa.BloodTransferInstitute.model.Appointment;
 
 import java.time.LocalDateTime;
@@ -22,4 +23,6 @@ public interface AppointmentService {
 	Optional<Appointment> findById(Long id);
 
 	List<Appointment> findByDateTime(LocalDateTime dateTime);
+
+	List<Appointment> findAllAvailable();
 }

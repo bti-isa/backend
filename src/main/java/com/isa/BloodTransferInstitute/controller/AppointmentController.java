@@ -1,11 +1,11 @@
 package com.isa.BloodTransferInstitute.controller;
 
-import com.isa.BloodTransferInstitute.dto.appointment.AppointmentDTO;
-import com.isa.BloodTransferInstitute.dto.appointment.FinishedAppointmentDTO;
-import com.isa.BloodTransferInstitute.dto.appointment.NewAppointmentDTO;
-import com.isa.BloodTransferInstitute.dto.appointment.ScheduleAppointmentDTO;
-import com.isa.BloodTransferInstitute.dto.appointment.mappers.GetAppointmentMapper;
 import com.isa.BloodTransferInstitute.model.Appointment;
+import com.isa.BloodTransferInstitute.repository.dto.appointment.AppointmentDTO;
+import com.isa.BloodTransferInstitute.repository.dto.appointment.FinishedAppointmentDTO;
+import com.isa.BloodTransferInstitute.repository.dto.appointment.NewAppointmentDTO;
+import com.isa.BloodTransferInstitute.repository.dto.appointment.ScheduleAppointmentDTO;
+import com.isa.BloodTransferInstitute.repository.dto.appointment.mappers.GetAppointmentMapper;
 import com.isa.BloodTransferInstitute.service.AppointmentService;
 
 import java.time.LocalDateTime;
@@ -76,6 +76,15 @@ public class AppointmentController {
 	@GetMapping("/datetime")
 	public ResponseEntity<List<AppointmentDTO>> findByDateTime(@NotNull @RequestParam final LocalDateTime dateTime) {
 		final var appointments = appointmentService.findByDateTime(dateTime);
+		if(appointments.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		}
+		return ResponseEntity.status(HttpStatus.OK).body(appointmentMapper.listToListDTO(appointments));
+	}
+
+	@GetMapping("/available")
+	public ResponseEntity<List<AppointmentDTO>> findAllAvailable() {
+		final var appointments = appointmentService.findAllAvailable();
 		if(appointments.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		}

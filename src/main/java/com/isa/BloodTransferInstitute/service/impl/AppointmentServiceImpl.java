@@ -1,10 +1,11 @@
 package com.isa.BloodTransferInstitute.service.impl;
 
-import com.isa.BloodTransferInstitute.dto.appointment.NewAppointmentDTO;
-import com.isa.BloodTransferInstitute.dto.appointment.FinishedAppointmentDTO;
-import com.isa.BloodTransferInstitute.dto.appointment.ScheduleAppointmentDTO;
+import com.isa.BloodTransferInstitute.enums.AppointmentStatus;
+import com.isa.BloodTransferInstitute.repository.dto.appointment.NewAppointmentDTO;
+import com.isa.BloodTransferInstitute.repository.dto.appointment.FinishedAppointmentDTO;
+import com.isa.BloodTransferInstitute.repository.dto.appointment.ScheduleAppointmentDTO;
 import com.isa.BloodTransferInstitute.exception.NotFoundException;
-import com.isa.BloodTransferInstitute.dto.appointment.mappers.AppointmentMapper;
+import com.isa.BloodTransferInstitute.repository.dto.appointment.mappers.AppointmentMapper;
 import com.isa.BloodTransferInstitute.model.Appointment;
 import com.isa.BloodTransferInstitute.model.BloodBank;
 import com.isa.BloodTransferInstitute.model.User;
@@ -61,5 +62,10 @@ public class AppointmentServiceImpl implements AppointmentService {
 	@Override
 	public List<Appointment> findByDateTime(final LocalDateTime dateTime) {
 		return appointmentRepository.findByDateTime(dateTime);
+	}
+
+	@Override
+	public List<Appointment> findAllAvailable() {
+		return appointmentRepository.findByAppointmentStatus(AppointmentStatus.AVAILIBLE);
 	}
 }

@@ -1,6 +1,6 @@
 package com.isa.BloodTransferInstitute.service;
 
-import com.isa.BloodTransferInstitute.dto.auth.ChangePasswordDTO;
+import com.isa.BloodTransferInstitute.repository.dto.auth.ChangePasswordDTO;
 
 import java.util.Optional;
 

@@ -1,6 +1,6 @@
 package com.isa.BloodTransferInstitute.controller;
 
-import com.isa.BloodTransferInstitute.dto.auth.ChangePasswordDTO;
+import com.isa.BloodTransferInstitute.repository.dto.auth.ChangePasswordDTO;
 import com.isa.BloodTransferInstitute.service.impl.AuthServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

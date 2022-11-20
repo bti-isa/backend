@@ -1,12 +1,12 @@
 package com.isa.BloodTransferInstitute.controller;
 
-import com.isa.BloodTransferInstitute.dto.SearchDTO;
-import com.isa.BloodTransferInstitute.dto.bloodbank.BloodBankDTO;
-import com.isa.BloodTransferInstitute.dto.bloodbank.NewBloodBankDTO;
-import com.isa.BloodTransferInstitute.dto.bloodbank.SimpleBloodBankDTO;
-import com.isa.BloodTransferInstitute.dto.bloodbank.UpdateBloodBankDTO;
-import com.isa.BloodTransferInstitute.dto.appointment.mappers.BloodBankMapper;
-import com.isa.BloodTransferInstitute.dto.appointment.mappers.GetBloodBankMapper;
+import com.isa.BloodTransferInstitute.repository.dto.SearchDTO;
+import com.isa.BloodTransferInstitute.repository.dto.bloodbank.BloodBankDTO;
+import com.isa.BloodTransferInstitute.repository.dto.bloodbank.NewBloodBankDTO;
+import com.isa.BloodTransferInstitute.repository.dto.bloodbank.SimpleBloodBankDTO;
+import com.isa.BloodTransferInstitute.repository.dto.bloodbank.UpdateBloodBankDTO;
+import com.isa.BloodTransferInstitute.repository.dto.appointment.mappers.BloodBankMapper;
+import com.isa.BloodTransferInstitute.repository.dto.appointment.mappers.GetBloodBankMapper;
 import com.isa.BloodTransferInstitute.model.BloodBank;
 import com.isa.BloodTransferInstitute.service.BloodBankService;
 

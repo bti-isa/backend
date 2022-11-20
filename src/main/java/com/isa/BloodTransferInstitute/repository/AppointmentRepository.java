@@ -1,5 +1,6 @@
 package com.isa.BloodTransferInstitute.repository;
 
+import com.isa.BloodTransferInstitute.enums.AppointmentStatus;
 import com.isa.BloodTransferInstitute.model.Appointment;
 
 import java.time.LocalDateTime;
@@ -12,4 +13,6 @@ import org.springframework.stereotype.Repository;
 public interface AppointmentRepository extends JpaRepository<Appointment, Long> {
 
 	List<Appointment> findByDateTime(LocalDateTime dateTime);
+
+	List<Appointment> findByAppointmentStatus(AppointmentStatus status);
 }
