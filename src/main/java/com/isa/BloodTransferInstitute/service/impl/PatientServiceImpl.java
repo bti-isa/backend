@@ -5,11 +5,9 @@ import com.isa.BloodTransferInstitute.dto.user.patient.NewPatientDTO;
 import com.isa.BloodTransferInstitute.dto.user.patient.UpdatePatientDTO;
 import com.isa.BloodTransferInstitute.enums.Role;
 import com.isa.BloodTransferInstitute.exception.NotFoundException;
-import com.isa.BloodTransferInstitute.mappers.PatientMapper;
+import com.isa.BloodTransferInstitute.dto.appointment.mappers.PatientMapper;
 import com.isa.BloodTransferInstitute.model.User;
-import com.isa.BloodTransferInstitute.repository.AddressRepository;
 import com.isa.BloodTransferInstitute.repository.BloodBankRepository;
-import com.isa.BloodTransferInstitute.repository.LocationRepository;
 import com.isa.BloodTransferInstitute.repository.UserRepository;
 import com.isa.BloodTransferInstitute.service.PatientService;
 

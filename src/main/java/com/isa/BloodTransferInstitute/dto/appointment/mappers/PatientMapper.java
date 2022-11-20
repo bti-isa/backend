@@ -1,4 +1,4 @@
-package com.isa.BloodTransferInstitute.mappers;
+package com.isa.BloodTransferInstitute.dto.appointment.mappers;
 
 import com.isa.BloodTransferInstitute.dto.user.patient.NewPatientDTO;
 import com.isa.BloodTransferInstitute.dto.user.patient.UpdatePatientDTO;

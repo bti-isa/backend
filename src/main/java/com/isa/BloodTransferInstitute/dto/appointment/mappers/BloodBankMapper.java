@@ -1,4 +1,4 @@
-package com.isa.BloodTransferInstitute.mappers;
+package com.isa.BloodTransferInstitute.dto.appointment.mappers;
 
 import com.isa.BloodTransferInstitute.dto.bloodbank.NewBloodBankDTO;
 import com.isa.BloodTransferInstitute.dto.bloodbank.SimpleBloodBankDTO;

@@ -1,11 +1,10 @@
 package com.isa.BloodTransferInstitute.service.impl;
 
 import com.isa.BloodTransferInstitute.dto.SearchDTO;
-import com.isa.BloodTransferInstitute.dto.bloodbank.BloodBankDTO;
 import com.isa.BloodTransferInstitute.dto.bloodbank.NewBloodBankDTO;
 import com.isa.BloodTransferInstitute.dto.bloodbank.UpdateBloodBankDTO;
 import com.isa.BloodTransferInstitute.exception.NotFoundException;
-import com.isa.BloodTransferInstitute.mappers.BloodBankMapper;
+import com.isa.BloodTransferInstitute.dto.appointment.mappers.BloodBankMapper;
 import com.isa.BloodTransferInstitute.model.BloodBank;
 import com.isa.BloodTransferInstitute.repository.BloodBankRepository;
 import com.isa.BloodTransferInstitute.service.BloodBankService;

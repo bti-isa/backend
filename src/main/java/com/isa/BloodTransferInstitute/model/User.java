@@ -71,7 +71,7 @@ public class User {
 	@JoinColumn(name = "address_id", referencedColumnName = "id")
 	Address address;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "bloodbank_id", referencedColumnName = "id")
 	BloodBank bloodBank;
 }

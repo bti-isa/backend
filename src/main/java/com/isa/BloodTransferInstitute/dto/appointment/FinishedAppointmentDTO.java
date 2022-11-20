@@ -4,6 +4,9 @@ import com.isa.BloodTransferInstitute.enums.AppointmentStatus;
 
 import java.time.LocalDateTime;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,16 +19,18 @@ import lombok.experimental.FieldDefaults;
 @Builder(toBuilder = true)
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class UpdateAppointmentDTO {
+public class FinishedAppointmentDTO {
 
+	@NotNull
 	Long id;
 
-	LocalDateTime dateTime;
-
+	@NotNull
 	Long patientId;
 
-	AppointmentStatus status;
-
+	@NotNull
 	Long bloodBankId;
+
+	@NotBlank
+	String reportDescription;
 
 }

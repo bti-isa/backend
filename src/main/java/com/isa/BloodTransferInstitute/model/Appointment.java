@@ -25,7 +25,7 @@ import lombok.experimental.FieldDefaults;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
+@Builder(toBuilder = true)
 @Data
 @Table(name = "Appointments")
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -42,7 +42,7 @@ public class Appointment {
 	@Column(nullable = false)
 	Double duration;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "patient_id", referencedColumnName = "id")
 	User patient;
 
@@ -56,7 +56,7 @@ public class Appointment {
 	@Column(nullable = false)
 	AppointmentStatus status;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "bloodbank_id", referencedColumnName = "id")
 	BloodBank bloodBank;
 }

@@ -5,9 +5,8 @@ import com.isa.BloodTransferInstitute.dto.bloodbank.BloodBankDTO;
 import com.isa.BloodTransferInstitute.dto.bloodbank.NewBloodBankDTO;
 import com.isa.BloodTransferInstitute.dto.bloodbank.SimpleBloodBankDTO;
 import com.isa.BloodTransferInstitute.dto.bloodbank.UpdateBloodBankDTO;
-import com.isa.BloodTransferInstitute.dto.user.patient.NewPatientDTO;
-import com.isa.BloodTransferInstitute.mappers.BloodBankMapper;
-import com.isa.BloodTransferInstitute.mappers.GetBloodBankMapper;
+import com.isa.BloodTransferInstitute.dto.appointment.mappers.BloodBankMapper;
+import com.isa.BloodTransferInstitute.dto.appointment.mappers.GetBloodBankMapper;
 import com.isa.BloodTransferInstitute.model.BloodBank;
 import com.isa.BloodTransferInstitute.service.BloodBankService;
 

@@ -4,10 +4,9 @@ import com.isa.BloodTransferInstitute.dto.user.patient.CheckUniquePatientDTO;
 import com.isa.BloodTransferInstitute.dto.user.patient.NewPatientDTO;
 import com.isa.BloodTransferInstitute.dto.user.patient.PatientDTO;
 import com.isa.BloodTransferInstitute.dto.user.patient.UpdatePatientDTO;
-import com.isa.BloodTransferInstitute.mappers.GetUserMapper;
+import com.isa.BloodTransferInstitute.dto.appointment.mappers.GetUserMapper;
 import com.isa.BloodTransferInstitute.service.PatientService;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.Valid;

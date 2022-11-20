@@ -1,9 +1,5 @@
 package com.isa.BloodTransferInstitute.dto.appointment;
 
-import com.isa.BloodTransferInstitute.model.BloodBank;
-
-import java.time.LocalDateTime;
-
 import javax.validation.constraints.NotNull;
 
 import lombok.AccessLevel;
@@ -18,12 +14,11 @@ import lombok.experimental.FieldDefaults;
 @Builder(toBuilder = true)
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class NewAppointmentDTO {
+public class ScheduleAppointmentDTO {
 
 	@NotNull
-	LocalDateTime dateTime;
+	Long patientId;
 
 	@NotNull
-	Long bloodBankId;
-
+	Long appointmentId;
 }
