@@ -30,6 +30,14 @@ public class BloodBankServiceImpl implements BloodBankService {
 
 	private final BloodBankRepository bloodBankRepository;
 	private final EntityManager em;
+	private static final String NAME = "name";
+	private static final String ADDRESS = "address";
+	private static final String CITY = "city";
+	private static final String COUNTRY = "country";
+	private static final String POSTAL_CODE = "postalCode";
+	private static final String NUMBER = "number";
+	private static final String STREET = "street";
+	private static final String RATING = "rating";
 
 	public BloodBank add(NewBloodBankDTO dto) {
 		return bloodBankRepository.save(BloodBankMapper.NewDTOToEntity(dto));
@@ -54,25 +62,25 @@ public class BloodBankServiceImpl implements BloodBankService {
 		final List<Predicate> predicates = new ArrayList<>();
 
 		if (searchDTO.getName() != null && !searchDTO.getName().isEmpty()) {
-			predicates.add(cb.like(bloodBank.get("name"), searchDTO.getName() + "%"));
+			predicates.add(cb.like(bloodBank.get(NAME), searchDTO.getName() + "%"));
 		}
 		if (searchDTO.getCity() != null && !searchDTO.getCity().isEmpty()) {
-			predicates.add(cb.like(bloodBank.get("address").get("city"), searchDTO.getCity() + "%"));
+			predicates.add(cb.like(bloodBank.get(ADDRESS).get(CITY), searchDTO.getCity() + "%"));
 		}
 		if (searchDTO.getCountry() != null && !searchDTO.getCountry().isEmpty()) {
-			predicates.add(cb.like(bloodBank.get("address").get("country"), searchDTO.getCountry() + "%"));
+			predicates.add(cb.like(bloodBank.get(ADDRESS).get(COUNTRY), searchDTO.getCountry() + "%"));
 		}
 		if (searchDTO.getNumber() != null && !searchDTO.getNumber().isEmpty()) {
-			predicates.add(cb.like(bloodBank.get("address").get("number"), searchDTO.getNumber() + "%"));
+			predicates.add(cb.like(bloodBank.get(ADDRESS).get(NUMBER), searchDTO.getNumber() + "%"));
 		}
 		if (searchDTO.getStreet() != null && !searchDTO.getStreet().isEmpty()) {
-			predicates.add(cb.like(bloodBank.get("address").get("street"), searchDTO.getStreet() + "%"));
+			predicates.add(cb.like(bloodBank.get(ADDRESS).get(STREET), searchDTO.getStreet() + "%"));
 		}
 		if (searchDTO.getPostalCode() != null) {
-			predicates.add(cb.equal(bloodBank.get("address").get("postalCode"), searchDTO.getPostalCode()));
+			predicates.add(cb.equal(bloodBank.get(ADDRESS).get(POSTAL_CODE), searchDTO.getPostalCode()));
 		}
 		if (searchDTO.getRating() != null) {
-			predicates.add(cb.equal(bloodBank.get("rating"), searchDTO.getRating()));
+			predicates.add(cb.equal(bloodBank.get(RATING), searchDTO.getRating()));
 		}
 
 		if(predicates.isEmpty()) {

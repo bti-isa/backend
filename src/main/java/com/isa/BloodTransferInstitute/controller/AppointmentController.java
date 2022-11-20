@@ -81,9 +81,11 @@ public class AppointmentController {
 		return ResponseEntity.status(HttpStatus.OK).body(appointmentMapper.listToListDTO(appointments));
 	}
 
-	@GetMapping("/available")
-	public ResponseEntity<List<AppointmentDTO>> findAllAvailable() {
-		final var appointments = appointmentService.findAllAvailable();
+	@GetMapping("/available/{number}/{size}")
+	public ResponseEntity<List<AppointmentDTO>> findAllAvailable(@NotNull @PathVariable("number") final int pageNumber,
+																@NotNull @PathVariable("size") final int pageSize)
+	{
+		final var appointments = appointmentService.findAllAvailable(pageSize, pageNumber);
 		if(appointments.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		}

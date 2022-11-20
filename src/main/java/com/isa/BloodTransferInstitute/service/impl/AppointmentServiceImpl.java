@@ -5,6 +5,7 @@ import com.isa.BloodTransferInstitute.dto.appointment.NewAppointmentDTO;
 import com.isa.BloodTransferInstitute.dto.appointment.FinishedAppointmentDTO;
 import com.isa.BloodTransferInstitute.dto.appointment.ScheduleAppointmentDTO;
 import com.isa.BloodTransferInstitute.exception.NotFoundException;
+import com.isa.BloodTransferInstitute.exception.ScheduleException;
 import com.isa.BloodTransferInstitute.mappers.AppointmentMapper;
 import com.isa.BloodTransferInstitute.model.Appointment;
 import com.isa.BloodTransferInstitute.model.BloodBank;
@@ -16,8 +17,13 @@ import com.isa.BloodTransferInstitute.service.AppointmentService;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -38,6 +44,9 @@ public class AppointmentServiceImpl implements AppointmentService {
 
 	@Override
 	public Appointment schedule(final ScheduleAppointmentDTO dto) {
+		if(scheduleValidation(dto.getPatientId())) {
+			throw new ScheduleException();
+		}
 		User patient = userRepository.findById(dto.getPatientId()).orElseThrow(NotFoundException::new);
 		Appointment appointment = appointmentRepository.findById(dto.getAppointmentId()).orElseThrow(NotFoundException::new);
 		return appointmentRepository.save(AppointmentMapper.ScheduleDTOToEntity(appointment, patient));
@@ -65,7 +74,25 @@ public class AppointmentServiceImpl implements AppointmentService {
 	}
 
 	@Override
-	public List<Appointment> findAllAvailable() {
-		return appointmentRepository.findByStatus(AppointmentStatus.AVAILIBLE);
+	public List<Appointment> findAllAvailable(int pageSize, int pageNumber) {
+		return appointmentRepository.findByStatus(AppointmentStatus.AVAILIBLE, PageRequest.of(pageNumber, pageSize, Sort.by(Direction.ASC, "bloodBank.rating")));
+	}
+
+	@Override
+	public List<Appointment> findAllCompleted() {
+		return appointmentRepository.findByStatus(AppointmentStatus.COMPLETED);
+	}
+
+	private boolean scheduleValidation(Long patientId) {
+		final var completedAppointmentsOfPatient = getPatientsCompletedAppointments(patientId);
+		final var sixMonths = 6;
+		return completedAppointmentsOfPatient.stream()
+			.anyMatch(appointment -> appointment.getDateTime().isAfter(LocalDateTime.now().minusMonths(sixMonths)));
+	}
+
+	private List<Appointment> getPatientsCompletedAppointments(Long patientId) {
+		return findAllCompleted().stream()
+			.filter(appointment -> Objects.equals(patientId, appointment.getPatient().getId()))
+			.toList();
 	}
 }

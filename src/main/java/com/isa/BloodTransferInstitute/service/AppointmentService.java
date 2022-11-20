@@ -23,5 +23,7 @@ public interface AppointmentService {
 
 	List<Appointment> findByDateTime(LocalDateTime dateTime);
 
-	List<Appointment> findAllAvailable();
+	List<Appointment> findAllAvailable(int pageSize, int pageNumber);
+
+	List<Appointment> findAllCompleted();
 }
