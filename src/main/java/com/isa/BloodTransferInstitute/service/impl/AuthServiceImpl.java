@@ -1,6 +1,6 @@
 package com.isa.BloodTransferInstitute.service.impl;
 
-import com.isa.BloodTransferInstitute.repository.dto.auth.ChangePasswordDTO;
+import com.isa.BloodTransferInstitute.dto.auth.ChangePasswordDTO;
 import com.isa.BloodTransferInstitute.exception.NotFoundException;
 import com.isa.BloodTransferInstitute.model.User;
 import com.isa.BloodTransferInstitute.repository.UserRepository;

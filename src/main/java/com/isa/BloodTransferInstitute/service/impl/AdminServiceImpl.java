@@ -1,8 +1,8 @@
 package com.isa.BloodTransferInstitute.service.impl;
 
-import com.isa.BloodTransferInstitute.repository.dto.user.admin.NewAdminDTO;
-import com.isa.BloodTransferInstitute.repository.dto.user.admin.UpdateAdminDTO;
-import com.isa.BloodTransferInstitute.repository.dto.appointment.mappers.AdminMapper;
+import com.isa.BloodTransferInstitute.dto.user.admin.NewAdminDTO;
+import com.isa.BloodTransferInstitute.dto.user.admin.UpdateAdminDTO;
+import com.isa.BloodTransferInstitute.mappers.AdminMapper;
 import com.isa.BloodTransferInstitute.model.BloodBank;
 import com.isa.BloodTransferInstitute.model.User;
 import com.isa.BloodTransferInstitute.repository.BloodBankRepository;

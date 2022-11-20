@@ -1,8 +1,8 @@
 package com.isa.BloodTransferInstitute.service;
 
-import com.isa.BloodTransferInstitute.repository.dto.user.patient.CheckUniquePatientDTO;
-import com.isa.BloodTransferInstitute.repository.dto.user.patient.NewPatientDTO;
-import com.isa.BloodTransferInstitute.repository.dto.user.patient.UpdatePatientDTO;
+import com.isa.BloodTransferInstitute.dto.user.patient.CheckUniquePatientDTO;
+import com.isa.BloodTransferInstitute.dto.user.patient.NewPatientDTO;
+import com.isa.BloodTransferInstitute.dto.user.patient.UpdatePatientDTO;
 import com.isa.BloodTransferInstitute.model.User;
 
 import java.util.ArrayList;

@@ -1,10 +1,10 @@
 package com.isa.BloodTransferInstitute.controller;
 
-import com.isa.BloodTransferInstitute.repository.dto.user.admin.AdminDTO;
-import com.isa.BloodTransferInstitute.repository.dto.user.admin.NewAdminDTO;
-import com.isa.BloodTransferInstitute.repository.dto.user.admin.UpdateAdminDTO;
-import com.isa.BloodTransferInstitute.repository.dto.appointment.mappers.AdminMapper;
-import com.isa.BloodTransferInstitute.repository.dto.appointment.mappers.GetUserMapper;
+import com.isa.BloodTransferInstitute.dto.user.admin.AdminDTO;
+import com.isa.BloodTransferInstitute.dto.user.admin.NewAdminDTO;
+import com.isa.BloodTransferInstitute.dto.user.admin.UpdateAdminDTO;
+import com.isa.BloodTransferInstitute.mappers.AdminMapper;
+import com.isa.BloodTransferInstitute.mappers.GetUserMapper;
 import com.isa.BloodTransferInstitute.service.AdminService;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;

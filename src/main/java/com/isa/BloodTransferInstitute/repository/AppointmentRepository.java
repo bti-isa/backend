@@ -14,5 +14,5 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
 
 	List<Appointment> findByDateTime(LocalDateTime dateTime);
 
-	List<Appointment> findByAppointmentStatus(AppointmentStatus status);
+	List<Appointment> findByStatus(AppointmentStatus status);
 }

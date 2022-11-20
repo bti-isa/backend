@@ -1,11 +1,11 @@
 package com.isa.BloodTransferInstitute.service.impl;
 
-import com.isa.BloodTransferInstitute.repository.dto.user.patient.CheckUniquePatientDTO;
-import com.isa.BloodTransferInstitute.repository.dto.user.patient.NewPatientDTO;
-import com.isa.BloodTransferInstitute.repository.dto.user.patient.UpdatePatientDTO;
+import com.isa.BloodTransferInstitute.dto.user.patient.CheckUniquePatientDTO;
+import com.isa.BloodTransferInstitute.dto.user.patient.NewPatientDTO;
+import com.isa.BloodTransferInstitute.dto.user.patient.UpdatePatientDTO;
 import com.isa.BloodTransferInstitute.enums.Role;
 import com.isa.BloodTransferInstitute.exception.NotFoundException;
-import com.isa.BloodTransferInstitute.repository.dto.appointment.mappers.PatientMapper;
+import com.isa.BloodTransferInstitute.mappers.PatientMapper;
 import com.isa.BloodTransferInstitute.model.User;
 import com.isa.BloodTransferInstitute.repository.BloodBankRepository;
 import com.isa.BloodTransferInstitute.repository.UserRepository;
