@@ -1,7 +1,7 @@
 package com.isa.BloodTransferInstitute.dto.bloodbank;
 
-import com.isa.BloodTransferInstitute.dto.address.AddressDTO;
 import com.isa.BloodTransferInstitute.dto.address.UpdateAddressDTO;
+
 import lombok.Builder;
 import lombok.Data;
 
@@ -19,7 +19,7 @@ public class UpdateBloodBankDTO {
     String name;
 
     @NotNull
-    UpdateAddressDTO updateAddressDTO;
+	UpdateAddressDTO updateAddressDTO;
 
     @NotNull
     Double rating;

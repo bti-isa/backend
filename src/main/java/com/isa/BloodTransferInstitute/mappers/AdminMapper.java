@@ -1,8 +1,5 @@
 package com.isa.BloodTransferInstitute.mappers;
 
-import com.isa.BloodTransferInstitute.dto.LocationDTO;
-import com.isa.BloodTransferInstitute.dto.address.AddressDTO;
-import com.isa.BloodTransferInstitute.dto.user.admin.AdminDTO;
 import com.isa.BloodTransferInstitute.dto.user.admin.NewAdminDTO;
 import com.isa.BloodTransferInstitute.dto.user.admin.UpdateAdminDTO;
 import com.isa.BloodTransferInstitute.enums.Role;
@@ -11,13 +8,10 @@ import com.isa.BloodTransferInstitute.model.BloodBank;
 import com.isa.BloodTransferInstitute.model.Location;
 import com.isa.BloodTransferInstitute.model.User;
 import com.isa.BloodTransferInstitute.service.BloodBankService;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
-import java.util.Optional;
+import lombok.RequiredArgsConstructor;
+
+import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor

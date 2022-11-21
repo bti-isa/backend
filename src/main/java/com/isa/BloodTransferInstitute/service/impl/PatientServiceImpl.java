@@ -7,9 +7,7 @@ import com.isa.BloodTransferInstitute.enums.Role;
 import com.isa.BloodTransferInstitute.exception.NotFoundException;
 import com.isa.BloodTransferInstitute.mappers.PatientMapper;
 import com.isa.BloodTransferInstitute.model.User;
-import com.isa.BloodTransferInstitute.repository.AddressRepository;
 import com.isa.BloodTransferInstitute.repository.BloodBankRepository;
-import com.isa.BloodTransferInstitute.repository.LocationRepository;
 import com.isa.BloodTransferInstitute.repository.UserRepository;
 import com.isa.BloodTransferInstitute.service.PatientService;
 
@@ -51,7 +49,7 @@ public class PatientServiceImpl implements PatientService {
 
 	@Override
 	public Optional<User> get(final Long id) {
-		return Optional.ofNullable(userRepository.findById(id).orElseThrow(NotFoundException::new));
+		return Optional.ofNullable(userRepository.findByIdAndRole(id, Role.PATIENT).orElseThrow(NotFoundException::new));
 	}
 
 	@Override

@@ -1,33 +1,43 @@
 package com.isa.BloodTransferInstitute.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import java.time.LocalTime;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.FieldDefaults;
 
-@Entity
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)
-@Table(name = "Reports")
-public class Report {
+@Data
+@FieldDefaults(level = AccessLevel.PRIVATE)
+@Entity
+@Table(name = "WorkingHours")
+public class WorkingHours {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(nullable = false, updatable = false, unique = true)
+	@Column(nullable = false, unique = true, updatable = false)
 	Long id;
 
-	@Column
-	String description;
+	@Column(nullable = false)
+	@JsonFormat(pattern="HH:mm")
+	LocalTime start;
+
+	@Column(nullable = false)
+	@JsonFormat(pattern="HH:mm")
+	LocalTime end;
 
 }

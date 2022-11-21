@@ -7,7 +7,6 @@ import com.isa.BloodTransferInstitute.dto.user.patient.UpdatePatientDTO;
 import com.isa.BloodTransferInstitute.mappers.GetUserMapper;
 import com.isa.BloodTransferInstitute.service.PatientService;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.Valid;
