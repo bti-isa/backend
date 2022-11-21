@@ -30,6 +30,4 @@ public class AddressDTO {
 
 	LocationDTO location;
 
-	Long bloodBankId;
-
 }

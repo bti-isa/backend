@@ -1,5 +1,6 @@
 package com.isa.BloodTransferInstitute.dto.appointment;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.isa.BloodTransferInstitute.model.BloodBank;
 
 import java.time.LocalDateTime;
@@ -21,6 +22,7 @@ import lombok.experimental.FieldDefaults;
 public class NewAppointmentDTO {
 
 	@NotNull
+	@JsonFormat(pattern="dd.MM.yyyy. HH:mm")
 	LocalDateTime dateTime;
 
 	@NotNull

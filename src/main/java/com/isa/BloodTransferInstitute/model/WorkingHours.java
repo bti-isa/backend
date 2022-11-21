@@ -1,5 +1,7 @@
 package com.isa.BloodTransferInstitute.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.time.LocalTime;
 
 import javax.persistence.Column;
@@ -31,9 +33,11 @@ public class WorkingHours {
 	Long id;
 
 	@Column(nullable = false)
+	@JsonFormat(pattern="HH:mm")
 	LocalTime start;
 
 	@Column(nullable = false)
+	@JsonFormat(pattern="HH:mm")
 	LocalTime end;
 
 }

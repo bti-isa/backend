@@ -20,5 +20,4 @@ public class ReportDTO {
 
 	String description;
 
-	AppointmentDTO appointment;
 }

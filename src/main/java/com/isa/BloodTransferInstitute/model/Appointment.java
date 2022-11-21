@@ -14,6 +14,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.isa.BloodTransferInstitute.enums.AppointmentStatus;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -37,6 +38,7 @@ public class Appointment {
 	Long id;
 
 	@Column(nullable = false)
+	@JsonFormat(pattern="dd.MM.yyyy. HH:mm")
 	LocalDateTime dateTime;
 
 	@Column(nullable = false)

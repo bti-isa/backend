@@ -49,7 +49,7 @@ public class PatientServiceImpl implements PatientService {
 
 	@Override
 	public Optional<User> get(final Long id) {
-		return Optional.ofNullable(userRepository.findById(id).orElseThrow(NotFoundException::new));
+		return Optional.ofNullable(userRepository.findByIdAndRole(id, Role.PATIENT).orElseThrow(NotFoundException::new));
 	}
 
 	@Override

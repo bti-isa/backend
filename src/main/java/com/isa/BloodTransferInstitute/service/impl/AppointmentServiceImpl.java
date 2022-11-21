@@ -4,6 +4,8 @@ import com.isa.BloodTransferInstitute.enums.AppointmentStatus;
 import com.isa.BloodTransferInstitute.dto.appointment.NewAppointmentDTO;
 import com.isa.BloodTransferInstitute.dto.appointment.FinishedAppointmentDTO;
 import com.isa.BloodTransferInstitute.dto.appointment.ScheduleAppointmentDTO;
+import com.isa.BloodTransferInstitute.enums.Role;
+import com.isa.BloodTransferInstitute.exception.CreateAppointmentException;
 import com.isa.BloodTransferInstitute.exception.NotFoundException;
 import com.isa.BloodTransferInstitute.exception.ScheduleException;
 import com.isa.BloodTransferInstitute.mappers.AppointmentMapper;
@@ -26,7 +28,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 @Service
 @RequiredArgsConstructor
@@ -38,16 +42,26 @@ public class AppointmentServiceImpl implements AppointmentService {
 
 	@Override
 	public Appointment create(final NewAppointmentDTO appointmentDTO) {
+		if(appointmentValidation(appointmentDTO)) {
+			throw new  CreateAppointmentException();
+		}
 		BloodBank bloodBank = bloodBankRepository.findById(appointmentDTO.getBloodBankId()).orElseThrow(NotFoundException::new);
 		return appointmentRepository.save(AppointmentMapper.NewDTOToEntity(appointmentDTO, bloodBank));
 	}
 
+	private boolean appointmentValidation(final NewAppointmentDTO appointmentDTO) {
+		var notHappenedAppointments = appointmentRepository.findByStatus(AppointmentStatus.AVAILIBLE);
+		notHappenedAppointments.addAll(appointmentRepository.findByStatus(AppointmentStatus.SCHEDULED));
+		return notHappenedAppointments.stream()
+			.anyMatch(appointment -> Objects.equals(appointmentDTO.getBloodBankId(), appointment.getBloodBank().getId()) && appointmentDTO.getDateTime().isEqual(appointment.getDateTime()));
+	}
+
 	@Override
 	public Appointment schedule(final ScheduleAppointmentDTO dto) {
-		if(scheduleValidation(dto.getPatientId())) {
+		if(scheduleValidationForPastSixMonths(dto.getPatientId()) || scheduleValidation(dto.getPatientId())) {
 			throw new ScheduleException();
 		}
-		User patient = userRepository.findById(dto.getPatientId()).orElseThrow(NotFoundException::new);
+		User patient = userRepository.findByIdAndRole(dto.getPatientId(), Role.PATIENT).orElseThrow(NotFoundException::new);
 		Appointment appointment = appointmentRepository.findById(dto.getAppointmentId()).orElseThrow(NotFoundException::new);
 		return appointmentRepository.save(AppointmentMapper.ScheduleDTOToEntity(appointment, patient));
 	}
@@ -83,7 +97,12 @@ public class AppointmentServiceImpl implements AppointmentService {
 		return appointmentRepository.findByStatus(AppointmentStatus.COMPLETED);
 	}
 
-	private boolean scheduleValidation(Long patientId) {
+	@Override
+	public List<Appointment> findAllScheduled() {
+		return appointmentRepository.findByStatus(AppointmentStatus.SCHEDULED);
+	}
+
+	private boolean scheduleValidationForPastSixMonths(Long patientId) {
 		final var completedAppointmentsOfPatient = getPatientsCompletedAppointments(patientId);
 		final var sixMonths = 6;
 		return completedAppointmentsOfPatient.stream()
@@ -94,5 +113,15 @@ public class AppointmentServiceImpl implements AppointmentService {
 		return findAllCompleted().stream()
 			.filter(appointment -> Objects.equals(patientId, appointment.getPatient().getId()))
 			.toList();
+	}
+
+	private List<Appointment> getPatientScheduledAppointments(Long patientId) {
+		return findAllScheduled().stream()
+			.filter(appointment -> Objects.equals(patientId, appointment.getPatient().getId()))
+			.toList();
+	}
+
+	private boolean scheduleValidation(Long patientId) {
+		return !getPatientScheduledAppointments(patientId).isEmpty();
 	}
 }

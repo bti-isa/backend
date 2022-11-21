@@ -8,6 +8,7 @@ import com.isa.BloodTransferInstitute.mappers.GetAppointmentMapper;
 import com.isa.BloodTransferInstitute.service.AppointmentService;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -73,8 +74,9 @@ public class AppointmentController {
 	}
 
 	@GetMapping("/datetime")
-	public ResponseEntity<List<AppointmentDTO>> findByDateTime(@NotNull @RequestParam final LocalDateTime dateTime) {
-		final var appointments = appointmentService.findByDateTime(dateTime);
+	public ResponseEntity<List<AppointmentDTO>> findByDateTime(@Valid @NotNull @RequestParam(name = "dateTime") final String dateTime) {
+		LocalDateTime parsedDateTime = LocalDateTime.parse(dateTime, DateTimeFormatter.ISO_DATE_TIME);
+		final var appointments = appointmentService.findByDateTime(parsedDateTime);
 		if(appointments.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		}

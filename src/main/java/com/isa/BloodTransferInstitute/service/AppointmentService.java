@@ -26,4 +26,6 @@ public interface AppointmentService {
 	List<Appointment> findAllAvailable(int pageSize, int pageNumber);
 
 	List<Appointment> findAllCompleted();
+
+	List<Appointment> findAllScheduled();
 }

@@ -29,6 +29,4 @@ public class BloodBankDTO {
 
 	String description;
 
-	List<AppointmentDTO> appointmentList;
-
 }
