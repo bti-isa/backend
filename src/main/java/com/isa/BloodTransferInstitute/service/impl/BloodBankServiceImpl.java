@@ -9,6 +9,7 @@ import com.isa.BloodTransferInstitute.model.BloodBank;
 import com.isa.BloodTransferInstitute.repository.BloodBankRepository;
 import com.isa.BloodTransferInstitute.service.BloodBankService;
 
+import org.springframework.data.domain.Pageable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -20,6 +21,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -99,6 +101,11 @@ public class BloodBankServiceImpl implements BloodBankService {
 	@Override
 	public List<BloodBank> getAll() {
 		return bloodBankRepository.findAll();
+	}
+
+	@Override
+	public Page<BloodBank> getAllWithPage(Pageable page){
+		return bloodBankRepository.findAll(page);
 	}
 
 }

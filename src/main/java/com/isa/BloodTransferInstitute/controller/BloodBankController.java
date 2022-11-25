@@ -10,6 +10,7 @@ import com.isa.BloodTransferInstitute.mappers.GetBloodBankMapper;
 import com.isa.BloodTransferInstitute.model.BloodBank;
 import com.isa.BloodTransferInstitute.service.BloodBankService;
 
+import org.springframework.data.domain.Pageable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,6 +65,15 @@ public class BloodBankController {
 		}
 
 		return ResponseEntity.status(HttpStatus.OK).body(getBloodBankMapper.ListToListDTO(bloodBanks));
+	}
+
+	@GetMapping
+	public ResponseEntity<List<BloodBankDTO>> getAllWithPage(Pageable page) {
+		final var bloodBanks = bloodBankService.getAllWithPage(page);
+		if (bloodBanks.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		}
+		return ResponseEntity.status(HttpStatus.OK).body(getBloodBankMapper.ListToListDTO(bloodBanks.toList()));
 	}
 	@GetMapping("/simple")
 	public ResponseEntity<List<SimpleBloodBankDTO>> getSimpleInformation() {
