@@ -88,8 +88,8 @@ public class AppointmentServiceImpl implements AppointmentService {
 	}
 
 	@Override
-	public List<Appointment> findAllAvailable(int pageSize, int pageNumber) {
-		return appointmentRepository.findByStatus(AppointmentStatus.AVAILIBLE, PageRequest.of(pageNumber, pageSize, Sort.by(Direction.ASC, "bloodBank.rating")));
+	public List<Appointment> findAllAvailable(int pageSize, int pageNumber, Sort.Direction direction) {
+		return appointmentRepository.findByStatus(AppointmentStatus.AVAILIBLE, PageRequest.of(pageNumber, pageSize, Sort.by(direction, "bloodBank.rating")));
 	}
 
 	@Override

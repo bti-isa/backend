@@ -92,8 +92,8 @@ public class BloodBankServiceImpl implements BloodBankService {
 		}
 
 		final TypedQuery<BloodBank> query = em.createQuery(criteriaQuery);
-//		query.setFirstResult((searchDTO.getPageNumber()) * searchDTO.getPageSize());
-//		query.setMaxResults(searchDTO.getPageSize());
+		query.setFirstResult((searchDTO.getPageNumber()) * searchDTO.getPageSize());
+		query.setMaxResults(searchDTO.getPageSize());
 
 		return query.getResultList();
 	}

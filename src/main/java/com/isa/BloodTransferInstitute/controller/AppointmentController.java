@@ -14,6 +14,7 @@ import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -83,11 +84,12 @@ public class AppointmentController {
 		return ResponseEntity.status(HttpStatus.OK).body(appointmentMapper.listToListDTO(appointments));
 	}
 
-	@GetMapping("/available/{number}/{size}")
+	@GetMapping("/available/{number}/{size}/{direction}")
 	public ResponseEntity<List<AppointmentDTO>> findAllAvailable(@NotNull @PathVariable("number") final int pageNumber,
-																@NotNull @PathVariable("size") final int pageSize)
+																@NotNull @PathVariable("size") final int pageSize,
+																@NotNull @PathVariable("direction") final Sort.Direction direction)
 	{
-		final var appointments = appointmentService.findAllAvailable(pageSize, pageNumber);
+		final var appointments = appointmentService.findAllAvailable(pageSize, pageNumber, direction);
 		if(appointments.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		}
