@@ -9,6 +9,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Sort;
+
 public interface AppointmentService {
 
 	Appointment create(NewAppointmentDTO appointmentDTO);
@@ -23,7 +25,7 @@ public interface AppointmentService {
 
 	List<Appointment> findByDateTime(LocalDateTime dateTime);
 
-	List<Appointment> findAllAvailable(int pageSize, int pageNumber);
+	List<Appointment> findAllAvailable(int pageSize, int pageNumber, Sort.Direction direction);
 
 	List<Appointment> findAllCompleted();
 
