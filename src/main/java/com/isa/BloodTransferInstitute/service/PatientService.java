@@ -2,6 +2,7 @@ package com.isa.BloodTransferInstitute.service;
 
 import com.isa.BloodTransferInstitute.dto.user.patient.CheckUniquePatientDTO;
 import com.isa.BloodTransferInstitute.dto.user.patient.NewPatientDTO;
+import com.isa.BloodTransferInstitute.dto.user.patient.SearchPatientDTO;
 import com.isa.BloodTransferInstitute.dto.user.patient.UpdatePatientDTO;
 import com.isa.BloodTransferInstitute.model.User;
 
@@ -23,4 +24,5 @@ public interface PatientService {
 
 	ArrayList<Boolean> checkUnique(CheckUniquePatientDTO dto);
 
+	List<User> search(final SearchPatientDTO dto);
 }

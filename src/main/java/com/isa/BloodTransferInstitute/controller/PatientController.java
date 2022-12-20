@@ -1,9 +1,6 @@
 package com.isa.BloodTransferInstitute.controller;
 
-import com.isa.BloodTransferInstitute.dto.user.patient.CheckUniquePatientDTO;
-import com.isa.BloodTransferInstitute.dto.user.patient.NewPatientDTO;
-import com.isa.BloodTransferInstitute.dto.user.patient.PatientDTO;
-import com.isa.BloodTransferInstitute.dto.user.patient.UpdatePatientDTO;
+import com.isa.BloodTransferInstitute.dto.user.patient.*;
 import com.isa.BloodTransferInstitute.mappers.GetUserMapper;
 import com.isa.BloodTransferInstitute.service.PatientService;
 
@@ -67,5 +64,11 @@ public class PatientController {
 	public ResponseEntity<List<Boolean>> checkUnique(@Valid @NotNull @RequestBody CheckUniquePatientDTO dto){
 		List<Boolean> retVal = patientService.checkUnique(dto);
 		return ResponseEntity.status(HttpStatus.OK).body(retVal);
+	}
+
+	@PostMapping("/search")
+	public ResponseEntity<List<PatientDTO>> search(@RequestBody final SearchPatientDTO dto) {
+		final var searchResult = getUserMapper.entityListToDTOlist(patientService.search(dto));
+		return  ResponseEntity.status(HttpStatus.OK).body(searchResult);
 	}
 }

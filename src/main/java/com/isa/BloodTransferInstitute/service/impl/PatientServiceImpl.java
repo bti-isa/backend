@@ -2,6 +2,7 @@ package com.isa.BloodTransferInstitute.service.impl;
 
 import com.isa.BloodTransferInstitute.dto.user.patient.CheckUniquePatientDTO;
 import com.isa.BloodTransferInstitute.dto.user.patient.NewPatientDTO;
+import com.isa.BloodTransferInstitute.dto.user.patient.SearchPatientDTO;
 import com.isa.BloodTransferInstitute.dto.user.patient.UpdatePatientDTO;
 import com.isa.BloodTransferInstitute.enums.Role;
 import com.isa.BloodTransferInstitute.exception.NotFoundException;
@@ -20,13 +21,20 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+
 @RequiredArgsConstructor
 @Service
 public class PatientServiceImpl implements PatientService {
 
 	private final UserRepository userRepository;
 	private final BloodBankRepository bloodBankRepository;
-
+	private final EntityManager em;
 	@Override
 	@Transactional
 	public User add(final NewPatientDTO dto) {
@@ -82,5 +90,29 @@ public class PatientServiceImpl implements PatientService {
 			retVal.add(true);
 
 		return retVal;
+	}
+
+	@Override
+	public List<User> search(SearchPatientDTO dto) {
+		final CriteriaBuilder cb = em.getCriteriaBuilder();
+		final CriteriaQuery<User> criteriaQuery = cb.createQuery(User.class);
+		final Root<User> user = criteriaQuery.from(User.class);
+		final List<Predicate> predicates = new ArrayList<>();
+
+		if (dto.getSearchParameter() != null && !dto.getSearchParameter().isEmpty()) {
+			predicates.add(cb.like(user.get("firstname"), dto.getSearchParameter() + "%"));
+		}
+		if (dto.getSearchParameter() != null && !dto.getSearchParameter().isEmpty()) {
+			predicates.add(cb.like(user.get("lastname"), dto.getSearchParameter() + "%"));
+		}
+		if (predicates.isEmpty()) {
+			criteriaQuery.where(predicates.toArray(new Predicate[0]));
+		} else {
+			criteriaQuery.where(cb.and(predicates.toArray(new Predicate[0])));
+		}
+
+		final TypedQuery<User> querry = em.createQuery(criteriaQuery);
+
+		return querry.getResultList();
 	}
 }
