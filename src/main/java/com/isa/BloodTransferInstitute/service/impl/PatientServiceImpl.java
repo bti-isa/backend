@@ -108,7 +108,7 @@ public class PatientServiceImpl implements PatientService {
 		if (predicates.isEmpty()) {
 			criteriaQuery.where(predicates.toArray(new Predicate[0]));
 		} else {
-			criteriaQuery.where(cb.or(predicates.toArray(new Predicate[0])));
+			criteriaQuery.where(cb.and(predicates.toArray(new Predicate[0])));
 		}
 
 		final TypedQuery<User> querry = em.createQuery(criteriaQuery);
