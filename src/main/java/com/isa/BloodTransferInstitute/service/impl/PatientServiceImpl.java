@@ -74,7 +74,7 @@ public class PatientServiceImpl implements PatientService {
 	public ArrayList<Boolean> checkUnique(CheckUniquePatientDTO dto){
 		ArrayList<Boolean> retVal = new ArrayList<>();
 
-		if(userRepository.findByEmail(dto.getEmail())==null)
+		if(userRepository.findByUsername(dto.getEmail())==null)
 			retVal.add(false);
 		else
 			retVal.add(true);
