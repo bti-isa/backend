@@ -1,24 +1,16 @@
 package com.isa.BloodTransferInstitute.security;
 
-import static org.springframework.http.HttpMethod.POST;
 import static org.springframework.security.config.Customizer.withDefaults;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
@@ -30,32 +22,64 @@ import lombok.RequiredArgsConstructor;
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-@EnableMethodSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
 	private final JwtAuthFilter jwtAuthFilter;
-	private final UserDetailsService userDetailsService;
-	private static final RequestMatcher AUTH_MATCHER = new OrRequestMatcher(
-		new AntPathRequestMatcher("/api/User/**")
+	private final UserAuthenticationProvider userAuthenticationProvider;
+	private final RequestMatcher AUTH_MATCHER = new OrRequestMatcher(
+		new AntPathRequestMatcher( API_URL + "/User/authenticate"),
+		new AntPathRequestMatcher(API_URL + "/Patient/", "POST"),
+		new AntPathRequestMatcher(API_URL + "/Patient/checkUnique")
 	);
+//	private final RequestMatcher COMMON_MATCHER = new OrRequestMatcher(
+//		new AntPathRequestMatcher(API_URL + "/BloodBank/search"),
+//		new AntPathRequestMatcher(API_URL + "/BloodBank/all"),
+//		new AntPathRequestMatcher(API_URL + "/BloodBank", "GET"),
+//		new AntPathRequestMatcher(API_URL + "/BloodBank/simple")
+//	);
+//	private final RequestMatcher PATIENT_MATCHER = new OrRequestMatcher(
+//		new AntPathRequestMatcher(API_URL + "/Appointment/schedule"),
+//		new AntPathRequestMatcher(API_URL + "/Appointment/datetime", "GET"),
+//		new AntPathRequestMatcher(API_URL + "/Appointment/available/{number}/{size}/{direction}", "GET"),
+//		new AntPathRequestMatcher(API_URL + "/polls/add"),
+//		new AntPathRequestMatcher(API_URL + "/Patient/", "PATCH")
+//	);
+//	private final RequestMatcher SYSTEM_ADMIN_MATCHER = new OrRequestMatcher(
+//		new AntPathRequestMatcher(API_URL + "/Admin/add"),
+//		new AntPathRequestMatcher(API_URL + "/Admin/update"),
+//		new AntPathRequestMatcher(API_URL + "/BloodBank/add"),
+//		new AntPathRequestMatcher(API_URL + "/BloodBank/update"),
+//		new AntPathRequestMatcher(API_URL + "/Patient/{id}", "DELETE"),
+//		new AntPathRequestMatcher(API_URL + "/Patient/search"),
+//		new AntPathRequestMatcher(API_URL + "/Patient/all"),
+//		new AntPathRequestMatcher(API_URL + "/Patient/{id}", "GET")
+//	);
+//	private final RequestMatcher INSTITUTE_ADMIN_MATCHER = new OrRequestMatcher(
+//		new AntPathRequestMatcher(API_URL + "/Appointment/", "POST"),
+//		new AntPathRequestMatcher(API_URL + "/Appointment/finish"),
+//		new AntPathRequestMatcher(API_URL + "/Appointment/all"),
+//		new AntPathRequestMatcher(API_URL + "/Appointment/{id}"),
+//		new AntPathRequestMatcher(API_URL + "/Patient/all"),
+//		new AntPathRequestMatcher(API_URL + "/Patient/{id}", "GET")
+//	);
 
-	private static final RequestMatcher MATCHER = new OrRequestMatcher(
-		new AntPathRequestMatcher("/api/**")
-	);
+	private static final String API_URL = "/api";
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http
 			.csrf().disable()
 			.authorizeHttpRequests()
-			.requestMatchers(AUTH_MATCHER)
-			.permitAll()
-			.requestMatchers(MATCHER)
-			.authenticated()
+			.requestMatchers(AUTH_MATCHER).permitAll()
+//			.requestMatchers(COMMON_MATCHER).hasAnyAuthority("SYSTEM_ADMIN", "PATIENT", "INSTITUTE_ADMIN")
+//			.requestMatchers(PATIENT_MATCHER).hasAuthority("PATIENT")
+//			.requestMatchers(INSTITUTE_ADMIN_MATCHER).hasAuthority("INSTITUTE_ADMIN")
+//			.requestMatchers(SYSTEM_ADMIN_MATCHER).hasAuthority("SYSTEM_ADMIN")
 			.anyRequest()
-			.hasAnyRole("PATIENT", "SYSTEM_ADMIN", "INSTITUTE_ADMIN")
+			.authenticated()
 			.and()
-			.authenticationProvider(authenticationProvider())
+			.authenticationProvider(userAuthenticationProvider)
 			.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
 			.httpBasic(withDefaults())
 			.sessionManagement()
@@ -65,22 +89,8 @@ public class SecurityConfig {
 	}
 
 	@Bean
-	public AuthenticationProvider authenticationProvider() {
-		final DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
-		authenticationProvider.setUserDetailsService(userDetailsService);
-		authenticationProvider.setPasswordEncoder(passwordEncoder());
-		return authenticationProvider;
-	}
-
-	@Bean
 	public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
 		return configuration.getAuthenticationManager();
-	}
-
-	@Bean
-	public PasswordEncoder passwordEncoder() {
-		//return NoOpPasswordEncoder.getInstance();
-		return new BCryptPasswordEncoder();
 	}
 
 }

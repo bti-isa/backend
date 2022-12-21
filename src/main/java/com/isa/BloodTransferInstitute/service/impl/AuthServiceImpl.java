@@ -50,15 +50,11 @@ public class AuthServiceImpl implements AuthService, UserDetailsService {
             throw new UsernameNotFoundException("User: " + username + " not found.");
         }
         Collection<GrantedAuthority> authorities = new ArrayList<>();
-        if (user.getRole() == Role.PATIENT) {
-            authorities.add(new SimpleGrantedAuthority("PATIENT"));
-        } else if (user.getRole() == Role.SYSTEM_ADMIN) {
-            authorities.add(new SimpleGrantedAuthority("SYSTEM_ADMIN"));
-        } else if (user.getRole() == Role.INSTITUTE_ADMIN) {
-            authorities.add(new SimpleGrantedAuthority("INSTITUTE_ADMIN"));
+        if (user.getRole() != null) {
+            authorities.add(new SimpleGrantedAuthority(user.getRole().toString()));
         } else {
             throw new UserHasNoRoleException("User: " + username + " has no role.");
         }
-        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), user.isEnabled(), user.isAccountExpired(), user.isCredentialsExpired(), user.isAccountLocked(), authorities);
+        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), user.isEnabled(), !user.isAccountExpired(), !user.isCredentialsExpired(), !user.isAccountLocked(), authorities);
     }
 }

@@ -7,6 +7,7 @@ import com.isa.BloodTransferInstitute.service.impl.AuthServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -38,6 +39,7 @@ public class UserController {
     }
 
     @PutMapping("/password/change")
+    @PreAuthorize("hasAnyAuthority('INSTITUTE_ADMIN', 'SYSTEM_ADMIN', 'PATIENT')")
     public ResponseEntity<Boolean> changePassword(@Valid @NotNull @RequestBody final ChangePasswordDTO dto){
         var result = authService.changePassword(dto);
         return ResponseEntity.status(HttpStatus.OK).body(result.get());
