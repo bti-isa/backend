@@ -12,8 +12,6 @@ public enum BloodType {
 	O_MINUS("O-");
 
 	private final String bloodType;
-
 	BloodType(final String bloodType) { this.bloodType = bloodType; }
-
 	public String getBloodType() { return this.bloodType; }
 }
