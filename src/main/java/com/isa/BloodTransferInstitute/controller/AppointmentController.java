@@ -87,6 +87,7 @@ public class AppointmentController {
 																			@NotNull @PathVariable("direction") final Sort.Direction direction,
 																			@NotNull @RequestParam(name = "dateTime") final String dateTime) {
 		LocalDateTime parsedDateTime = LocalDateTime.parse(dateTime, DateTimeFormatter.ISO_DATE_TIME);
+		parsedDateTime = parsedDateTime.plusHours(1).minusSeconds(parsedDateTime.getSecond());
 		final var appointments = appointmentService.findAllAvailableByDateTime(parsedDateTime, pageSize, pageNumber, direction);
 		if(appointments.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
