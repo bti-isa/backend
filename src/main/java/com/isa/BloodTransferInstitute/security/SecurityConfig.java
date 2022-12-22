@@ -80,6 +80,8 @@ public class SecurityConfig {
 			.anyRequest()
 			.authenticated()
 			.and()
+			.cors()
+			.and()
 			.authenticationProvider(userAuthenticationProvider)
 			.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
 			.httpBasic(withDefaults())
