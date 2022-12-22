@@ -1,7 +1,6 @@
-package com.isa.BloodTransferInstitute.dto.appointment;
+package com.isa.BloodTransferInstitute.dto;
 
-import com.isa.BloodTransferInstitute.dto.NewPollDTO;
-
+import javax.persistence.Column;
 import javax.validation.constraints.NotNull;
 
 import lombok.AccessLevel;
@@ -16,14 +15,29 @@ import lombok.experimental.FieldDefaults;
 @Builder(toBuilder = true)
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ScheduleAppointmentDTO {
+public class NewPollDTO {
 
 	@NotNull
-	Long appointmentId;
+	Boolean weightOver50kg;
 
 	@NotNull
-	String username;
+	Boolean commonCold;
 
 	@NotNull
-	NewPollDTO poll;
+	Boolean skinDiseases;
+
+	@NotNull
+	Boolean problemWithPressure;
+
+	@NotNull
+	Boolean antibiotics;
+
+	@NotNull
+	Boolean menstruation;
+
+	@NotNull
+	Boolean dentalIntervention;
+
+	@NotNull
+	Boolean other;
 }
