@@ -1,5 +1,6 @@
 package com.isa.BloodTransferInstitute.model;
 
+import com.isa.BloodTransferInstitute.enums.BloodType;
 import com.isa.BloodTransferInstitute.enums.Gender;
 import com.isa.BloodTransferInstitute.enums.Role;
 
@@ -80,6 +81,9 @@ public class User {
 	@Column
 	boolean credentialsExpired = false;
 
+	@Column
+	BloodType bloodType;
+
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "address_id", referencedColumnName = "id")
 	Address address;
@@ -88,4 +92,11 @@ public class User {
 	@JoinColumn(name = "bloodbank_id", referencedColumnName = "id")
 	BloodBank bloodBank;
 
+	public void punish(){
+		if(penalties > 1){
+			enabled = false;
+			return;
+		}
+		penalties += 1;
+	}
 }

@@ -1,6 +1,7 @@
 package com.isa.BloodTransferInstitute.dto.user.patient;
 
 import com.isa.BloodTransferInstitute.dto.address.NewAddressDTO;
+import com.isa.BloodTransferInstitute.enums.BloodType;
 import com.isa.BloodTransferInstitute.enums.Gender;
 import com.isa.BloodTransferInstitute.enums.Role;
 
@@ -57,5 +58,8 @@ public class NewPatientDTO {
 
 	@NotNull
 	NewAddressDTO address;
+
+	@NotNull
+	BloodType bloodType;
 
 }
