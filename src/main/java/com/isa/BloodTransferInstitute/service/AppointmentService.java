@@ -23,11 +23,13 @@ public interface AppointmentService {
 
 	Optional<Appointment> findById(Long id);
 
-	List<Appointment> findByDateTime(LocalDateTime dateTime);
-
-	List<Appointment> findAllAvailable(int pageSize, int pageNumber, Sort.Direction direction);
+	List<Appointment> findAllAvailableByDateTime(final LocalDateTime dateTime, int pageSize, int pageNumber, Sort.Direction direction);
 
 	List<Appointment> findAllCompleted();
 
 	List<Appointment> findAllScheduled();
+
+	List<Appointment> findAllByPatientId(Long patientId);
+
+	List<Appointment> findAllByBloodBankId(Long bloodBankId);
 }

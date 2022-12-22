@@ -1,6 +1,7 @@
 package com.isa.BloodTransferInstitute.service.impl;
 
 import com.isa.BloodTransferInstitute.dto.auth.ChangePasswordDTO;
+import com.isa.BloodTransferInstitute.enums.Gender;
 import com.isa.BloodTransferInstitute.enums.Role;
 import com.isa.BloodTransferInstitute.exception.NotFoundException;
 import com.isa.BloodTransferInstitute.exception.UserHasNoRoleException;
@@ -14,11 +15,15 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
+
+import javax.annotation.PostConstruct;
 
 @Service
 @RequiredArgsConstructor

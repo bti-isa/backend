@@ -83,13 +83,8 @@ public class AppointmentServiceImpl implements AppointmentService {
 	}
 
 	@Override
-	public List<Appointment> findByDateTime(final LocalDateTime dateTime) {
-		return appointmentRepository.findByDateTime(dateTime);
-	}
-
-	@Override
-	public List<Appointment> findAllAvailable(int pageSize, int pageNumber, Sort.Direction direction) {
-		return appointmentRepository.findByStatus(AppointmentStatus.AVAILIBLE, PageRequest.of(pageNumber, pageSize, Sort.by(direction, "bloodBank.rating")));
+	public List<Appointment> findAllAvailableByDateTime(final LocalDateTime dateTime, int pageSize, int pageNumber, Sort.Direction direction) {
+		return appointmentRepository.findByDateTimeAndStatus(dateTime, AppointmentStatus.AVAILIBLE, PageRequest.of(pageNumber, pageSize, Sort.by(direction, "bloodBank.rating")));
 	}
 
 	@Override
@@ -100,6 +95,16 @@ public class AppointmentServiceImpl implements AppointmentService {
 	@Override
 	public List<Appointment> findAllScheduled() {
 		return appointmentRepository.findByStatus(AppointmentStatus.SCHEDULED);
+	}
+
+	@Override
+	public List<Appointment> findAllByPatientId(Long patientId) {
+		return appointmentRepository.findByPatientId(patientId);
+	}
+
+	@Override
+	public List<Appointment> findAllByBloodBankId(Long bloodBankId) {
+		return appointmentRepository.findByBloodBankId(bloodBankId);
 	}
 
 	private boolean scheduleValidationForPastSixMonths(Long patientId) {
