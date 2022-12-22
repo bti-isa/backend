@@ -48,7 +48,7 @@ public class BloodBankController {
 	}
 
 	@PostMapping("/search")
-	@PreAuthorize("hasAnyAuthority('INSTITUTE_ADMIN', 'SYSTEM_ADMIN', 'PATIENT')")
+	//@PreAuthorize("hasAnyAuthority('INSTITUTE_ADMIN', 'SYSTEM_ADMIN', 'PATIENT')")
 	public ResponseEntity<List<BloodBankDTO>> search(@RequestBody final SearchDTO searchDTO) {
 		final var searchResult = getBloodBankMapper.ListToListDTO(bloodBankService.search(searchDTO));
 		return ResponseEntity.status(HttpStatus.OK).body(searchResult);
@@ -62,7 +62,7 @@ public class BloodBankController {
 	}
 
 	@GetMapping("/all")
-	@PreAuthorize("hasAnyAuthority('INSTITUTE_ADMIN', 'SYSTEM_ADMIN', 'PATIENT')")
+	//@PreAuthorize("hasAnyAuthority('INSTITUTE_ADMIN', 'SYSTEM_ADMIN', 'PATIENT')")
 	public ResponseEntity<List<BloodBankDTO>> getAll() {
 		final var bloodBanks = bloodBankService.getAll();
 		if (bloodBanks.isEmpty()) {
@@ -70,6 +70,16 @@ public class BloodBankController {
 		}
 
 		return ResponseEntity.status(HttpStatus.OK).body(getBloodBankMapper.ListToListDTO(bloodBanks));
+	}
+
+	@GetMapping("/{id}")
+	public ResponseEntity<BloodBankDTO> getAById(@Valid @NotNull @PathVariable("id") final Long id) {
+		final var bloodBank = bloodBankService.getById(id);
+		if (bloodBank.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		}
+
+		return ResponseEntity.status(HttpStatus.OK).body(getBloodBankMapper.EntityToEntityDTO(bloodBank.get()));
 	}
 
 	@GetMapping
@@ -81,6 +91,7 @@ public class BloodBankController {
 		}
 		return ResponseEntity.status(HttpStatus.OK).body(getBloodBankMapper.ListToListDTO(bloodBanks.toList()));
 	}
+
 	@GetMapping("/simple")
 	@PreAuthorize("hasAnyAuthority('INSTITUTE_ADMIN', 'SYSTEM_ADMIN', 'PATIENT')")
 	public ResponseEntity<List<SimpleBloodBankDTO>> getSimpleInformation() {

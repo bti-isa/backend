@@ -24,6 +24,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
 
+import javax.annotation.PostConstruct;
+
 @Service
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService, UserDetailsService {

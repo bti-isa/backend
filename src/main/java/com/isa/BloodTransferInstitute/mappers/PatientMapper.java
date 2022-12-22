@@ -30,7 +30,7 @@ public class PatientMapper {
 		final var newUser = User.builder()
 			.firstname(dto.getFirstname())
 			.lastname(dto.getLastname())
-			.username(dto.getEmail())
+			.username(dto.getUsername())
 			.password(dto.getPassword())
 			.phoneNumber(dto.getPhoneNumber())
 			.occupation(dto.getOccupation())
