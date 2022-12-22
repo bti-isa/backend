@@ -23,4 +23,5 @@ public interface GetUserMapper {
 	List<PatientDTO> entityListToDTOlist(List<User> users);
 	AdminDTO AdminToAdminDTO(User admin);
 	BloodBankDTO BloodBankToBloodBankDTO(BloodBank bloodBank);
+	List<AdminDTO> adminListToDTOlist(List<User> admins);
 }

@@ -18,6 +18,10 @@ public class Poll {
     @Column(nullable = false,updatable = false,unique = true)
     Long id;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "patient_id", referencedColumnName = "id")
+    User patient;
+
     @Column(nullable = false)
     Boolean weightOver50kg;
 
@@ -41,5 +45,13 @@ public class Poll {
 
     @Column(nullable = false)
     Boolean other;
+
+    public Boolean checkCriteria(){
+        if(!weightOver50kg || commonCold || skinDiseases || problemWithPressure
+           || antibiotics || menstruation || dentalIntervention || other){
+            return false;
+        }
+        return true;
+    }
 
 }

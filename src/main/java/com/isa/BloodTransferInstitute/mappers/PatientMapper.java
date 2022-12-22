@@ -30,7 +30,7 @@ public class PatientMapper {
 		final var newUser = User.builder()
 			.firstname(dto.getFirstname())
 			.lastname(dto.getLastname())
-			.email(dto.getEmail())
+			.username(dto.getUsername())
 			.password(dto.getPassword())
 			.phoneNumber(dto.getPhoneNumber())
 			.occupation(dto.getOccupation())
@@ -40,8 +40,9 @@ public class PatientMapper {
 			.role(dto.getRole())
 			.deleted(false)
 			.penalties(0)
-			.accountActivated(true)
+			.enabled(true)
 			.address(address)
+			.bloodType(dto.getBloodType())
 			.build();
 
 		return newUser;
@@ -76,8 +77,9 @@ public class PatientMapper {
 			.jmbg(dto.getJmbg())
 			.gender(dto.getGender())
 			.role(dto.getRole())
-			.accountActivated(dto.getAccountActivated())
+			.enabled(dto.getAccountActivated())
 			.address(updatedAddress)
+			.bloodType(dto.getBloodType())
 			.build();
 	}
 

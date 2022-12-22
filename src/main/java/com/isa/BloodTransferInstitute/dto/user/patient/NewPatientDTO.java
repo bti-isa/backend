@@ -1,6 +1,7 @@
 package com.isa.BloodTransferInstitute.dto.user.patient;
 
 import com.isa.BloodTransferInstitute.dto.address.NewAddressDTO;
+import com.isa.BloodTransferInstitute.enums.BloodType;
 import com.isa.BloodTransferInstitute.enums.Gender;
 import com.isa.BloodTransferInstitute.enums.Role;
 
@@ -31,7 +32,7 @@ public class NewPatientDTO {
 
 	@NotBlank
 	@Email
-	String email;
+	String username;
 
 	@NotBlank
 	@Size(min = 8, message = "Please, enter at least 8 characters for password.")
@@ -57,5 +58,7 @@ public class NewPatientDTO {
 
 	@NotNull
 	NewAddressDTO address;
+
+	BloodType bloodType;
 
 }

@@ -25,4 +25,8 @@ public interface PatientService {
 	ArrayList<Boolean> checkUnique(CheckUniquePatientDTO dto);
 
 	List<User> search(final SearchPatientDTO dto);
+
+	boolean punish(User patient);
+
+	void activate(Long id);
 }

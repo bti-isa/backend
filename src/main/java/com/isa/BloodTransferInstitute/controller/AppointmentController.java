@@ -17,6 +17,7 @@ import javax.validation.constraints.NotNull;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -39,24 +40,28 @@ public class AppointmentController {
 	private final GetAppointmentMapper appointmentMapper;
 
 	@PostMapping("/")
+	@PreAuthorize("hasAuthority('INSTITUTE_ADMIN')")
 	public ResponseEntity<AppointmentDTO> create(@Valid @NotNull @RequestBody final NewAppointmentDTO dto) {
 		final var appointment = appointmentService.create(dto);
 		return ResponseEntity.status(HttpStatus.CREATED).body(appointmentMapper.entityToEntityDTO(appointment));
 	}
 
 	@PatchMapping("/schedule")
+	@PreAuthorize("hasAuthority('PATIENT')")
 	public ResponseEntity<AppointmentDTO> schedule(@Valid @NotNull @RequestBody final ScheduleAppointmentDTO dto) {
 		final var appointment = appointmentService.schedule(dto);
 		return ResponseEntity.status(HttpStatus.OK).body(appointmentMapper.entityToEntityDTO(appointment));
 	}
 
 	@PatchMapping("/finish")
+	@PreAuthorize("hasAuthority('INSTITUTE_ADMIN')")
 	public ResponseEntity<AppointmentDTO> finish(@Valid @NotNull @RequestBody final FinishedAppointmentDTO dto) {
 		final var appointment = appointmentService.finish(dto);
 		return ResponseEntity.status(HttpStatus.OK).body(appointmentMapper.entityToEntityDTO(appointment));
 	}
 
 	@GetMapping("/all")
+	@PreAuthorize("hasAuthority('INSTITUTE_ADMIN')")
 	public ResponseEntity<List<AppointmentDTO>> getAll() {
 		final var appointments = appointmentService.getAll();
 		if(appointments.isEmpty()) {
@@ -66,6 +71,7 @@ public class AppointmentController {
 	}
 
 	@GetMapping("/{id}")
+	@PreAuthorize("hasAuthority('INSTITUTE_ADMIN')")
 	public ResponseEntity<AppointmentDTO> getAppointment(@NotNull @PathVariable("id") final Long id) {
 		final var appointment = appointmentService.findById(id);
 		if(appointment.isEmpty()) {
@@ -74,25 +80,38 @@ public class AppointmentController {
 		return ResponseEntity.status(HttpStatus.OK).body(appointmentMapper.entityToEntityDTO(appointment.get()));
 	}
 
-	@GetMapping("/datetime")
-	public ResponseEntity<List<AppointmentDTO>> findByDateTime(@Valid @NotNull @RequestParam(name = "dateTime") final String dateTime) {
+	@GetMapping("/{number}/{size}/{direction}")
+	@PreAuthorize("hasAuthority('PATIENT')")
+	public ResponseEntity<List<AppointmentDTO>> findAllAvailableByDateTime(@NotNull @PathVariable("number") final int pageNumber,
+																			@NotNull @PathVariable("size") final int pageSize,
+																			@NotNull @PathVariable("direction") final Sort.Direction direction,
+																			@NotNull @RequestParam(name = "dateTime") final String dateTime) {
 		LocalDateTime parsedDateTime = LocalDateTime.parse(dateTime, DateTimeFormatter.ISO_DATE_TIME);
-		final var appointments = appointmentService.findByDateTime(parsedDateTime);
+		final var appointments = appointmentService.findAllAvailableByDateTime(parsedDateTime, pageSize, pageNumber, direction);
 		if(appointments.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		}
 		return ResponseEntity.status(HttpStatus.OK).body(appointmentMapper.listToListDTO(appointments));
 	}
 
-	@GetMapping("/available/{number}/{size}/{direction}")
-	public ResponseEntity<List<AppointmentDTO>> findAllAvailable(@NotNull @PathVariable("number") final int pageNumber,
-																@NotNull @PathVariable("size") final int pageSize,
-																@NotNull @PathVariable("direction") final Sort.Direction direction)
-	{
-		final var appointments = appointmentService.findAllAvailable(pageSize, pageNumber, direction);
-		if(appointments.isEmpty()) {
+	@GetMapping("/patient/{id}")
+	@PreAuthorize("hasAuthority('PATIENT')")
+	public ResponseEntity<List<AppointmentDTO>> findAllByPatientId(@NotNull @PathVariable("id") final Long id) {
+		final var appointment = appointmentService.findAllByPatientId(id);
+		if(appointment.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		}
-		return ResponseEntity.status(HttpStatus.OK).body(appointmentMapper.listToListDTO(appointments));
+		return ResponseEntity.status(HttpStatus.OK).body(appointmentMapper.listToListDTO(appointment));
 	}
+
+	@GetMapping("/admins-bloodBank/{id}")
+	@PreAuthorize("hasAuthority('INSTITUTE_ADMIN')")
+	public ResponseEntity<List<AppointmentDTO>> findAllByAdminsBloodBankId(@NotNull @PathVariable("id") final Long id) {
+		final var appointment = appointmentService.findAllByAdminsBloodBankId(id);
+		if(appointment.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		}
+		return ResponseEntity.status(HttpStatus.OK).body(appointmentMapper.listToListDTO(appointment));
+	}
+
 }

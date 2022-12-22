@@ -15,4 +15,16 @@ public class PollServiceImpl implements PollService {
     public void add(Poll poll){
         pollRepository.save(poll);
     }
+
+    public Boolean check(Long id){
+        var poll = pollRepository.findByPatientId(id);
+        if(poll != null && checkPollData(poll)){
+            return true;
+        }
+        return  false;
+    }
+
+    private Boolean checkPollData(Poll poll){
+        return poll.checkCriteria();
+    }
 }
