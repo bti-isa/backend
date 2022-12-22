@@ -34,7 +34,7 @@ public class PatientController {
 	@GetMapping("/activate/{id}")
 	public ResponseEntity<?> activate(@PathVariable Long id){
 		patientService.activate(id);
-		return ResponseEntity.ok("bla");
+		return ResponseEntity.ok("Your succesfully active account.");
 	}
 
 	@PatchMapping("/")
