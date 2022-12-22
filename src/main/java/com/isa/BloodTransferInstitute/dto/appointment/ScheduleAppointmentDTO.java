@@ -22,7 +22,7 @@ public class ScheduleAppointmentDTO {
 	Long appointmentId;
 
 	@NotNull
-	Long patientId;
+	String username;
 
 	@NotNull
 	NewPollDTO poll;

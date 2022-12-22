@@ -61,10 +61,10 @@ public class AppointmentServiceImpl implements AppointmentService {
 
 	@Override
 	public Appointment schedule(final ScheduleAppointmentDTO dto) {
-		if(scheduleValidationForPastSixMonths(dto.getPatientId()) || scheduleValidation(dto.getPatientId())) {
+		User patient = userRepository.findByUsername(dto.getUsername());
+		if(scheduleValidationForPastSixMonths(patient.getId()) || scheduleValidation(patient.getId())) {
 			throw new ScheduleException();
 		}
-		User patient = userRepository.findByIdAndRole(dto.getPatientId(), Role.PATIENT).orElseThrow(NotFoundException::new);
 		pollRepository.save(PollMapper.NewDTOToEntity(dto.getPoll(), patient));
 		Appointment appointment = appointmentRepository.findById(dto.getAppointmentId()).orElseThrow(NotFoundException::new);
 		return appointmentRepository.save(AppointmentMapper.ScheduleDTOToEntity(appointment, patient));
