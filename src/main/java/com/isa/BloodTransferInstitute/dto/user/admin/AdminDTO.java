@@ -18,7 +18,7 @@ public class AdminDTO {
     Long id;
     String firstname;
     String lastname;
-    String email;
+    String username;
     String jmbg;
     Gender gender;
     Role role;
