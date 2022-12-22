@@ -9,11 +9,13 @@ import com.isa.BloodTransferInstitute.exception.CreateAppointmentException;
 import com.isa.BloodTransferInstitute.exception.NotFoundException;
 import com.isa.BloodTransferInstitute.exception.ScheduleException;
 import com.isa.BloodTransferInstitute.mappers.AppointmentMapper;
+import com.isa.BloodTransferInstitute.mappers.PollMapper;
 import com.isa.BloodTransferInstitute.model.Appointment;
 import com.isa.BloodTransferInstitute.model.BloodBank;
 import com.isa.BloodTransferInstitute.model.User;
 import com.isa.BloodTransferInstitute.repository.AppointmentRepository;
 import com.isa.BloodTransferInstitute.repository.BloodBankRepository;
+import com.isa.BloodTransferInstitute.repository.PollRepository;
 import com.isa.BloodTransferInstitute.repository.UserRepository;
 import com.isa.BloodTransferInstitute.service.AppointmentService;
 
@@ -39,6 +41,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 	private final AppointmentRepository appointmentRepository;
 	private final BloodBankRepository bloodBankRepository;
 	private final UserRepository userRepository;
+	private final PollRepository pollRepository;
 
 	@Override
 	public Appointment create(final NewAppointmentDTO appointmentDTO) {
@@ -62,6 +65,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 			throw new ScheduleException();
 		}
 		User patient = userRepository.findByIdAndRole(dto.getPatientId(), Role.PATIENT).orElseThrow(NotFoundException::new);
+		pollRepository.save(PollMapper.NewDTOToEntity(dto.getPoll(), patient));
 		Appointment appointment = appointmentRepository.findById(dto.getAppointmentId()).orElseThrow(NotFoundException::new);
 		return appointmentRepository.save(AppointmentMapper.ScheduleDTOToEntity(appointment, patient));
 	}
