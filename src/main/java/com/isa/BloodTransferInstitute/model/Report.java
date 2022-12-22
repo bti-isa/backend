@@ -29,5 +29,4 @@ public class Report {
 
 	@Column
 	String description;
-
 }

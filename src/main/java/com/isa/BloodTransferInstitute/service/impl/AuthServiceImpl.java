@@ -19,6 +19,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
@@ -30,6 +31,23 @@ import javax.annotation.PostConstruct;
 public class AuthServiceImpl implements AuthService, UserDetailsService {
 
     private final UserRepository userRepository;
+
+//    @PostConstruct
+//    public void initUser(){
+//        PasswordEncoder encoder = new BCryptPasswordEncoder();
+//        User u1 = new User();
+//        u1.setDeleted(false);
+//        u1.setFirstname("Milos");
+//        u1.setLastname("Miki");
+//        u1.setUsername("mitraja@gmail.com");
+//        u1.setPhoneNumber("95874673563563");
+//        u1.setJmbg("239818973217127");
+//        u1.setEnabled(true);
+//        u1.setGender(Gender.MALE);
+//        u1.setRole(Role.PATIENT);
+//        u1.setPassword(encoder.encode("123"));
+//        userRepository.save(u1);
+//    }
 
     @Override
     public Optional<Boolean> changePassword(ChangePasswordDTO dto) {

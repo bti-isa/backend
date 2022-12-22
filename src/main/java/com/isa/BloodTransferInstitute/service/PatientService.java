@@ -26,5 +26,7 @@ public interface PatientService {
 
 	List<User> search(final SearchPatientDTO dto);
 
+	boolean punish(User patient);
+
 	void activate(Long id);
 }

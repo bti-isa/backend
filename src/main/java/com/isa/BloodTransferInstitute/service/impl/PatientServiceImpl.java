@@ -151,4 +151,11 @@ public class PatientServiceImpl implements PatientService {
 
 		return querry.getResultList();
 	}
+
+	@Override
+	public boolean punish(User patient) {
+		patient.punish();
+		userRepository.save(patient);
+		return patient.isEnabled();
+	}
 }

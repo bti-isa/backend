@@ -42,6 +42,7 @@ public class PatientMapper {
 			.penalties(0)
 			.enabled(true)
 			.address(address)
+			.bloodType(dto.getBloodType())
 			.build();
 
 		return newUser;
@@ -78,6 +79,7 @@ public class PatientMapper {
 			.role(dto.getRole())
 			.enabled(dto.getAccountActivated())
 			.address(updatedAddress)
+			.bloodType(dto.getBloodType())
 			.build();
 	}
 

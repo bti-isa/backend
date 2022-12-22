@@ -83,4 +83,15 @@ public class PatientController {
 		final var searchResult = getUserMapper.entityListToDTOlist(patientService.search(dto));
 		return  ResponseEntity.status(HttpStatus.OK).body(searchResult);
 	}
+
+	@PutMapping("/punish/{id}")
+	@PreAuthorize("hasAuthority('INSTITUTE_ADMIN')")
+	public ResponseEntity<?> punish(@PathVariable Long id){
+		var patient  = patientService.get(id).get();
+		if(patient == null){
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		}
+		return ResponseEntity.status(HttpStatus.OK).body(patientService.punish(patient));
+	}
+
 }
