@@ -1,6 +1,5 @@
 package com.isa.BloodTransferInstitute.dto.user.admin;
 
-import com.isa.BloodTransferInstitute.dto.LocationDTO;
 import com.isa.BloodTransferInstitute.dto.address.NewAddressDTO;
 import com.isa.BloodTransferInstitute.enums.Gender;
 import com.isa.BloodTransferInstitute.enums.Role;

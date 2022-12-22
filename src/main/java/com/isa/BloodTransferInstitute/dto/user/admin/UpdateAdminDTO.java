@@ -2,6 +2,7 @@ package com.isa.BloodTransferInstitute.dto.user.admin;
 
 import com.isa.BloodTransferInstitute.dto.address.UpdateAddressDTO;
 import com.isa.BloodTransferInstitute.enums.Gender;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -48,7 +49,7 @@ public class UpdateAdminDTO {
     Boolean accountActivated;
 
     @NotNull
-    UpdateAddressDTO address;
+	UpdateAddressDTO address;
 
     Long bloodBankId;
 }

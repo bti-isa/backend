@@ -1,11 +1,16 @@
 package com.isa.BloodTransferInstitute.model;
 
+import com.isa.BloodTransferInstitute.enums.BloodType;
 import com.isa.BloodTransferInstitute.enums.Gender;
 import com.isa.BloodTransferInstitute.enums.Role;
 
+import java.util.Collection;
 import java.util.List;
 
 import javax.persistence.*;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -38,7 +43,7 @@ public class User {
 	String lastname;
 
 	@Column(nullable = false, updatable = false, unique = true)
-	String email;
+	String username;
 
 	@Column(nullable = false)
 	String password;
@@ -62,16 +67,29 @@ public class User {
 	Role role;
 
 	@Column
-	Boolean accountActivated;
+	Integer penalties;
+
+	@Column(nullable = false)
+	boolean enabled;
 
 	@Column
-	Integer penalties;
+	boolean accountExpired = false;
+
+	@Column
+	boolean accountLocked = false;
+
+	@Column
+	boolean credentialsExpired = false;
 
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "address_id", referencedColumnName = "id")
 	Address address;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "bloodbank_id", referencedColumnName = "id")
 	BloodBank bloodBank;
+
+	@Column
+	BloodType bloodType;
+
 }

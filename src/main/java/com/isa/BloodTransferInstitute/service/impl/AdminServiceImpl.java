@@ -2,6 +2,7 @@ package com.isa.BloodTransferInstitute.service.impl;
 
 import com.isa.BloodTransferInstitute.dto.user.admin.NewAdminDTO;
 import com.isa.BloodTransferInstitute.dto.user.admin.UpdateAdminDTO;
+import com.isa.BloodTransferInstitute.enums.Gender;
 import com.isa.BloodTransferInstitute.enums.Role;
 import com.isa.BloodTransferInstitute.mappers.AdminMapper;
 import com.isa.BloodTransferInstitute.mappers.GetUserMapper;
@@ -10,8 +11,13 @@ import com.isa.BloodTransferInstitute.model.User;
 import com.isa.BloodTransferInstitute.repository.BloodBankRepository;
 import com.isa.BloodTransferInstitute.repository.UserRepository;
 import com.isa.BloodTransferInstitute.service.AdminService;
+
+import javax.annotation.PostConstruct;
+
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
+
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

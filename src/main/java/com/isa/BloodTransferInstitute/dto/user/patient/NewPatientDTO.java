@@ -31,7 +31,7 @@ public class NewPatientDTO {
 
 	@NotBlank
 	@Email
-	String email;
+	String username;
 
 	@NotBlank
 	@Size(min = 8, message = "Please, enter at least 8 characters for password.")

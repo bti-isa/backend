@@ -1,7 +1,6 @@
 package com.isa.BloodTransferInstitute.dto.address;
 
 import com.isa.BloodTransferInstitute.dto.LocationDTO;
-import com.isa.BloodTransferInstitute.model.Location;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -30,7 +29,5 @@ public class AddressDTO {
 	Integer postalCode;
 
 	LocationDTO location;
-
-	Long bloodBankId;
 
 }

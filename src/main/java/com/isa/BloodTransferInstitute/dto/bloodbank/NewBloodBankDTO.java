@@ -1,6 +1,7 @@
 package com.isa.BloodTransferInstitute.dto.bloodbank;
 
 import com.isa.BloodTransferInstitute.dto.address.NewAddressDTO;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -21,5 +22,5 @@ public class NewBloodBankDTO {
     String description;
 
     @NotNull
-    NewAddressDTO address;
+	NewAddressDTO address;
 }

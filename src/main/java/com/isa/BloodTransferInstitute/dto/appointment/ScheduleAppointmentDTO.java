@@ -1,10 +1,5 @@
 package com.isa.BloodTransferInstitute.dto.appointment;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.isa.BloodTransferInstitute.model.BloodBank;
-
-import java.time.LocalDateTime;
-
 import javax.validation.constraints.NotNull;
 
 import lombok.AccessLevel;
@@ -19,13 +14,11 @@ import lombok.experimental.FieldDefaults;
 @Builder(toBuilder = true)
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class NewAppointmentDTO {
+public class ScheduleAppointmentDTO {
 
 	@NotNull
-	@JsonFormat(pattern="dd.MM.yyyy. HH:mm")
-	LocalDateTime dateTime;
+	Long patientId;
 
 	@NotNull
-	Long bloodBankId;
-
+	Long appointmentId;
 }

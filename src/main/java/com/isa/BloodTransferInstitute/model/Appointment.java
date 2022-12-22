@@ -14,6 +14,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.isa.BloodTransferInstitute.enums.AppointmentStatus;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -25,7 +26,7 @@ import lombok.experimental.FieldDefaults;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
+@Builder(toBuilder = true)
 @Data
 @Table(name = "Appointments")
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -37,12 +38,13 @@ public class Appointment {
 	Long id;
 
 	@Column(nullable = false)
+	@JsonFormat(pattern="dd.MM.yyyy. HH:mm")
 	LocalDateTime dateTime;
 
 	@Column(nullable = false)
 	Double duration;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "patient_id", referencedColumnName = "id")
 	User patient;
 
@@ -56,7 +58,7 @@ public class Appointment {
 	@Column(nullable = false)
 	AppointmentStatus status;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "bloodbank_id", referencedColumnName = "id")
 	BloodBank bloodBank;
 }
