@@ -48,7 +48,7 @@ public class BloodBankController {
 	}
 
 	@PostMapping("/search")
-	@PreAuthorize("hasAnyAuthority('INSTITUTE_ADMIN', 'SYSTEM_ADMIN', 'PATIENT')")
+	//@PreAuthorize("hasAnyAuthority('INSTITUTE_ADMIN', 'SYSTEM_ADMIN', 'PATIENT')")
 	public ResponseEntity<List<BloodBankDTO>> search(@RequestBody final SearchDTO searchDTO) {
 		final var searchResult = getBloodBankMapper.ListToListDTO(bloodBankService.search(searchDTO));
 		return ResponseEntity.status(HttpStatus.OK).body(searchResult);
@@ -62,7 +62,7 @@ public class BloodBankController {
 	}
 
 	@GetMapping("/all")
-	@PreAuthorize("hasAnyAuthority('INSTITUTE_ADMIN', 'SYSTEM_ADMIN', 'PATIENT')")
+	//@PreAuthorize("hasAnyAuthority('INSTITUTE_ADMIN', 'SYSTEM_ADMIN', 'PATIENT')")
 	public ResponseEntity<List<BloodBankDTO>> getAll() {
 		final var bloodBanks = bloodBankService.getAll();
 		if (bloodBanks.isEmpty()) {
