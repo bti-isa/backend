@@ -31,6 +31,12 @@ public class PatientController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(getUserMapper.entityToDTO(user));
 	}
 
+	@GetMapping("/activate/{id}")
+	public ResponseEntity<?> activate(@PathVariable Long id){
+		patientService.activate(id);
+		return ResponseEntity.ok("bla");
+	}
+
 	@PatchMapping("/")
 	@PreAuthorize("hasAuthority('PATIENT')")
 	public ResponseEntity<PatientDTO> updateUser(@Valid @NotNull @RequestBody final UpdatePatientDTO dto) {

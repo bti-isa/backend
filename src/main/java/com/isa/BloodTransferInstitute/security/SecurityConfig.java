@@ -30,7 +30,8 @@ public class SecurityConfig {
 	private final RequestMatcher AUTH_MATCHER = new OrRequestMatcher(
 		new AntPathRequestMatcher( API_URL + "/User/authenticate"),
 		new AntPathRequestMatcher(API_URL + "/Patient/", "POST"),
-		new AntPathRequestMatcher(API_URL + "/Patient/checkUnique")
+		new AntPathRequestMatcher(API_URL + "/Patient/checkUnique"),
+		new AntPathRequestMatcher(API_URL + "/Patient/activate/{id}")
 	);
 //	private final RequestMatcher COMMON_MATCHER = new OrRequestMatcher(
 //		new AntPathRequestMatcher(API_URL + "/BloodBank/search"),
