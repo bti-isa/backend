@@ -104,10 +104,10 @@ public class AppointmentController {
 		return ResponseEntity.status(HttpStatus.OK).body(appointmentMapper.listToListDTO(appointment));
 	}
 
-	@GetMapping("/bloodBank/{id}")
+	@GetMapping("/admins-bloodBank/{id}")
 	@PreAuthorize("hasAuthority('INSTITUTE_ADMIN')")
-	public ResponseEntity<List<AppointmentDTO>> findAllByBloodBankId(@NotNull @PathVariable("id") final Long id) {
-		final var appointment = appointmentService.findAllByBloodBankId(id);
+	public ResponseEntity<List<AppointmentDTO>> findAllByAdminsBloodBankId(@NotNull @PathVariable("id") final Long id) {
+		final var appointment = appointmentService.findAllByAdminsBloodBankId(id);
 		if(appointment.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		}

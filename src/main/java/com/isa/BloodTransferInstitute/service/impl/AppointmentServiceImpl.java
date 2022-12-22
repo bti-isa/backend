@@ -103,8 +103,9 @@ public class AppointmentServiceImpl implements AppointmentService {
 	}
 
 	@Override
-	public List<Appointment> findAllByBloodBankId(Long bloodBankId) {
-		return appointmentRepository.findByBloodBankId(bloodBankId);
+	public List<Appointment> findAllByAdminsBloodBankId(Long adminsId) {
+		User instituteAdmin = userRepository.findById(adminsId).orElseThrow(NotFoundException::new);
+		return appointmentRepository.findByBloodBankId(instituteAdmin.getBloodBank().getId());
 	}
 
 	private boolean scheduleValidationForPastSixMonths(Long patientId) {
