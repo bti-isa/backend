@@ -59,7 +59,6 @@ public class NewPatientDTO {
 	@NotNull
 	NewAddressDTO address;
 
-	@NotNull
 	BloodType bloodType;
 
 }

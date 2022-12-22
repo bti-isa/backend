@@ -48,5 +48,4 @@ public class PatientDTO {
 	AddressDTO address;
 
 	BloodType bloodType;
-
 }
