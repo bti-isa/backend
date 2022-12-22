@@ -25,6 +25,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
@@ -42,6 +43,9 @@ public class AppointmentServiceImpl implements AppointmentService {
 	private final BloodBankRepository bloodBankRepository;
 	private final UserRepository userRepository;
 	private final PollRepository pollRepository;
+
+	@Autowired
+	private EmailSenderService emailSenderService;
 
 	@Override
 	public Appointment create(final NewAppointmentDTO appointmentDTO) {
@@ -67,6 +71,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 		}
 		pollRepository.save(PollMapper.NewDTOToEntity(dto.getPoll(), patient));
 		Appointment appointment = appointmentRepository.findById(dto.getAppointmentId()).orElseThrow(NotFoundException::new);
+		emailSenderService.sendSimpleEmail(dto.getUsername(),"Successfully schedule appointment", "Dear "+patient.getFirstname()+ ", your successfully schedule appointment in "+appointment.getDateTime().toString().replace('T',' ')+" at "+appointment.getBloodBank().getName()+".");
 		return appointmentRepository.save(AppointmentMapper.ScheduleDTOToEntity(appointment, patient));
 	}
 
@@ -133,5 +138,9 @@ public class AppointmentServiceImpl implements AppointmentService {
 
 	private boolean scheduleValidation(Long patientId) {
 		return !getPatientScheduledAppointments(patientId).isEmpty();
+	}
+
+	public List<Appointment> findAllByBloodbankId(Long id){
+		return appointmentRepository.findByBloodBankIdAndStatus(id,AppointmentStatus.AVAILIBLE);
 	}
 }
