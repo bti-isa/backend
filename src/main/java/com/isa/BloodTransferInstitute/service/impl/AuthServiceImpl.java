@@ -31,6 +31,23 @@ public class AuthServiceImpl implements AuthService, UserDetailsService {
 
     private final UserRepository userRepository;
 
+//    @PostConstruct
+//    public void initUser(){
+//        User u1 = new User();
+//        PasswordEncoder encoder = new BCryptPasswordEncoder();
+//        u1.setDeleted(false);
+//        u1.setFirstname("SysAdmin");
+//        u1.setLastname("SysAdminovic");
+//        u1.setUsername("sys@gmail.com");
+//        u1.setPhoneNumber("0252415227");
+//        u1.setJmbg("1105145852463");
+//        u1.setEnabled(true);
+//        u1.setGender(Gender.MALE);
+//        u1.setRole(Role.SYSTEM_ADMIN);
+//        u1.setPassword(encoder.encode("123"));
+//        userRepository.save(u1);
+//    }
+
     @Override
     public Optional<Boolean> changePassword(ChangePasswordDTO dto) {
         var user = userRepository.findByUsername(dto.getEmail());
@@ -62,4 +79,5 @@ public class AuthServiceImpl implements AuthService, UserDetailsService {
         }
         return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), user.isEnabled(), !user.isAccountExpired(), !user.isCredentialsExpired(), !user.isAccountLocked(), authorities);
     }
+
 }

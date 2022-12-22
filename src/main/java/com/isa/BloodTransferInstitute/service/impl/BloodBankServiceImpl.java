@@ -108,4 +108,5 @@ public class BloodBankServiceImpl implements BloodBankService {
 		return bloodBankRepository.findAll(page);
 	}
 
+
 }
