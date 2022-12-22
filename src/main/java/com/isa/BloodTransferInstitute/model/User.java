@@ -1,5 +1,6 @@
 package com.isa.BloodTransferInstitute.model;
 
+import com.isa.BloodTransferInstitute.enums.BloodType;
 import com.isa.BloodTransferInstitute.enums.Gender;
 import com.isa.BloodTransferInstitute.enums.Role;
 
@@ -87,5 +88,8 @@ public class User {
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "bloodbank_id", referencedColumnName = "id")
 	BloodBank bloodBank;
+
+	@Column
+	BloodType bloodType;
 
 }
