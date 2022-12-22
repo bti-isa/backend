@@ -130,4 +130,8 @@ public class AppointmentServiceImpl implements AppointmentService {
 	private boolean scheduleValidation(Long patientId) {
 		return !getPatientScheduledAppointments(patientId).isEmpty();
 	}
+
+	public List<Appointment> findAllByBloodbankId(Long id){
+		return appointmentRepository.findByBloodBankId(id);
+	}
 }
