@@ -20,7 +20,7 @@ public class PatientDTO {
 
 	Long id;
 
-	Boolean accountActivated;
+	Boolean enabled;
 
 	Boolean deleted;
 
@@ -28,7 +28,7 @@ public class PatientDTO {
 
 	String lastname;
 
-	String email;
+	String username;
 
 	String jmbg;
 
