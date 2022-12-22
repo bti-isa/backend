@@ -20,5 +20,7 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
 
 	List<Appointment> findByBloodBankId(Long bloodBankId);
 
+	List<Appointment> findByBloodBankIdAndStatus(Long bloodBankId,AppointmentStatus status);
+
 	List<Appointment> findByPatientId(Long patientId);
 }
