@@ -32,4 +32,6 @@ public interface AppointmentService {
 	List<Appointment> findAllByPatientId(Long patientId);
 
 	List<Appointment> findAllByAdminsBloodBankId(Long adminsId);
+
+	List<Appointment> findAllByBloodbankId(Long id);
 }

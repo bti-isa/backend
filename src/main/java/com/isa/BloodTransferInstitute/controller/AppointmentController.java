@@ -87,6 +87,7 @@ public class AppointmentController {
 																			@NotNull @PathVariable("direction") final Sort.Direction direction,
 																			@NotNull @RequestParam(name = "dateTime") final String dateTime) {
 		LocalDateTime parsedDateTime = LocalDateTime.parse(dateTime, DateTimeFormatter.ISO_DATE_TIME);
+		parsedDateTime = parsedDateTime.plusHours(1).minusSeconds(parsedDateTime.getSecond());
 		final var appointments = appointmentService.findAllAvailableByDateTime(parsedDateTime, pageSize, pageNumber, direction);
 		if(appointments.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -108,6 +109,16 @@ public class AppointmentController {
 	@PreAuthorize("hasAuthority('INSTITUTE_ADMIN')")
 	public ResponseEntity<List<AppointmentDTO>> findAllByAdminsBloodBankId(@NotNull @PathVariable("id") final Long id) {
 		final var appointment = appointmentService.findAllByAdminsBloodBankId(id);
+		if(appointment.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		}
+		return ResponseEntity.status(HttpStatus.OK).body(appointmentMapper.listToListDTO(appointment));
+	}
+
+	@GetMapping("/bloodbank/{id}")
+	@PreAuthorize("hasAnyAuthority('INSTITUTE_ADMIN', 'SYSTEM_ADMIN', 'PATIENT')")
+	public ResponseEntity<List<AppointmentDTO>> findAllByBloodbankId(@NotNull @PathVariable("id")final Long id){
+		final var appointment = appointmentService.findAllByBloodbankId(id);
 		if(appointment.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		}
