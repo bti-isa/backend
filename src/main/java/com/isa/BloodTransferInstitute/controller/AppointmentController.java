@@ -13,6 +13,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import javax.websocket.server.PathParam;
 
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
@@ -112,10 +113,10 @@ public class AppointmentController {
 		return ResponseEntity.status(HttpStatus.OK).body(appointmentMapper.listToListDTO(appointment));
 	}
 
-	@GetMapping("/admins-bloodBank/{id}")
+	@GetMapping("/admins-bloodBank")
 	@PreAuthorize("hasAuthority('INSTITUTE_ADMIN')")
-	public ResponseEntity<List<AppointmentDTO>> findAllByAdminsBloodBankId(@NotNull @PathVariable("id") final Long id) {
-		final var appointment = appointmentService.findAllByAdminsBloodBankId(id);
+	public ResponseEntity<List<AppointmentDTO>> findAllByAdminsUsername(@NotNull @RequestParam("username") final String username) {
+		final var appointment = appointmentService.findAllByAdminsUsername(username);
 		if(appointment.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		}

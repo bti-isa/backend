@@ -122,8 +122,8 @@ public class AppointmentServiceImpl implements AppointmentService {
 	}
 
 	@Override
-	public List<Appointment> findAllByAdminsBloodBankId(Long adminsId) {
-		User instituteAdmin = userRepository.findById(adminsId).orElseThrow(NotFoundException::new);
+	public List<Appointment> findAllByAdminsUsername(String username) {
+		User instituteAdmin = userRepository.findByUsername(username);
 		return appointmentRepository.findByBloodBankId(instituteAdmin.getBloodBank().getId());
 	}
 

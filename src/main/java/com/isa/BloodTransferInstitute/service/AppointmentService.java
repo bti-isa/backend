@@ -31,7 +31,7 @@ public interface AppointmentService {
 
 	List<Appointment> findAllByPatientId(Long patientId);
 
-	List<Appointment> findAllByAdminsBloodBankId(Long adminsId);
+	List<Appointment> findAllByAdminsUsername(String username);
 
 	List<Appointment> findAllByBloodbankId(Long id);
 
