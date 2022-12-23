@@ -94,4 +94,10 @@ public class PatientController {
 		return ResponseEntity.status(HttpStatus.OK).body(patientService.punish(patient));
 	}
 
+	@GetMapping("/username/{username}")
+	@PreAuthorize("hasAuthority('PATIENT')")
+	public ResponseEntity<?> getIdbyUsername(@PathVariable String username){
+		var patient = patientService.getByUsername(username);
+		return ResponseEntity.status(HttpStatus.OK).body(patient.getId());
+	}
 }

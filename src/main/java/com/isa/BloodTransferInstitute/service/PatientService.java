@@ -29,4 +29,6 @@ public interface PatientService {
 	boolean punish(User patient);
 
 	void activate(Long id);
+
+	User getByUsername(String username);
 }

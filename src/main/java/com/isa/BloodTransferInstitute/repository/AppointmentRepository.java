@@ -3,6 +3,7 @@ package com.isa.BloodTransferInstitute.repository;
 import com.isa.BloodTransferInstitute.enums.AppointmentStatus;
 import com.isa.BloodTransferInstitute.model.Appointment;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -20,7 +21,7 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
 
 	List<Appointment> findByBloodBankId(Long bloodBankId);
 
-	List<Appointment> findByBloodBankIdAndStatus(Long bloodBankId,AppointmentStatus status);
+	List<Appointment> findByBloodBankIdAndStatusAndDateTimeGreaterThanEqual(Long bloodBankId, AppointmentStatus status, LocalDateTime dateTime);
 
 	List<Appointment> findByPatientId(Long patientId);
 }
