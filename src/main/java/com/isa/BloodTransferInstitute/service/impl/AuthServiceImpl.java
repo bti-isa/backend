@@ -32,6 +32,22 @@ public class AuthServiceImpl implements AuthService, UserDetailsService {
 
     private final UserRepository userRepository;
 
+//    @PostConstruct
+//    public void initUser(){
+//        User u1 = new User();
+//        PasswordEncoder encoder = new BCryptPasswordEncoder();
+//        u1.setDeleted(false);
+//        u1.setFirstname("Pera");
+//        u1.setLastname("Peric");
+//        u1.setUsername("pacijent@gmail.com");
+//        u1.setPhoneNumber("0612540367");
+//        u1.setJmbg("3303345852463");
+//        u1.setEnabled(true);
+//        u1.setGender(Gender.MALE);
+//        u1.setRole(Role.PATIENT);
+//        u1.setPassword(encoder.encode("123"));
+//        userRepository.save(u1);
+//    }
     @Override
     public Optional<Boolean> changePassword(ChangePasswordDTO dto) {
         var user = userRepository.findByUsername(dto.getEmail());

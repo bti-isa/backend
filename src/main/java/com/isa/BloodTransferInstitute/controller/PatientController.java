@@ -30,6 +30,11 @@ public class PatientController {
 		final var user = patientService.add(dto);
 		return ResponseEntity.status(HttpStatus.CREATED).body(getUserMapper.entityToDTO(user));
 	}
+	@PostMapping("/add")
+	public ResponseEntity<PatientDTO> addUser2(@Valid @NotNull @RequestBody final NewPatientDTO dto) {
+		final var user = patientService.add(dto);
+		return ResponseEntity.status(HttpStatus.CREATED).body(getUserMapper.entityToDTO(user));
+	}
 
 	@GetMapping("/activate/{id}")
 	public ResponseEntity<?> activate(@PathVariable Long id){
