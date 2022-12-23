@@ -49,18 +49,19 @@ public class AppointmentServiceImpl implements AppointmentService {
 
 	@Override
 	public Appointment create(final NewAppointmentDTO appointmentDTO) {
-		if(appointmentValidation(appointmentDTO)) {
+		User admin = userRepository.findByUsername(appointmentDTO.getUsername());
+		if(appointmentValidation(appointmentDTO, admin)) {
 			throw new  CreateAppointmentException();
 		}
-		BloodBank bloodBank = bloodBankRepository.findById(appointmentDTO.getBloodBankId()).orElseThrow(NotFoundException::new);
+		BloodBank bloodBank = bloodBankRepository.findById(admin.getBloodBank().getId()).orElseThrow(NotFoundException::new);
 		return appointmentRepository.save(AppointmentMapper.NewDTOToEntity(appointmentDTO, bloodBank));
 	}
 
-	private boolean appointmentValidation(final NewAppointmentDTO appointmentDTO) {
+	private boolean appointmentValidation(final NewAppointmentDTO appointmentDTO, final User admin) {
 		var notHappenedAppointments = appointmentRepository.findByStatus(AppointmentStatus.AVAILIBLE);
 		notHappenedAppointments.addAll(appointmentRepository.findByStatus(AppointmentStatus.SCHEDULED));
 		return notHappenedAppointments.stream()
-			.anyMatch(appointment -> Objects.equals(appointmentDTO.getBloodBankId(), appointment.getBloodBank().getId()) && appointmentDTO.getDateTime().isEqual(appointment.getDateTime()));
+			.anyMatch(appointment -> Objects.equals(admin.getBloodBank().getId(), appointment.getBloodBank().getId()) && appointmentDTO.getDateTime().isEqual(appointment.getDateTime()));
 	}
 
 	@Override

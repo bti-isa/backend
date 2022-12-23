@@ -26,6 +26,6 @@ public class NewAppointmentDTO {
 	LocalDateTime dateTime;
 
 	@NotNull
-	Long bloodBankId;
+	String username;
 
 }
