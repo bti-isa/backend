@@ -22,7 +22,6 @@ import lombok.experimental.FieldDefaults;
 public class NewAppointmentDTO {
 
 	@NotNull
-	@JsonFormat(pattern="dd.MM.yyyy. HH:mm")
 	LocalDateTime dateTime;
 
 	@NotNull

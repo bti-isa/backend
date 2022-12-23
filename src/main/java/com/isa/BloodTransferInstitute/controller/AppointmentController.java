@@ -42,6 +42,7 @@ public class AppointmentController {
 	@PostMapping("/")
 	@PreAuthorize("hasAuthority('INSTITUTE_ADMIN')")
 	public ResponseEntity<AppointmentDTO> create(@Valid @NotNull @RequestBody final NewAppointmentDTO dto) {
+		dto.setDateTime(dto.getDateTime().plusHours(1).minusSeconds(dto.getDateTime().getSecond()));
 		final var appointment = appointmentService.create(dto);
 		return ResponseEntity.status(HttpStatus.CREATED).body(appointmentMapper.entityToEntityDTO(appointment));
 	}
