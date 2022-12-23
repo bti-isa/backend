@@ -5,9 +5,7 @@ import com.isa.BloodTransferInstitute.dto.appointment.NewAppointmentDTO;
 import com.isa.BloodTransferInstitute.dto.appointment.FinishedAppointmentDTO;
 import com.isa.BloodTransferInstitute.dto.appointment.ScheduleAppointmentDTO;
 import com.isa.BloodTransferInstitute.enums.Role;
-import com.isa.BloodTransferInstitute.exception.CreateAppointmentException;
-import com.isa.BloodTransferInstitute.exception.NotFoundException;
-import com.isa.BloodTransferInstitute.exception.ScheduleException;
+import com.isa.BloodTransferInstitute.exception.*;
 import com.isa.BloodTransferInstitute.mappers.AppointmentMapper;
 import com.isa.BloodTransferInstitute.mappers.PollMapper;
 import com.isa.BloodTransferInstitute.model.Appointment;
@@ -77,6 +75,17 @@ public class AppointmentServiceImpl implements AppointmentService {
 	}
 
 	@Override
+	public Appointment cancelAppointment(Long id){
+		Appointment appointment = appointmentRepository.findById(id).get();
+		if(appointment.getDateTime().compareTo(LocalDateTime.now())<0)
+			throw new PastAppointmentException();
+		if(appointment.getDateTime().plusDays(1).compareTo(LocalDateTime.now())<0)
+			throw new CancelException();
+		appointment.setStatus(AppointmentStatus.AVAILIBLE);
+		appointment.setPatient(null);
+		return appointmentRepository.save(appointment);
+	}
+	@Override
 	public Appointment finish(final FinishedAppointmentDTO appointmentDTO) {
 		Appointment appointment = appointmentRepository.findById(appointmentDTO.getId()).orElseThrow(NotFoundException::new);
 		return appointmentRepository.save(AppointmentMapper.FinishDTOToEntity(appointmentDTO, appointment));
@@ -142,6 +151,6 @@ public class AppointmentServiceImpl implements AppointmentService {
 	}
 
 	public List<Appointment> findAllByBloodbankId(Long id){
-		return appointmentRepository.findByBloodBankIdAndStatus(id,AppointmentStatus.AVAILIBLE);
+		return appointmentRepository.findByBloodBankIdAndStatusAndDateTimeGreaterThanEqual(id,AppointmentStatus.AVAILIBLE, LocalDateTime.now());
 	}
 }

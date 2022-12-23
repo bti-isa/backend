@@ -95,6 +95,12 @@ public class AppointmentController {
 		}
 		return ResponseEntity.status(HttpStatus.OK).body(appointmentMapper.listToListDTO(appointments));
 	}
+	@GetMapping("/cancel/{id}")
+	@PreAuthorize("hasAuthority('PATIENT')")
+	public ResponseEntity<AppointmentDTO> cancelAppointment(@NotNull @PathVariable("id") final Long id){
+		final var appointment = appointmentService.cancelAppointment(id);
+		return ResponseEntity.status(HttpStatus.OK).body(appointmentMapper.entityToEntityDTO(appointment));
+	}
 
 	@GetMapping("/patient/{id}")
 	@PreAuthorize("hasAuthority('PATIENT')")
