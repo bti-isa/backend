@@ -15,13 +15,12 @@ public class SysAdminMapper {
                 .deleted(false)
                 .firstname(dto.getFirstname())
                 .lastname(dto.getLastname())
-                .email(dto.getEmail())
+                .username(dto.getEmail())
                 .password(dto.getPassword())
                 .phoneNumber(dto.getPhoneNumber())
                 .jmbg(dto.getJmbg())
                 .gender(dto.getGender())
                 .role(Role.SYSTEM_ADMIN)
-                .accountActivated(false)
                 .build();
         return updatedUser;
     }
@@ -30,7 +29,7 @@ public class SysAdminMapper {
                 .id(admin.getId())
                 .firstname(admin.getFirstname())
                 .lastname(admin.getLastname())
-                .email(admin.getEmail())
+                .email(admin.getUsername())
                 .jmbg(admin.getJmbg())
                 .gender(admin.getGender())
                 .role(admin.getRole())
