@@ -79,9 +79,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 		Appointment appointment = appointmentRepository.findById(id).get();
 		if(appointment.getDateTime().compareTo(LocalDateTime.now())<0)
 			throw new PastAppointmentException();
-		System.out.println(appointment.getDateTime().plusDays(1));
-		System.out.println(LocalDateTime.now());
-		if(appointment.getDateTime().plusDays(1).isAfter(LocalDateTime.now()))
+		if(appointment.getDateTime().isBefore(LocalDateTime.now().plusDays(1)))
 			throw new CancelException();
 		appointment.setStatus(AppointmentStatus.AVAILIBLE);
 		appointment.setPatient(null);
