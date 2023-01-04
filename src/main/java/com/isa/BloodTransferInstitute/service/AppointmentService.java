@@ -15,7 +15,9 @@ public interface AppointmentService {
 
 	Appointment create(NewAppointmentDTO appointmentDTO);
 
-	Appointment schedule(ScheduleAppointmentDTO appointmentDTO);
+	void preSchedule(ScheduleAppointmentDTO appointmentDTO);
+
+	Appointment schedule(Long appointmentId, Long patientId);
 
 	Appointment finish(FinishedAppointmentDTO appointmentDTO);
 

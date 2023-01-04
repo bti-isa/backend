@@ -4,7 +4,9 @@ import com.isa.BloodTransferInstitute.dto.appointment.AppointmentDTO;
 import com.isa.BloodTransferInstitute.dto.appointment.FinishedAppointmentDTO;
 import com.isa.BloodTransferInstitute.dto.appointment.NewAppointmentDTO;
 import com.isa.BloodTransferInstitute.dto.appointment.ScheduleAppointmentDTO;
+import com.isa.BloodTransferInstitute.exception.NotFoundException;
 import com.isa.BloodTransferInstitute.mappers.GetAppointmentMapper;
+import com.isa.BloodTransferInstitute.model.Appointment;
 import com.isa.BloodTransferInstitute.service.AppointmentService;
 
 import java.time.LocalDateTime;
@@ -48,11 +50,18 @@ public class AppointmentController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(appointmentMapper.entityToEntityDTO(appointment));
 	}
 
-	@PatchMapping("/schedule")
+	@PatchMapping("/pre-schedule")
 	@PreAuthorize("hasAuthority('PATIENT')")
-	public ResponseEntity<AppointmentDTO> schedule(@Valid @NotNull @RequestBody final ScheduleAppointmentDTO dto) {
-		final var appointment = appointmentService.schedule(dto);
-		return ResponseEntity.status(HttpStatus.OK).body(appointmentMapper.entityToEntityDTO(appointment));
+	public ResponseEntity<?> preSchedule(@Valid @NotNull @RequestBody final ScheduleAppointmentDTO dto) {
+		appointmentService.preSchedule(dto);
+		return ResponseEntity.status(HttpStatus.OK).body("The message has just been sent to your email address. Please scan QR code and confirm your desired appointment.");
+	}
+
+	@GetMapping("/scheduled-message/{appointmentId}/{patientId}")
+	public ResponseEntity<?> schedule(@NotNull @PathVariable("appointmentId") final Long appointmentId,
+												@NotNull @PathVariable("patientId") final Long patientId) {
+		Appointment scheduledAppointment = appointmentService.schedule(appointmentId, patientId);
+		return ResponseEntity.status(HttpStatus.OK).body("Dear "+ scheduledAppointment.getPatient().getFirstname() + ", your appointment is successfully scheduled at " + scheduledAppointment.getDateTime().toString().replace('T',' ') + " .");
 	}
 
 	@PatchMapping("/finish")
