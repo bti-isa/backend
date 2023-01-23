@@ -7,16 +7,20 @@ import com.isa.BloodTransferInstitute.dto.appointment.ScheduleAppointmentDTO;
 import com.isa.BloodTransferInstitute.exception.NotFoundException;
 import com.isa.BloodTransferInstitute.mappers.GetAppointmentMapper;
 import com.isa.BloodTransferInstitute.model.Appointment;
+import com.isa.BloodTransferInstitute.model.User;
 import com.isa.BloodTransferInstitute.service.AppointmentService;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.websocket.server.PathParam;
 
+import com.isa.BloodTransferInstitute.service.PatientService;
+import com.isa.BloodTransferInstitute.service.impl.EmailSenderService;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,6 +44,8 @@ import lombok.RequiredArgsConstructor;
 public class AppointmentController {
 
 	private final AppointmentService appointmentService;
+	private final EmailSenderService emailService;
+	private final PatientService patientService;
 	private final GetAppointmentMapper appointmentMapper;
 
 	@PostMapping("/")
@@ -61,6 +67,9 @@ public class AppointmentController {
 	public ResponseEntity<?> schedule(@NotNull @PathVariable("appointmentId") final Long appointmentId,
 												@NotNull @PathVariable("patientId") final Long patientId) {
 		Appointment scheduledAppointment = appointmentService.schedule(appointmentId, patientId);
+		User user = patientService.get(patientId).get();
+		emailService.sendEmailAppointmentStart(user.getUsername(),"Alternative way to start an appointment!",
+				"When you get to the appointment, just let your doctor scan the following QR code:", appointmentId);
 		return ResponseEntity.status(HttpStatus.OK).body("Dear "+ scheduledAppointment.getPatient().getFirstname() + ", your appointment is successfully scheduled at " + scheduledAppointment.getDateTime().toString().replace('T',' ') + " .");
 	}
 

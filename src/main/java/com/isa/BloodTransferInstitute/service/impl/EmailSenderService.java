@@ -82,5 +82,43 @@ public class EmailSenderService {
             throw new MailException();
         }
     }
+    public void sendEmailAppointmentStart(String toEmail, String subject, String body, Long appointmentId) {
+        try {
+            MimeMessage message = mailSender.createMimeMessage();
+            message.setSubject(subject);
+            message.setFrom(new InternetAddress("psw.hospital.contact@gmail.com"));
+            message.setRecipient(RecipientType.TO, new InternetAddress(toEmail));
+
+            MimeBodyPart textPart = new MimeBodyPart();
+            textPart.setContent(body, "text/plain; charset=UTF-8");
+
+            Multipart multiPart = new MimeMultipart("alternative");
+
+            String qrCodeText = "http://localhost:3000/appointment-realization/" + appointmentId.toString();
+            BufferedImage bufferedImage = QRCodeGenerator.generateQRCodeImage(qrCodeText);
+
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            ImageIO.write(bufferedImage, "png", stream);
+            stream.flush();
+            byte[] imageBytes= stream.toByteArray();
+            stream.close();
+
+            BodyPart imagePart = new MimeBodyPart();
+            ByteArrayDataSource imageDataSource = new ByteArrayDataSource(imageBytes,"image/png");
+
+            imagePart.setDataHandler(new DataHandler(imageDataSource));
+            imagePart.setHeader("Content-ID", "<qrImage>");
+            imagePart.setFileName("QR_Code.png");
+
+            multiPart.addBodyPart(imagePart);
+            multiPart.addBodyPart(textPart);
+
+            message.setContent(multiPart);
+            mailSender.send(message);
+
+        } catch (Exception e) {
+            throw new MailException();
+        }
+    }
 
 }
