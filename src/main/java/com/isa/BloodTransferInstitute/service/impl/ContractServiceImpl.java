@@ -46,8 +46,8 @@ public class ContractServiceImpl implements ContractService {
 				passedCheckContracts.add(contract);
 				continue;
 			}
-//			emailSenderService.sendSimpleEmail("psw@hospital.com", "Delivery information", "\n" +
-//				"The delivery on the " + contract.getDate().toString() + " date will not be made because there are not enough blood units of type " + contract.getBloodUnit().getBloodType() + " in stock.");
+			emailSenderService.sendSimpleEmail("vuk.milanovic11@gmail.com", "Delivery information", "\n" +
+				"The delivery on the " + contract.getDate().toString() + " date will not be made because there are not enough blood units of type " + contract.getBloodUnit().getBloodType() + " in stock.");
 		}
 		contractRepository.saveAll(contracts);
 		return passedCheckContracts;
