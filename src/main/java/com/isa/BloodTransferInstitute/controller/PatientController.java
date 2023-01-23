@@ -91,7 +91,7 @@ public class PatientController {
 		if(patient == null){
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		}
-		return ResponseEntity.status(HttpStatus.OK).body(patientService.punish(patient));
+		return ResponseEntity.status(HttpStatus.OK).body("Punished.");
 	}
 
 	@GetMapping("/username/{username}")

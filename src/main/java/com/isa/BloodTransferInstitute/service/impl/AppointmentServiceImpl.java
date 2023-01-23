@@ -18,11 +18,13 @@ import com.isa.BloodTransferInstitute.repository.UserRepository;
 import com.isa.BloodTransferInstitute.service.AppointmentService;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.isa.BloodTransferInstitute.service.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -41,6 +43,8 @@ public class AppointmentServiceImpl implements AppointmentService {
 	private final BloodBankRepository bloodBankRepository;
 	private final UserRepository userRepository;
 	private final PollRepository pollRepository;
+
+	private final PatientService patientService;
 
 	@Autowired
 	private EmailSenderService emailSenderService;
@@ -65,6 +69,9 @@ public class AppointmentServiceImpl implements AppointmentService {
 	@Override
 	public Appointment schedule(final ScheduleAppointmentDTO dto) {
 		User patient = userRepository.findByUsername(dto.getUsername());
+		if(patient.getPenalties() > 2){
+			throw new PenaltyException();
+		}
 		if(scheduleValidationForPastSixMonths(patient.getId()) || scheduleValidation(patient.getId())) {
 			throw new ScheduleException();
 		}
@@ -81,6 +88,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 			throw new PastAppointmentException();
 		if(appointment.getDateTime().isBefore(LocalDateTime.now().plusDays(1)))
 			throw new CancelException();
+		patientService.punish(appointment.getPatient());
 		appointment.setStatus(AppointmentStatus.AVAILIBLE);
 		appointment.setPatient(null);
 		return appointmentRepository.save(appointment);
