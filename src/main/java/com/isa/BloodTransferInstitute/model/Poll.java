@@ -2,6 +2,7 @@ package com.isa.BloodTransferInstitute.model;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.springframework.context.annotation.Scope;
 
 import javax.persistence.*;
 
