@@ -25,6 +25,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.isa.BloodTransferInstitute.service.PatientService;
+import org.mapstruct.control.MappingControl.Use;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -67,7 +68,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 	}
 
 	@Override
-	public Appointment schedule(final ScheduleAppointmentDTO dto) {
+	public void preSchedule(final ScheduleAppointmentDTO dto) {
 		User patient = userRepository.findByUsername(dto.getUsername());
 		if(patient.getPenalties() > 2){
 			throw new PenaltyException();
@@ -75,9 +76,19 @@ public class AppointmentServiceImpl implements AppointmentService {
 		if(scheduleValidationForPastSixMonths(patient.getId()) || scheduleValidation(patient.getId())) {
 			throw new ScheduleException();
 		}
-		pollRepository.save(PollMapper.NewDTOToEntity(dto.getPoll(), patient));
 		Appointment appointment = appointmentRepository.findById(dto.getAppointmentId()).orElseThrow(NotFoundException::new);
-		emailSenderService.sendSimpleEmail(dto.getUsername(),"Successfully schedule appointment", "Dear "+patient.getFirstname()+ ", your successfully schedule appointment in "+appointment.getDateTime().toString().replace('T',' ')+" at "+appointment.getBloodBank().getName()+".");
+		BloodBank bloodBank = appointment.getBloodBank();
+		pollRepository.save(PollMapper.NewDTOToEntity(dto.getPoll(), patient));
+		emailSenderService.sendEmailWithQRCode(dto.getUsername(),"Appointment information", bloodBank.getName() + "\n" +
+			bloodBank.getAddress().getStreet() + " " + bloodBank.getAddress().getNumber() + "\n" +
+			bloodBank.getAddress().getCity() + ", " + bloodBank.getAddress().getCountry() + "\n" +
+			bloodBank.getAddress().getPostalCode(), appointment.getId(), patient.getId());
+	}
+
+	@Override
+	public Appointment schedule(final Long appointmentId, final Long patientId) {
+		Appointment appointment = appointmentRepository.findById(appointmentId).orElseThrow(NotFoundException::new);
+		User patient = userRepository.findById(patientId).orElseThrow(NotFoundException::new);
 		return appointmentRepository.save(AppointmentMapper.ScheduleDTOToEntity(appointment, patient));
 	}
 
@@ -156,6 +167,11 @@ public class AppointmentServiceImpl implements AppointmentService {
 
 	private boolean scheduleValidation(Long patientId) {
 		return !getPatientScheduledAppointments(patientId).isEmpty();
+	}
+
+	private boolean appointmentRecentlyScheduled(Long appointmentId) {
+		Appointment appointment = appointmentRepository.findById(appointmentId).orElseThrow(ScheduleException::new);
+		return appointment.getStatus() != AppointmentStatus.AVAILIBLE;
 	}
 
 	public List<Appointment> findAllByBloodbankId(Long id){
