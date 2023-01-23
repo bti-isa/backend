@@ -5,14 +5,17 @@ import com.isa.BloodTransferInstitute.enums.Gender;
 import com.isa.BloodTransferInstitute.enums.Role;
 import com.isa.BloodTransferInstitute.mappers.AdminMapper;
 import com.isa.BloodTransferInstitute.mappers.GetUserMapper;
+import com.isa.BloodTransferInstitute.mappers.PatientMapper;
 import com.isa.BloodTransferInstitute.model.BloodBank;
 import com.isa.BloodTransferInstitute.model.User;
 import com.isa.BloodTransferInstitute.repository.BloodBankRepository;
 import com.isa.BloodTransferInstitute.repository.UserRepository;
+import com.isa.BloodTransferInstitute.security.UserAuthenticationProvider;
 import com.isa.BloodTransferInstitute.service.AdminService;
 import javax.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -27,10 +30,15 @@ public class AdminServiceImpl implements AdminService {
     private final UserRepository userRepository;
     private final AdminMapper adminMapper;
     private final BloodBankRepository bankRepository;
-    private final GetUserMapper getUserMapper;
+
+    @Autowired
+    private UserAuthenticationProvider passwordEncoder;
 
     public User add(NewAdminDTO dto) {
-        return userRepository.save(adminMapper.DTOtoEntity(dto));
+        User user = adminMapper.DTOtoEntity(dto);
+        user.setPassword(passwordEncoder.passwordEncoder().encode(dto.getPassword()));
+        user.setEnabled(true);
+        return userRepository.save(user);
     }
 
     @Override

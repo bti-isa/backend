@@ -15,7 +15,9 @@ public interface AppointmentService {
 
 	Appointment create(NewAppointmentDTO appointmentDTO);
 
-	Appointment schedule(ScheduleAppointmentDTO appointmentDTO);
+	void preSchedule(ScheduleAppointmentDTO appointmentDTO);
+
+	Appointment schedule(Long appointmentId, Long patientId);
 
 	Appointment finish(FinishedAppointmentDTO appointmentDTO);
 
@@ -31,5 +33,9 @@ public interface AppointmentService {
 
 	List<Appointment> findAllByPatientId(Long patientId);
 
-	List<Appointment> findAllByAdminsBloodBankId(Long adminsId);
+	List<Appointment> findAllByAdminsUsername(String username);
+
+	List<Appointment> findAllByBloodbankId(Long id);
+
+	Appointment cancelAppointment(Long id);
 }

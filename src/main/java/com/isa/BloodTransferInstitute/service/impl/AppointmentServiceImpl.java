@@ -5,24 +5,28 @@ import com.isa.BloodTransferInstitute.dto.appointment.NewAppointmentDTO;
 import com.isa.BloodTransferInstitute.dto.appointment.FinishedAppointmentDTO;
 import com.isa.BloodTransferInstitute.dto.appointment.ScheduleAppointmentDTO;
 import com.isa.BloodTransferInstitute.enums.Role;
-import com.isa.BloodTransferInstitute.exception.CreateAppointmentException;
-import com.isa.BloodTransferInstitute.exception.NotFoundException;
-import com.isa.BloodTransferInstitute.exception.ScheduleException;
+import com.isa.BloodTransferInstitute.exception.*;
 import com.isa.BloodTransferInstitute.mappers.AppointmentMapper;
+import com.isa.BloodTransferInstitute.mappers.PollMapper;
 import com.isa.BloodTransferInstitute.model.Appointment;
 import com.isa.BloodTransferInstitute.model.BloodBank;
 import com.isa.BloodTransferInstitute.model.User;
 import com.isa.BloodTransferInstitute.repository.AppointmentRepository;
 import com.isa.BloodTransferInstitute.repository.BloodBankRepository;
+import com.isa.BloodTransferInstitute.repository.PollRepository;
 import com.isa.BloodTransferInstitute.repository.UserRepository;
 import com.isa.BloodTransferInstitute.service.AppointmentService;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.isa.BloodTransferInstitute.service.PatientService;
+import org.mapstruct.control.MappingControl.Use;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
@@ -39,33 +43,67 @@ public class AppointmentServiceImpl implements AppointmentService {
 	private final AppointmentRepository appointmentRepository;
 	private final BloodBankRepository bloodBankRepository;
 	private final UserRepository userRepository;
+	private final PollRepository pollRepository;
+
+	private final PatientService patientService;
+
+	@Autowired
+	private EmailSenderService emailSenderService;
 
 	@Override
 	public Appointment create(final NewAppointmentDTO appointmentDTO) {
-		if(appointmentValidation(appointmentDTO)) {
+		User admin = userRepository.findByUsername(appointmentDTO.getUsername());
+		if(appointmentValidation(appointmentDTO, admin)) {
 			throw new  CreateAppointmentException();
 		}
-		BloodBank bloodBank = bloodBankRepository.findById(appointmentDTO.getBloodBankId()).orElseThrow(NotFoundException::new);
+		BloodBank bloodBank = bloodBankRepository.findById(admin.getBloodBank().getId()).orElseThrow(NotFoundException::new);
 		return appointmentRepository.save(AppointmentMapper.NewDTOToEntity(appointmentDTO, bloodBank));
 	}
 
-	private boolean appointmentValidation(final NewAppointmentDTO appointmentDTO) {
+	private boolean appointmentValidation(final NewAppointmentDTO appointmentDTO, final User admin) {
 		var notHappenedAppointments = appointmentRepository.findByStatus(AppointmentStatus.AVAILIBLE);
 		notHappenedAppointments.addAll(appointmentRepository.findByStatus(AppointmentStatus.SCHEDULED));
 		return notHappenedAppointments.stream()
-			.anyMatch(appointment -> Objects.equals(appointmentDTO.getBloodBankId(), appointment.getBloodBank().getId()) && appointmentDTO.getDateTime().isEqual(appointment.getDateTime()));
+			.anyMatch(appointment -> Objects.equals(admin.getBloodBank().getId(), appointment.getBloodBank().getId()) && appointmentDTO.getDateTime().isEqual(appointment.getDateTime()));
 	}
 
 	@Override
-	public Appointment schedule(final ScheduleAppointmentDTO dto) {
-		if(scheduleValidationForPastSixMonths(dto.getPatientId()) || scheduleValidation(dto.getPatientId())) {
+	public void preSchedule(final ScheduleAppointmentDTO dto) {
+		User patient = userRepository.findByUsername(dto.getUsername());
+		if(patient.getPenalties() > 2){
+			throw new PenaltyException();
+		}
+		if(scheduleValidationForPastSixMonths(patient.getId()) || scheduleValidation(patient.getId())) {
 			throw new ScheduleException();
 		}
-		User patient = userRepository.findByIdAndRole(dto.getPatientId(), Role.PATIENT).orElseThrow(NotFoundException::new);
 		Appointment appointment = appointmentRepository.findById(dto.getAppointmentId()).orElseThrow(NotFoundException::new);
+		BloodBank bloodBank = appointment.getBloodBank();
+		pollRepository.save(PollMapper.NewDTOToEntity(dto.getPoll(), patient));
+		emailSenderService.sendEmailWithQRCode(dto.getUsername(),"Appointment information", bloodBank.getName() + "\n" +
+			bloodBank.getAddress().getStreet() + " " + bloodBank.getAddress().getNumber() + "\n" +
+			bloodBank.getAddress().getCity() + ", " + bloodBank.getAddress().getCountry() + "\n" +
+			bloodBank.getAddress().getPostalCode(), appointment.getId(), patient.getId());
+	}
+
+	@Override
+	public Appointment schedule(final Long appointmentId, final Long patientId) {
+		Appointment appointment = appointmentRepository.findById(appointmentId).orElseThrow(NotFoundException::new);
+		User patient = userRepository.findById(patientId).orElseThrow(NotFoundException::new);
 		return appointmentRepository.save(AppointmentMapper.ScheduleDTOToEntity(appointment, patient));
 	}
 
+	@Override
+	public Appointment cancelAppointment(Long id){
+		Appointment appointment = appointmentRepository.findById(id).get();
+		if(appointment.getDateTime().compareTo(LocalDateTime.now())<0)
+			throw new PastAppointmentException();
+		if(appointment.getDateTime().isBefore(LocalDateTime.now().plusDays(1)))
+			throw new CancelException();
+		patientService.punish(appointment.getPatient());
+		appointment.setStatus(AppointmentStatus.AVAILIBLE);
+		appointment.setPatient(null);
+		return appointmentRepository.save(appointment);
+	}
 	@Override
 	public Appointment finish(final FinishedAppointmentDTO appointmentDTO) {
 		Appointment appointment = appointmentRepository.findById(appointmentDTO.getId()).orElseThrow(NotFoundException::new);
@@ -103,8 +141,8 @@ public class AppointmentServiceImpl implements AppointmentService {
 	}
 
 	@Override
-	public List<Appointment> findAllByAdminsBloodBankId(Long adminsId) {
-		User instituteAdmin = userRepository.findById(adminsId).orElseThrow(NotFoundException::new);
+	public List<Appointment> findAllByAdminsUsername(String username) {
+		User instituteAdmin = userRepository.findByUsername(username);
 		return appointmentRepository.findByBloodBankId(instituteAdmin.getBloodBank().getId());
 	}
 
@@ -129,5 +167,14 @@ public class AppointmentServiceImpl implements AppointmentService {
 
 	private boolean scheduleValidation(Long patientId) {
 		return !getPatientScheduledAppointments(patientId).isEmpty();
+	}
+
+	private boolean appointmentRecentlyScheduled(Long appointmentId) {
+		Appointment appointment = appointmentRepository.findById(appointmentId).orElseThrow(ScheduleException::new);
+		return appointment.getStatus() != AppointmentStatus.AVAILIBLE;
+	}
+
+	public List<Appointment> findAllByBloodbankId(Long id){
+		return appointmentRepository.findByBloodBankIdAndStatusAndDateTimeGreaterThanEqual(id,AppointmentStatus.AVAILIBLE, LocalDateTime.now());
 	}
 }

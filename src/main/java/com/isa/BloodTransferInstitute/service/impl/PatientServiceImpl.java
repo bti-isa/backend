@@ -61,7 +61,13 @@ public class PatientServiceImpl implements PatientService {
 		u.setEnabled(true);
 		userRepository.save(u);
 	}
-//	@PostConstruct
+
+	@Override
+	public User getByUsername(String username) {
+		return userRepository.findByUsername(username);
+	}
+
+	//	@PostConstruct
 //	public void initUser(){
 //		User u1 = new User();
 //		u1.setDeleted(false);
@@ -144,7 +150,7 @@ public class PatientServiceImpl implements PatientService {
 		if (predicates.isEmpty()) {
 			criteriaQuery.where(predicates.toArray(new Predicate[0]));
 		} else {
-			criteriaQuery.where(cb.and(predicates.toArray(new Predicate[0])));
+			criteriaQuery.where(cb.or(predicates.toArray(new Predicate[0])));
 		}
 
 		final TypedQuery<User> querry = em.createQuery(criteriaQuery);
@@ -158,4 +164,6 @@ public class PatientServiceImpl implements PatientService {
 		userRepository.save(patient);
 		return patient.isEnabled();
 	}
+
+
 }

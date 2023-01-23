@@ -4,16 +4,23 @@ import com.isa.BloodTransferInstitute.dto.appointment.AppointmentDTO;
 import com.isa.BloodTransferInstitute.dto.appointment.FinishedAppointmentDTO;
 import com.isa.BloodTransferInstitute.dto.appointment.NewAppointmentDTO;
 import com.isa.BloodTransferInstitute.dto.appointment.ScheduleAppointmentDTO;
+import com.isa.BloodTransferInstitute.exception.NotFoundException;
 import com.isa.BloodTransferInstitute.mappers.GetAppointmentMapper;
+import com.isa.BloodTransferInstitute.model.Appointment;
+import com.isa.BloodTransferInstitute.model.User;
 import com.isa.BloodTransferInstitute.service.AppointmentService;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import javax.websocket.server.PathParam;
 
+import com.isa.BloodTransferInstitute.service.PatientService;
+import com.isa.BloodTransferInstitute.service.impl.EmailSenderService;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,20 +44,33 @@ import lombok.RequiredArgsConstructor;
 public class AppointmentController {
 
 	private final AppointmentService appointmentService;
+	private final EmailSenderService emailService;
+	private final PatientService patientService;
 	private final GetAppointmentMapper appointmentMapper;
 
 	@PostMapping("/")
 	@PreAuthorize("hasAuthority('INSTITUTE_ADMIN')")
 	public ResponseEntity<AppointmentDTO> create(@Valid @NotNull @RequestBody final NewAppointmentDTO dto) {
+		dto.setDateTime(dto.getDateTime().plusHours(1).minusSeconds(dto.getDateTime().getSecond()));
 		final var appointment = appointmentService.create(dto);
 		return ResponseEntity.status(HttpStatus.CREATED).body(appointmentMapper.entityToEntityDTO(appointment));
 	}
 
-	@PatchMapping("/schedule")
+	@PatchMapping("/pre-schedule")
 	@PreAuthorize("hasAuthority('PATIENT')")
-	public ResponseEntity<AppointmentDTO> schedule(@Valid @NotNull @RequestBody final ScheduleAppointmentDTO dto) {
-		final var appointment = appointmentService.schedule(dto);
-		return ResponseEntity.status(HttpStatus.OK).body(appointmentMapper.entityToEntityDTO(appointment));
+	public ResponseEntity<?> preSchedule(@Valid @NotNull @RequestBody final ScheduleAppointmentDTO dto) {
+		appointmentService.preSchedule(dto);
+		return ResponseEntity.status(HttpStatus.OK).body("The message has just been sent to your email address. Please scan QR code and confirm your desired appointment.");
+	}
+
+	@GetMapping("/scheduled-message/{appointmentId}/{patientId}")
+	public ResponseEntity<?> schedule(@NotNull @PathVariable("appointmentId") final Long appointmentId,
+												@NotNull @PathVariable("patientId") final Long patientId) {
+		Appointment scheduledAppointment = appointmentService.schedule(appointmentId, patientId);
+		User user = patientService.get(patientId).get();
+		emailService.sendEmailAppointmentStart(user.getUsername(),"Alternative way to start an appointment!",
+				"When you get to the appointment, just let your doctor scan the following QR code:", appointmentId);
+		return ResponseEntity.status(HttpStatus.OK).body("Dear "+ scheduledAppointment.getPatient().getFirstname() + ", your appointment is successfully scheduled at " + scheduledAppointment.getDateTime().toString().replace('T',' ') + " .");
 	}
 
 	@PatchMapping("/finish")
@@ -87,11 +107,18 @@ public class AppointmentController {
 																			@NotNull @PathVariable("direction") final Sort.Direction direction,
 																			@NotNull @RequestParam(name = "dateTime") final String dateTime) {
 		LocalDateTime parsedDateTime = LocalDateTime.parse(dateTime, DateTimeFormatter.ISO_DATE_TIME);
+		parsedDateTime = parsedDateTime.plusHours(1).minusSeconds(parsedDateTime.getSecond());
 		final var appointments = appointmentService.findAllAvailableByDateTime(parsedDateTime, pageSize, pageNumber, direction);
 		if(appointments.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		}
 		return ResponseEntity.status(HttpStatus.OK).body(appointmentMapper.listToListDTO(appointments));
+	}
+	@GetMapping("/cancel/{id}")
+	@PreAuthorize("hasAuthority('PATIENT')")
+	public ResponseEntity<AppointmentDTO> cancelAppointment(@NotNull @PathVariable("id") final Long id){
+		final var appointment = appointmentService.cancelAppointment(id);
+		return ResponseEntity.status(HttpStatus.OK).body(appointmentMapper.entityToEntityDTO(appointment));
 	}
 
 	@GetMapping("/patient/{id}")
@@ -104,10 +131,20 @@ public class AppointmentController {
 		return ResponseEntity.status(HttpStatus.OK).body(appointmentMapper.listToListDTO(appointment));
 	}
 
-	@GetMapping("/admins-bloodBank/{id}")
+	@GetMapping("/admins-bloodBank")
 	@PreAuthorize("hasAuthority('INSTITUTE_ADMIN')")
-	public ResponseEntity<List<AppointmentDTO>> findAllByAdminsBloodBankId(@NotNull @PathVariable("id") final Long id) {
-		final var appointment = appointmentService.findAllByAdminsBloodBankId(id);
+	public ResponseEntity<List<AppointmentDTO>> findAllByAdminsUsername(@NotNull @RequestParam("username") final String username) {
+		final var appointment = appointmentService.findAllByAdminsUsername(username);
+		if(appointment.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		}
+		return ResponseEntity.status(HttpStatus.OK).body(appointmentMapper.listToListDTO(appointment));
+	}
+
+	@GetMapping("/bloodbank/{id}")
+	@PreAuthorize("hasAnyAuthority('INSTITUTE_ADMIN', 'SYSTEM_ADMIN', 'PATIENT')")
+	public ResponseEntity<List<AppointmentDTO>> findAllByBloodbankId(@NotNull @PathVariable("id")final Long id){
+		final var appointment = appointmentService.findAllByBloodbankId(id);
 		if(appointment.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		}
