@@ -159,9 +159,10 @@ public class PatientServiceImpl implements PatientService {
 	}
 
 	@Override
-	public void punish(User patient) {
+	public boolean punish(User patient) {
 		patient.punish();
 		userRepository.save(patient);
+		return patient.isEnabled();
 	}
 
 

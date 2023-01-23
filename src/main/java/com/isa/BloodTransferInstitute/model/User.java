@@ -93,6 +93,10 @@ public class User {
 	BloodBank bloodBank;
 
 	public void punish(){
+		if(penalties > 1){
+			enabled = false;
+			return;
+		}
 		penalties += 1;
 	}
 }
