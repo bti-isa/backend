@@ -19,6 +19,9 @@ public class Complaint {
     @Column(nullable = false, updatable = false, unique = true)
     Long id;
 
+    @Version
+    Long version;
+
     @Column(nullable = false)
     String text;
 

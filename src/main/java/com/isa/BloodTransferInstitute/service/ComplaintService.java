@@ -16,7 +16,6 @@ public interface ComplaintService {
     Optional<Complaint> getById(Long id);
     Complaint add(NewComplaintDTO dto);
     Complaint update(AnswerDTO dto);
-    //List<ComplaintDTO> getAllPending();
     List<ComplaintDTO> getAllAnswered();
     List<ComplaintDTO> getAllByStatus(ComplaintStatus status);
 }

@@ -13,6 +13,7 @@ import com.isa.BloodTransferInstitute.repository.ComplaintRepository;
 import com.isa.BloodTransferInstitute.service.ComplaintService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -33,13 +34,27 @@ public class ComplaintServiceImpl implements ComplaintService {
     public Complaint add(NewComplaintDTO dto){
         return complaintRepository.save(complaintMapper.DTOToEntity(dto));
     }
-
     @Override
     public Complaint update(AnswerDTO dto) {
+        Integer counter = 0;
         Complaint complaint = getById(dto.getId()).get();
         complaint.setAnswer(dto.getAnswer());
         complaint.setStatus(ComplaintStatus.ANSWERED);
-        return complaintRepository.save(complaint);
+        while(counter < 5) {
+            try {
+                complaintRepository.save(complaint);
+                break;
+            } catch (OptimisticLockingFailureException ex) {
+                complaint = getById(dto.getId()).get();
+                complaint.setAnswer(dto.getAnswer());
+                complaint.setStatus(ComplaintStatus.ANSWERED);
+                counter++;
+            }
+        }
+        if(counter == 5) {
+            throw new RuntimeException("Update not successful!");
+        }
+        return complaint;
     }
     @Override
     public List<ComplaintDTO> getAllByStatus(ComplaintStatus status) {
