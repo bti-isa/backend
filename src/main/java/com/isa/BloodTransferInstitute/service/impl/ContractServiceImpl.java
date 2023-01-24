@@ -31,7 +31,7 @@ public class ContractServiceImpl implements ContractService {
 		List<Contract> contracts = contractRepository.findAllByDate(LocalDate.now());
 		contracts = insufficientCheck(contracts);
 		for (Contract c: contracts) {
-			BloodUnit bloodUnit = bloodUnitRepository.findByBloodType(c.getBloodUnit().getBloodType());
+			BloodUnit bloodUnit = bloodUnitRepository.findByBloodTypeAndBloodBankId(c.getBloodType(), c.getBloodBank().getId());
 			bloodUnit.setQuantity(bloodUnit.getQuantity() - c.getQuantity());
 			bloodUnitRepository.save(bloodUnit);
 		}
@@ -42,12 +42,13 @@ public class ContractServiceImpl implements ContractService {
 		List<Contract> passedCheckContracts = new ArrayList<>();
 		for (Contract contract: contracts) {
 			contract.setDate(contract.getDate().plusMonths(1));
-			if(contract.canDeliver()) {
+			BloodUnit bloodUnit = bloodUnitRepository.findByBloodTypeAndBloodBankId(contract.getBloodType(), contract.getBloodBank().getId());
+			if(contract.canDeliver(bloodUnit)) {
 				passedCheckContracts.add(contract);
 				continue;
 			}
 			emailSenderService.sendSimpleEmail("vuk.milanovic11@gmail.com", "Delivery information", "\n" +
-				"The delivery on the " + contract.getDate().toString() + " date will not be made because there are not enough blood units of type " + contract.getBloodUnit().getBloodType() + " in stock.");
+				"The delivery on the " + contract.getDate().toString() + " date will not be made because there are not enough blood units of type " + contract.getBloodType() + " in stock.");
 		}
 		contractRepository.saveAll(contracts);
 		return passedCheckContracts;

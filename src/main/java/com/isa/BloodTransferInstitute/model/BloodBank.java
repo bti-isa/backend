@@ -21,7 +21,7 @@ public class BloodBank {
     @Column(nullable = false, updatable = false, unique = true)
     Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     String name;
 
     @OneToOne(cascade = CascadeType.ALL)
@@ -38,10 +38,4 @@ public class BloodBank {
     @JoinColumn(name = "workinghours_id", referencedColumnName = "id")
     WorkingHours workingHours;
 
-    @ManyToMany
-    @JoinTable(
-        name = "bloodBank_bloodUnit",
-        joinColumns = @JoinColumn(name = "bloodBank_id"),
-        inverseJoinColumns = @JoinColumn(name = "bloodUnit_id"))
-    List<BloodUnit> bloodUnits;
 }

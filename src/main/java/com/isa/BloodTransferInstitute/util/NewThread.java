@@ -37,12 +37,12 @@ public class NewThread extends Thread {
 					channel.queueDeclare("monthly", false, false, false, null);
 					var message = new StringBuilder();
 					for (Contract c: contracts.get()) {
-						message.append("\n" + "Blood type: ").append(c.getBloodUnit().getBloodType()).append(" ").append("Quantity: ").append(c.getQuantity());
+						message.append("\n" + "Blood type: ").append(c.getBloodType()).append(" ").append("Quantity: ").append(c.getQuantity());
 					}
 					final byte[] body = message.toString().getBytes(StandardCharsets.UTF_8);
 					channel.basicPublish("", "monthly", null, body);
 					logger.info("Message: " + message);
-					Thread.sleep(30000); // 86 400 000 sec
+					Thread.sleep(86400000); // 86 400 000 sec
 				}
 			} catch (IOException | InterruptedException | ExecutionException | TimeoutException e) {
 					throw new RuntimeException(e);
