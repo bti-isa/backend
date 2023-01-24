@@ -5,6 +5,7 @@ import com.isa.BloodTransferInstitute.dto.bloodbank.BloodBankDTO;
 import com.isa.BloodTransferInstitute.dto.bloodbank.NewBloodBankDTO;
 import com.isa.BloodTransferInstitute.dto.bloodbank.SimpleBloodBankDTO;
 import com.isa.BloodTransferInstitute.dto.bloodbank.UpdateBloodBankDTO;
+import com.isa.BloodTransferInstitute.dto.user.admin.RegisteredDonorsDTO;
 import com.isa.BloodTransferInstitute.mappers.BloodBankMapper;
 import com.isa.BloodTransferInstitute.mappers.GetBloodBankMapper;
 import com.isa.BloodTransferInstitute.model.BloodBank;
@@ -105,7 +106,7 @@ public class BloodBankController {
 
 	@GetMapping("/registered-donors/{id}")
 	@PreAuthorize("hasAnyAuthority('INSTITUTE_ADMIN')")
-	public ResponseEntity<List<Long>>getRegisteredDonors(@Valid @NotNull @PathVariable("id") final Long id){
+	public ResponseEntity<List<RegisteredDonorsDTO>>getRegisteredDonors(@Valid @NotNull @PathVariable("id") final Long id){
 		return ResponseEntity.status(HttpStatus.OK).body(bloodBankService.getRegisteredDonors(id));
 	}
 }

@@ -3,6 +3,7 @@ package com.isa.BloodTransferInstitute.service;
 import com.isa.BloodTransferInstitute.dto.SearchDTO;
 import com.isa.BloodTransferInstitute.dto.bloodbank.NewBloodBankDTO;
 import com.isa.BloodTransferInstitute.dto.bloodbank.UpdateBloodBankDTO;
+import com.isa.BloodTransferInstitute.dto.user.admin.RegisteredDonorsDTO;
 import com.isa.BloodTransferInstitute.model.BloodBank;
 import com.isa.BloodTransferInstitute.model.User;
 import org.springframework.data.domain.Page;
@@ -20,5 +21,5 @@ public interface BloodBankService {
 	BloodBank update(UpdateBloodBankDTO dto);
 	List<BloodBank> getAll();
 	Page<BloodBank> getAllWithPage(Pageable page);
-	List<Long> getRegisteredDonors(Long id);
+	List<RegisteredDonorsDTO> getRegisteredDonors(Long id);
 }

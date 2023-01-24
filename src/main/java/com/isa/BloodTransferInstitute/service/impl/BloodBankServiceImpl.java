@@ -3,9 +3,14 @@ package com.isa.BloodTransferInstitute.service.impl;
 import com.isa.BloodTransferInstitute.dto.SearchDTO;
 import com.isa.BloodTransferInstitute.dto.bloodbank.NewBloodBankDTO;
 import com.isa.BloodTransferInstitute.dto.bloodbank.UpdateBloodBankDTO;
+import com.isa.BloodTransferInstitute.dto.user.admin.RegisteredDonorsDTO;
+import com.isa.BloodTransferInstitute.dto.user.patient.PatientDTO;
 import com.isa.BloodTransferInstitute.exception.NotFoundException;
 import com.isa.BloodTransferInstitute.mappers.BloodBankMapper;
+import com.isa.BloodTransferInstitute.mappers.GetUserMapper;
+import com.isa.BloodTransferInstitute.mappers.PatientMapper;
 import com.isa.BloodTransferInstitute.model.BloodBank;
+import com.isa.BloodTransferInstitute.model.User;
 import com.isa.BloodTransferInstitute.repository.BloodBankRepository;
 import com.isa.BloodTransferInstitute.repository.UserRepository;
 import com.isa.BloodTransferInstitute.service.BloodBankService;
@@ -111,8 +116,19 @@ public class BloodBankServiceImpl implements BloodBankService {
 	}
 
 	@Override
-	public List<Long> getRegisteredDonors(Long id) {
-		return new ArrayList<Long>(userRepository.getRegisteredDonorsForBloodBank(id));
+	public List<RegisteredDonorsDTO> getRegisteredDonors(Long id) {
+		List<Long> ids = new ArrayList<Long>(userRepository.getRegisteredDonorsForBloodBank(id));
+		if(ids.isEmpty())
+			throw new NotFoundException();
+
+		List<RegisteredDonorsDTO> returnList = new ArrayList<>();
+		for(User user : userRepository.findAll()){
+			if(ids.contains(user.getId())){
+				var temp = PatientMapper.EntityToPatientDTO(user);
+				returnList.add(temp);
+			}
+		}
+		return  returnList;
 	}
 
 
