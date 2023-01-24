@@ -3,6 +3,7 @@ package com.isa.BloodTransferInstitute.repository;
 import com.isa.BloodTransferInstitute.enums.Role;
 import com.isa.BloodTransferInstitute.model.User;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,4 +20,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	User findByJmbg(String jmbg);
 	User findByPhoneNumber(String phoneNumber);
 	Optional<User> findByIdAndRole(Long id, Role role);
+
+	@Query("SELECT u.id FROM appointments a LEFT JOIN users u ON a.patient.id = u.id WHERE a.bloodBank.id = ?1 AND a.finished = 1 AND a.status = 2 AND u.enabled = 1")
+	Collection<Long> getRegisteredDonorsForBloodBank(Long bloodBankId);
 }

@@ -7,6 +7,7 @@ import com.isa.BloodTransferInstitute.exception.NotFoundException;
 import com.isa.BloodTransferInstitute.mappers.BloodBankMapper;
 import com.isa.BloodTransferInstitute.model.BloodBank;
 import com.isa.BloodTransferInstitute.repository.BloodBankRepository;
+import com.isa.BloodTransferInstitute.repository.UserRepository;
 import com.isa.BloodTransferInstitute.service.BloodBankService;
 
 import org.springframework.data.domain.Pageable;
@@ -31,6 +32,7 @@ import lombok.RequiredArgsConstructor;
 public class BloodBankServiceImpl implements BloodBankService {
 
 	private final BloodBankRepository bloodBankRepository;
+	private final UserRepository userRepository;
 	private final EntityManager em;
 	private static final String NAME = "name";
 	private static final String ADDRESS = "address";
@@ -106,6 +108,11 @@ public class BloodBankServiceImpl implements BloodBankService {
 	@Override
 	public Page<BloodBank> getAllWithPage(Pageable page){
 		return bloodBankRepository.findAll(page);
+	}
+
+	@Override
+	public List<Long> getRegisteredDonors(Long id) {
+		return new ArrayList<Long>(userRepository.getRegisteredDonorsForBloodBank(id));
 	}
 
 

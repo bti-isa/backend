@@ -19,7 +19,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
-@Entity
+@Entity(name="users")
 @Table(name = "Users")
 @Data
 @NoArgsConstructor

@@ -102,4 +102,10 @@ public class BloodBankController {
 		}
 		return ResponseEntity.status(HttpStatus.OK).body(returnList);
 	}
+
+	@GetMapping("/registered-donors/{id}")
+	@PreAuthorize("hasAnyAuthority('INSTITUTE_ADMIN')")
+	public ResponseEntity<List<Long>>getRegisteredDonors(@Valid @NotNull @PathVariable("id") final Long id){
+		return ResponseEntity.status(HttpStatus.OK).body(bloodBankService.getRegisteredDonors(id));
+	}
 }

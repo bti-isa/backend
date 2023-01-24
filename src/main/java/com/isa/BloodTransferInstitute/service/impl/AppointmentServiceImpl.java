@@ -132,6 +132,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 				increaseBloodQuantity(bloodQuantity,unit);
 				return true;
 		}
+		//ispraviti ovo nakon sto se promeni baza, potrebno je proslediti bloodBankId i u konstruktor takodje.
 		createNewBloodUnit(bloodQuantity, patientBloodType);
 		return true;
 	}
