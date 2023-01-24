@@ -42,7 +42,7 @@ public class NewThread extends Thread {
 					final byte[] body = message.toString().getBytes(StandardCharsets.UTF_8);
 					channel.basicPublish("", "monthly", null, body);
 					logger.info("Message: " + message);
-					Thread.sleep(30000); // 86 400 000 sec
+					Thread.sleep(86400000); // 86 400 000 sec
 				}
 			} catch (IOException | InterruptedException | ExecutionException | TimeoutException e) {
 					throw new RuntimeException(e);
