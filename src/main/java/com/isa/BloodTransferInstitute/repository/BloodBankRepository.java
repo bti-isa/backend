@@ -11,4 +11,5 @@ import java.util.List;
 
 @Repository
 public interface BloodBankRepository extends JpaRepository<BloodBank, Long> {
+
 }
