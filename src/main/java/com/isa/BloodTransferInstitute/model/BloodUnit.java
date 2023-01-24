@@ -38,4 +38,9 @@ public class BloodUnit {
 
 	@ManyToMany(mappedBy = "bloodUnits")
 	List<BloodBank> bloodBanks;
+
+	public BloodUnit(Integer bloodQuantity, BloodType patientBloodType) {
+		bloodType = patientBloodType;
+		quantity = bloodQuantity;
+	}
 }

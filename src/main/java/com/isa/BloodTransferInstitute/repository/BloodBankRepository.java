@@ -2,6 +2,7 @@ package com.isa.BloodTransferInstitute.repository;
 
 import com.isa.BloodTransferInstitute.model.BloodBank;
 
+import com.isa.BloodTransferInstitute.model.BloodUnit;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

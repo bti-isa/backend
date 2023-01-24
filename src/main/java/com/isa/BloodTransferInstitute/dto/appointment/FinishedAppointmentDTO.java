@@ -24,12 +24,6 @@ public class FinishedAppointmentDTO {
 	@NotNull
 	Long id;
 
-	@NotNull
-	Long patientId;
-
-	@NotNull
-	Long bloodBankId;
-
 	@NotBlank
 	String reportDescription;
 
