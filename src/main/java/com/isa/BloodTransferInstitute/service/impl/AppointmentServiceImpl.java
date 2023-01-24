@@ -25,6 +25,9 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.isa.BloodTransferInstitute.service.PatientService;
+
+import javax.persistence.OptimisticLockException;
+
 import org.mapstruct.control.MappingControl.Use;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -89,7 +92,11 @@ public class AppointmentServiceImpl implements AppointmentService {
 	public Appointment schedule(final Long appointmentId, final Long patientId) {
 		Appointment appointment = appointmentRepository.findById(appointmentId).orElseThrow(NotFoundException::new);
 		User patient = userRepository.findById(patientId).orElseThrow(NotFoundException::new);
-		return appointmentRepository.save(AppointmentMapper.ScheduleDTOToEntity(appointment, patient));
+		try {
+			return appointmentRepository.save(AppointmentMapper.ScheduleDTOToEntity(appointment, patient));
+		} catch (OptimisticLockException e) {
+			throw new ScheduleException();
+		}
 	}
 
 	@Override

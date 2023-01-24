@@ -13,6 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Version;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.isa.BloodTransferInstitute.enums.AppointmentStatus;
@@ -36,6 +37,10 @@ public class Appointment {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(nullable = false, unique = true, updatable = false)
 	Long id;
+
+	@Column()
+	@Version
+	Long version;
 
 	@Column(nullable = false)
 	@JsonFormat(pattern="dd.MM.yyyy. HH:mm")
