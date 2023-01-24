@@ -107,7 +107,20 @@ public class AppointmentServiceImpl implements AppointmentService {
 	@Override
 	public Appointment finish(final FinishedAppointmentDTO appointmentDTO) {
 		Appointment appointment = appointmentRepository.findById(appointmentDTO.getId()).orElseThrow(NotFoundException::new);
+		if(!handleEquipment(appointmentDTO.getEquipment(),appointmentDTO.getBloodBankId()))
+			throw new NoEquipmentException();
+
 		return appointmentRepository.save(AppointmentMapper.FinishDTOToEntity(appointmentDTO, appointment));
+	}
+
+	private boolean handleEquipment(Integer equipment, Long bloodBankId){
+		BloodBank bloodBank = bloodBankRepository.getById(bloodBankId);
+		if(bloodBank.getEquipment() < equipment)
+			return false;
+
+		bloodBank.setEquipment(bloodBank.getEquipment()-equipment);
+		bloodBankRepository.save(bloodBank);
+		return true;
 	}
 
 	@Override

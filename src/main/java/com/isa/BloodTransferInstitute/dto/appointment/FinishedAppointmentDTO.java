@@ -33,4 +33,9 @@ public class FinishedAppointmentDTO {
 	@NotBlank
 	String reportDescription;
 
+	@NotNull
+	Integer equipment;
+
+	@NotNull
+	Integer bloodQuantity;
 }

@@ -34,6 +34,10 @@ public class BloodBank {
     @Column(nullable = false)
     String description;
 
+    @Column
+    Integer equipment;
+
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "workinghours_id", referencedColumnName = "id")
     WorkingHours workingHours;
