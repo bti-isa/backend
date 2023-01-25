@@ -1,6 +1,7 @@
 package com.isa.BloodTransferInstitute.controller;
 
 import com.isa.BloodTransferInstitute.dto.CordDTO;
+import com.isa.BloodTransferInstitute.exception.MapException;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -25,11 +26,15 @@ public class MapController {
     public String StartDelivery(@RequestBody CordDTO cordDto) {
         RestTemplate restTemplate = new RestTemplate();
         String url = "http://localhost:8085/start";
-        restTemplate.postForObject(url, cordDto, Object.class);
+        try {
+            restTemplate.postForObject(url, cordDto, Object.class);
+        }catch (Exception e){
+            throw new MapException();
+        }
         registry.getListenerContainer("foo").start();
         return "";
     }
-    
+
     @RabbitListener(id = "foo", queues = "test", autoStartup = "false")
     public void consumeMessageFromQueue (String cord){
         System.out.println("Message recieved from queue: " + cord);
