@@ -96,7 +96,7 @@ public class BloodBankController {
 	@PreAuthorize("hasAnyAuthority('INSTITUTE_ADMIN', 'SYSTEM_ADMIN', 'PATIENT')")
 	public ResponseEntity<List<SimpleBloodBankDTO>> getSimpleInformation() {
 		List<SimpleBloodBankDTO> returnList = new ArrayList<SimpleBloodBankDTO>();
-		for(BloodBank bloodBank : bloodBankService.getAll()) {
+		for (BloodBank bloodBank : bloodBankService.getAll()) {
 			var simple = BloodBankMapper.EntityToSimpleDTO(bloodBank);
 			returnList.add(simple);
 		}
