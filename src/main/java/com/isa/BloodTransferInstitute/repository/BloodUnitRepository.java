@@ -11,4 +11,5 @@ import java.util.Optional;
 
 public interface BloodUnitRepository extends JpaRepository<BloodUnit, Long> {
 	BloodUnit findByBloodType(BloodType bloodType);
+	BloodUnit findByBloodTypeAndBloodBankId(BloodType bloodType, Long bloodBankId);
 }
