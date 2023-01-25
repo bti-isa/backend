@@ -107,6 +107,20 @@ public class BloodBankController {
 	@GetMapping("/registered-donors/{id}")
 	@PreAuthorize("hasAnyAuthority('INSTITUTE_ADMIN')")
 	public ResponseEntity<List<RegisteredDonorsDTO>>getRegisteredDonors(@Valid @NotNull @PathVariable("id") final Long id){
-		return ResponseEntity.status(HttpStatus.OK).body(bloodBankService.getRegisteredDonors(id));
+		Long bloodBankId = bloodBankService.getByAdminId(id);
+		if(bloodBankId == null){
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		}
+		return ResponseEntity.status(HttpStatus.OK).body(bloodBankService.getRegisteredDonors(bloodBankId));
+	}
+
+	@GetMapping("/get-by-admin/{id}")
+	@PreAuthorize("hasAnyAuthority('INSTITUTE_ADMIN')")
+	public ResponseEntity<BloodBankDTO> getByAdminId(@Valid @NotNull @PathVariable("id") final Long id){
+		Long bloodBankId = bloodBankService.getByAdminId(id);
+		if(bloodBankId == null){
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		}
+		return ResponseEntity.status(HttpStatus.OK).body(getBloodBankMapper.EntityToEntityDTO(bloodBankService.getById(bloodBankId).get()));
 	}
 }

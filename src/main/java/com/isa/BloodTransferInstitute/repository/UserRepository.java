@@ -1,6 +1,7 @@
 package com.isa.BloodTransferInstitute.repository;
 
 import com.isa.BloodTransferInstitute.enums.Role;
+import com.isa.BloodTransferInstitute.model.BloodBank;
 import com.isa.BloodTransferInstitute.model.User;
 
 import java.util.Collection;
@@ -23,4 +24,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
 	@Query("SELECT u.id FROM appointments a LEFT JOIN users u ON a.patient.id = u.id WHERE a.bloodBank.id = ?1 AND a.finished = 1 AND a.status = 2 AND u.enabled = 1")
 	Collection<Long> getRegisteredDonorsForBloodBank(Long bloodBankId);
+
+	@Query("SELECT u.bloodBank.id FROM users u WHERE u.id = ?1")
+	Long getBloodBankByUserId(Long id);
 }

@@ -131,5 +131,10 @@ public class BloodBankServiceImpl implements BloodBankService {
 		return  returnList;
 	}
 
+	@Override
+	public Long getByAdminId(Long id) {
+		return userRepository.getBloodBankByUserId(id);
+	}
+
 
 }
