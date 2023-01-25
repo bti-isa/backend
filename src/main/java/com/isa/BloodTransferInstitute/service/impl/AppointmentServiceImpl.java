@@ -184,4 +184,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 	public List<Appointment> findAllByBloodbankId(Long id){
 		return appointmentRepository.findByBloodBankIdAndStatusAndDateTimeGreaterThanEqual(id,AppointmentStatus.AVAILIBLE, LocalDateTime.now());
 	}
+	public List<Appointment> findAllFinishedByBloodbankId(Long id){
+		return appointmentRepository.findByBloodBankIdAndStatus(id,AppointmentStatus.COMPLETED);
+	}
 }
