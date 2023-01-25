@@ -131,28 +131,32 @@ public class AppointmentServiceImpl implements AppointmentService {
 		return true;
 	}
 
-	private boolean handleBloodUnits(Integer bloodQuantity, Appointment appointment){
+	private void handleBloodUnits(Integer bloodQuantity, Appointment appointment){
 		BloodType patientBloodType = appointment.getPatient().getBloodType();
-		List<BloodUnit> bloodUnits = appointment.getBloodBank().getBloodUnits();
-		for(BloodUnit unit: bloodUnits){
-			if(unit.getBloodType().equals(patientBloodType))
-				increaseBloodQuantity(bloodQuantity,unit);
-				return true;
+		var bloodBankId = appointment.getBloodBank().getId();
+		List<BloodUnit> bloodUnits = bloodUnitRepository.getByBankAndBloodType(bloodBankId,patientBloodType);
+
+		if(bloodUnits.isEmpty()) {
+			createNewBloodUnit(bloodQuantity, patientBloodType, bloodBankId);
+			return;
 		}
-		//ispraviti ovo nakon sto se promeni baza, potrebno je proslediti bloodBankId i u konstruktor takodje.
-		createNewBloodUnit(bloodQuantity, patientBloodType);
-		return true;
+
+		increaseBloodQuantity(bloodQuantity,bloodUnits,patientBloodType);
 	}
 
-	private void increaseBloodQuantity(Integer bloodQuaintity, BloodUnit unit){
-		unit.setQuantity(unit.getQuantity()+bloodQuaintity);
-		bloodUnitRepository.save(unit);
-		return;
+	private void increaseBloodQuantity(Integer bloodQuaintity, List<BloodUnit> bloodUnits, BloodType patientBloodType){
+		for(BloodUnit unit: bloodUnits){
+			if(unit.getBloodType().equals(patientBloodType)){
+				unit.setQuantity(unit.getQuantity()+bloodQuaintity);
+				bloodUnitRepository.save(unit);
+			}
+		}
 	}
 
-	private void createNewBloodUnit(Integer bloodQuantity, BloodType patientBloodType){
-		bloodUnitRepository.save(new BloodUnit(bloodQuantity,patientBloodType));
-		return;
+	private void createNewBloodUnit(Integer bloodQuantity, BloodType patientBloodType, Long bloodBankId){
+		var newUnit = new BloodUnit(bloodQuantity,patientBloodType);
+		newUnit.setBloodBank(bloodBankRepository.findById(bloodBankId).get());
+		bloodUnitRepository.save(newUnit);
 	}
 
 	@Override
