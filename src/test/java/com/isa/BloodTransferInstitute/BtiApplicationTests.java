@@ -141,6 +141,9 @@ public class BtiApplicationTests {
 				}
 			}
 		});
+
+		t1.start();
+		t1.join();
 	}
 
 }
