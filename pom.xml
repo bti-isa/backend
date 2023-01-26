@@ -136,9 +136,9 @@
 			<artifactId>mapstruct-processor</artifactId>
 			<version>1.5.3.Final</version>
 		</dependency>
-    
-    <dependency>
-    	<groupId>org.junit.vintage</groupId>
+
+	    <dependency>
+	        <groupId>org.junit.vintage</groupId>
 			<artifactId>junit-vintage-engine</artifactId>
 			<scope>test</scope>
 			<exclusions>
@@ -147,7 +147,7 @@
 					<artifactId>hamcrest-core</artifactId>
 				</exclusion>
 			</exclusions>
-    <dependency>
+	    </dependency>
     
 		<dependency>
 			<groupId>org.ehcache</groupId>
