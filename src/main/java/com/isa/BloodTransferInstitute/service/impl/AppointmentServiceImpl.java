@@ -71,17 +71,17 @@ public class AppointmentServiceImpl implements AppointmentService {
 	}
 
 	private boolean appointmentValidation(final NewAppointmentDTO appointmentDTO, final User admin) {
-		var notHappenedAppointments = appointmentRepository.findByStatus(AppointmentStatus.AVAILIBLE);
-		notHappenedAppointments.addAll(appointmentRepository.findByStatus(AppointmentStatus.SCHEDULED));
-		return notHappenedAppointments.stream()
-			.anyMatch(appointment -> Objects.equals(admin.getBloodBank().getId(), appointment.getBloodBank().getId()) && appointmentDTO.getDateTime().isEqual(appointment.getDateTime()));
-//		var appointments = appointmentRepository.findByBloodBankId(admin.getBloodBank().getId());
-//		for(var appointment : appointments){
-//			if(appointment.getDateTime().isEqual(appointmentDTO.getDateTime())){
-//				return false;
-//			}
-//		}
-//		return true;
+//		var notHappenedAppointments = appointmentRepository.findByStatus(AppointmentStatus.AVAILIBLE);
+//		notHappenedAppointments.addAll(appointmentRepository.findByStatus(AppointmentStatus.SCHEDULED));
+//		return notHappenedAppointments.stream()
+//			.anyMatch(appointment -> Objects.equals(admin.getBloodBank().getId(), appointment.getBloodBank().getId()) && appointmentDTO.getDateTime().isEqual(appointment.getDateTime()));
+		var appointments = appointmentRepository.findByBloodBankId(admin.getBloodBank().getId());
+		for(var appointment : appointments){
+			if(appointment.getDateTime().isEqual(appointmentDTO.getDateTime())){
+				return false;
+			}
+		}
+		return true;
 	}
 
 	@Override
