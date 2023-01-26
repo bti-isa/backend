@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 
+import javax.persistence.Tuple;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
@@ -125,16 +126,16 @@ public class BloodBankController {
 	@GetMapping("/get-blood-units/{id}")
 	@PreAuthorize("hasAnyAuthority('INSTITUTE_ADMIN')")
 	public ResponseEntity<?> getBloodUnits(@Valid @NotNull @PathVariable("id") final Long id) {
-		List<BloodUnit> units = bloodBankService.getBloodUnits(id);
+		List<BloodUnitDTO> units = bloodBankService.getBloodUnits(id);
 		if(units.isEmpty())
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 
-		List<BloodUnitDTO> retList = new ArrayList<BloodUnitDTO>();
-		for (var unit : units){
-			var dto = getBloodBankMapper.BloodUnitToDTO(unit);
-			retList.add(dto);
-		}
+//		List<BloodUnitDTO> retList = new ArrayList<BloodUnitDTO>();
+//		for (var unit : units){
+//			var dto = getBloodBankMapper.BloodUnitToDTO(unit.);
+//			retList.add(dto);
+//		}
 
-		return ResponseEntity.status(HttpStatus.OK).body(retList);
+		return ResponseEntity.status(HttpStatus.OK).body(units);
 	}
 }
