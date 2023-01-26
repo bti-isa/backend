@@ -15,6 +15,7 @@ import java.util.Optional;
 public interface ComplaintService {
     Optional<Complaint> getById(Long id);
     Complaint add(NewComplaintDTO dto);
+    Complaint updateComplicated(AnswerDTO dto);
     Complaint update(AnswerDTO dto);
     List<ComplaintDTO> getAllAnswered();
     List<ComplaintDTO> getAllByStatus(ComplaintStatus status);
