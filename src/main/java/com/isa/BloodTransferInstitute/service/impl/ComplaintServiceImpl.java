@@ -80,6 +80,10 @@ public class ComplaintServiceImpl implements ComplaintService {
         return retList;
     }
     @Override
+    public void delete(Long id) {
+        complaintRepository.deleteById(id);
+    }
+    @Override
     public List<ComplaintDTO> getAllAnswered() {
         List<Complaint> tempList = complaintRepository.findAll();
         List<ComplaintDTO> retList = new ArrayList<ComplaintDTO>();
