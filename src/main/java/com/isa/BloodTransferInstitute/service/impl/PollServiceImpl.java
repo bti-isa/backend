@@ -21,7 +21,7 @@ public class PollServiceImpl implements PollService {
 
     public Boolean check(Long id){
         var poll = pollRepository.findByPatientId(id);
-        if(poll != null && checkPollData(poll)){
+        if(poll != null && checkPollData(poll.get(poll.size()-1))){
             return true;
         }
         return  false;

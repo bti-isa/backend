@@ -2,6 +2,8 @@ package com.isa.BloodTransferInstitute;
 
 import static org.junit.Assert.assertEquals;
 
+
+import com.isa.BloodTransferInstitute.dto.appointment.FinishedAppointmentDTO;
 import com.isa.BloodTransferInstitute.dto.appointment.NewAppointmentDTO;
 import com.isa.BloodTransferInstitute.dto.complaint.AnswerDTO;
 import com.isa.BloodTransferInstitute.dto.complaint.NewComplaintDTO;
@@ -49,6 +51,7 @@ public class BtiApplicationTests {
 	private ComplaintRepository complaintRepository;
 	@Autowired
 	private AppointmentService appointmentService;
+
 
 	@Test
 	public void multipleAppointmentScheduling() throws InterruptedException {
@@ -145,5 +148,40 @@ public class BtiApplicationTests {
 		t1.start();
 		t1.join();
 	}
+
+	@Test
+	public void Finished_appointment() throws InterruptedException {
+
+		FinishedAppointmentDTO dto1 = new FinishedAppointmentDTO(1L,"bla",1,1);
+		FinishedAppointmentDTO dto2 = new FinishedAppointmentDTO(1L,"bla",1,1);
+		Thread t1 = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					Thread.sleep(6000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				try {
+					appointmentService.finish(dto1);
+				} catch (OptimisticLockException exception) {
+					Assertions.assertEquals(exception.getCause().toString(), "OptimisticLockException");
+				}
+			}
+		});
+		Thread t2 = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				appointmentService.finish(dto2);
+			}
+		});
+
+		t1.run();
+		t2.run();
+		t1.join();
+		t2.join();
+
+	}
+
 
 }
