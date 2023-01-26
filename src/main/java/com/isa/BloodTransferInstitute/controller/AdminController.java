@@ -34,7 +34,7 @@ public class AdminController {
     }
 
     @PutMapping("/update")
-    @PreAuthorize("hasAuthority('SYSTEM_ADMIN')")
+    @PreAuthorize("hasAuthority('SYSTEM_ADMIN','INSTITUTE_ADMIN')")
     public ResponseEntity<AdminDTO> update(@Valid @NonNull @RequestBody final UpdateAdminDTO dto){
         final var updatedUser = adminService.update(dto);
         return ResponseEntity.status(HttpStatus.OK).body(getUserMapper.AdminToAdminDTO(updatedUser));

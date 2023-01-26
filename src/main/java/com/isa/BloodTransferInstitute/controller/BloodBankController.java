@@ -1,14 +1,12 @@
 package com.isa.BloodTransferInstitute.controller;
 
 import com.isa.BloodTransferInstitute.dto.SearchDTO;
-import com.isa.BloodTransferInstitute.dto.bloodbank.BloodBankDTO;
-import com.isa.BloodTransferInstitute.dto.bloodbank.NewBloodBankDTO;
-import com.isa.BloodTransferInstitute.dto.bloodbank.SimpleBloodBankDTO;
-import com.isa.BloodTransferInstitute.dto.bloodbank.UpdateBloodBankDTO;
+import com.isa.BloodTransferInstitute.dto.bloodbank.*;
 import com.isa.BloodTransferInstitute.dto.user.admin.RegisteredDonorsDTO;
 import com.isa.BloodTransferInstitute.mappers.BloodBankMapper;
 import com.isa.BloodTransferInstitute.mappers.GetBloodBankMapper;
 import com.isa.BloodTransferInstitute.model.BloodBank;
+import com.isa.BloodTransferInstitute.model.BloodUnit;
 import com.isa.BloodTransferInstitute.service.BloodBankService;
 
 import org.springframework.data.domain.Pageable;
@@ -38,7 +36,6 @@ import javax.validation.constraints.NotNull;
 public class BloodBankController {
 
 	private final BloodBankService bloodBankService;
-
 	private final GetBloodBankMapper getBloodBankMapper;
 
 	@PostMapping("/add")
@@ -56,7 +53,7 @@ public class BloodBankController {
 	}
 
 	@PutMapping("/update")
-	@PreAuthorize("hasAuthority('SYSTEM_ADMIN')")
+	@PreAuthorize("hasAuthority('SYSTEM_ADMIN','INSTITUTE_ADMIN')")
 	public ResponseEntity<BloodBankDTO> update(@Valid @NonNull @RequestBody final UpdateBloodBankDTO dto) {
 		final var updatedBank = bloodBankService.update(dto);
 		return ResponseEntity.status(HttpStatus.OK).body(getBloodBankMapper.EntityToEntityDTO(updatedBank));
@@ -122,5 +119,21 @@ public class BloodBankController {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		}
 		return ResponseEntity.status(HttpStatus.OK).body(getBloodBankMapper.EntityToEntityDTO(bloodBankService.getById(bloodBankId).get()));
+	}
+
+	@GetMapping("/get-blood-units/{id}")
+	@PreAuthorize("hasAnyAuthority('INSTITUTE_ADMIN')")
+	public ResponseEntity<?> getBloodUnits(@Valid @NotNull @PathVariable("id") final Long id) {
+		List<BloodUnit> units = bloodBankService.getBloodUnits(id);
+		if(units.isEmpty())
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+
+		List<BloodUnitDTO> retList = new ArrayList<BloodUnitDTO>();
+		for (var unit : units){
+			var dto = getBloodBankMapper.BloodUnitToDTO(unit);
+			retList.add(dto);
+		}
+
+		return ResponseEntity.status(HttpStatus.OK).body(retList);
 	}
 }

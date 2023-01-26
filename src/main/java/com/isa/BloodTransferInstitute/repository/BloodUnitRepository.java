@@ -16,4 +16,7 @@ public interface BloodUnitRepository extends JpaRepository<BloodUnit, Long> {
 
 	@Query(value = "SELECT * FROM blood_units u WHERE u.bloodbank_id = ?1 AND u.blood_type && ?2 = 1", nativeQuery = true)
 	List<BloodUnit> getByBankAndBloodType(Long id, BloodType bloodType);
+
+	@Query(value = "select * FROM blood_units u WHERE u.bloodbank_id = ?1 GROUP BY u.id", nativeQuery = true)
+	List<BloodUnit> getBloodUnits(Long bloodBankId);
 }

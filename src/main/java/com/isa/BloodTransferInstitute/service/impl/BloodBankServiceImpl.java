@@ -1,6 +1,7 @@
 package com.isa.BloodTransferInstitute.service.impl;
 
 import com.isa.BloodTransferInstitute.dto.SearchDTO;
+import com.isa.BloodTransferInstitute.dto.bloodbank.DonorsQueryDTO;
 import com.isa.BloodTransferInstitute.dto.bloodbank.NewBloodBankDTO;
 import com.isa.BloodTransferInstitute.dto.bloodbank.UpdateBloodBankDTO;
 import com.isa.BloodTransferInstitute.dto.user.admin.RegisteredDonorsDTO;
@@ -10,17 +11,23 @@ import com.isa.BloodTransferInstitute.mappers.BloodBankMapper;
 import com.isa.BloodTransferInstitute.mappers.GetUserMapper;
 import com.isa.BloodTransferInstitute.mappers.PatientMapper;
 import com.isa.BloodTransferInstitute.model.BloodBank;
+import com.isa.BloodTransferInstitute.model.BloodUnit;
 import com.isa.BloodTransferInstitute.model.User;
 import com.isa.BloodTransferInstitute.repository.BloodBankRepository;
+import com.isa.BloodTransferInstitute.repository.BloodUnitRepository;
 import com.isa.BloodTransferInstitute.repository.UserRepository;
 import com.isa.BloodTransferInstitute.service.BloodBankService;
 
 import org.springframework.data.domain.Pageable;
+
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Tuple;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -38,6 +45,7 @@ public class BloodBankServiceImpl implements BloodBankService {
 
 	private final BloodBankRepository bloodBankRepository;
 	private final UserRepository userRepository;
+	private final BloodUnitRepository bloodUnitRepository;
 	private final EntityManager em;
 	private static final String NAME = "name";
 	private static final String ADDRESS = "address";
@@ -117,18 +125,32 @@ public class BloodBankServiceImpl implements BloodBankService {
 
 	@Override
 	public List<RegisteredDonorsDTO> getRegisteredDonors(Long id) {
-		List<Long> ids = new ArrayList<Long>(userRepository.getRegisteredDonorsForBloodBank(id));
-		if(ids.isEmpty())
+		List<Tuple> queryResult = new ArrayList<>(userRepository.getRegisteredDonorsForBloodBank(id));
+		if(queryResult.isEmpty())
 			throw new NotFoundException();
 
 		List<RegisteredDonorsDTO> returnList = new ArrayList<>();
 		for(User user : userRepository.findAll()){
-			if(ids.contains(user.getId())){
-				var temp = PatientMapper.EntityToPatientDTO(user);
-				returnList.add(temp);
+			for(var it : convertFromQueryResult(queryResult)){
+				if(it.getPatientId().equals(user.getId())){
+					var temp = PatientMapper.EntityToPatientDTO(user);
+					temp.setDonateDate(it.getAppointmentDate());
+					returnList.add(temp);
+				}
 			}
 		}
 		return  returnList;
+	}
+
+	private List<DonorsQueryDTO> convertFromQueryResult(List<Tuple> queryResult){
+		List<DonorsQueryDTO> converted = queryResult.stream()
+				.map(t -> new DonorsQueryDTO(
+						t.get(0, Long.class),
+						t.get(1, LocalDateTime.class)
+				))
+				.collect(Collectors.toList());
+
+		return converted;
 	}
 
 	@Override
@@ -136,5 +158,9 @@ public class BloodBankServiceImpl implements BloodBankService {
 		return userRepository.getBloodBankByUserId(id);
 	}
 
+	@Override
+	public List<BloodUnit> getBloodUnits(Long id) {
+		return bloodUnitRepository.getBloodUnits(id);
+	}
 
 }

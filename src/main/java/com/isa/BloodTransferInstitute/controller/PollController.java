@@ -25,6 +25,6 @@ public class PollController {
     @GetMapping("/get/{id}")
     @PreAuthorize("hasAuthority('INSTITUTE_ADMIN')")
     public ResponseEntity<Boolean> getById(@PathVariable Long id){
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(pollService.check(id));
+        return ResponseEntity.status(HttpStatus.OK).body(pollService.check(id));
     }
 }

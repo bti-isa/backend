@@ -5,6 +5,9 @@ import com.isa.BloodTransferInstitute.enums.Gender;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.time.LocalDateTime;
+import java.util.Date;
+
 @NoArgsConstructor
 @Data
 @Builder(toBuilder = true)
@@ -27,4 +30,6 @@ public class RegisteredDonorsDTO {
     String phoneNumber;
 
     BloodType bloodType;
+
+    LocalDateTime donateDate;
 }

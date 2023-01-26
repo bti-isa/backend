@@ -5,6 +5,7 @@ import com.isa.BloodTransferInstitute.dto.bloodbank.NewBloodBankDTO;
 import com.isa.BloodTransferInstitute.dto.bloodbank.UpdateBloodBankDTO;
 import com.isa.BloodTransferInstitute.dto.user.admin.RegisteredDonorsDTO;
 import com.isa.BloodTransferInstitute.model.BloodBank;
+import com.isa.BloodTransferInstitute.model.BloodUnit;
 import com.isa.BloodTransferInstitute.model.User;
 import org.springframework.data.domain.Page;
 
@@ -23,4 +24,5 @@ public interface BloodBankService {
 	Page<BloodBank> getAllWithPage(Pageable page);
 	List<RegisteredDonorsDTO> getRegisteredDonors(Long id);
 	Long getByAdminId(Long id);
+	List<BloodUnit> getBloodUnits(Long id);
 }
