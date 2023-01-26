@@ -1,6 +1,7 @@
 package com.isa.BloodTransferInstitute.controller;
 
 import com.isa.BloodTransferInstitute.dto.user.admin.AdminDTO;
+import com.isa.BloodTransferInstitute.dto.user.admin.AdminProfileUpdateDTO;
 import com.isa.BloodTransferInstitute.dto.user.admin.NewAdminDTO;
 import com.isa.BloodTransferInstitute.dto.user.admin.UpdateAdminDTO;
 import com.isa.BloodTransferInstitute.mappers.AdminMapper;
@@ -57,4 +58,14 @@ public class AdminController {
         }
         return ResponseEntity.status(HttpStatus.OK).body(getUserMapper.AdminToAdminDTO(result.get()));
     }
+
+    @PutMapping("/profile-update")
+    @PreAuthorize("hasAuthority('INSTITUTE_ADMIN')")
+    public ResponseEntity<Boolean> profileUpdate(@Valid @NonNull @RequestBody final AdminProfileUpdateDTO dto){
+        if(!adminService.adminProfileUpdate(dto))
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
 }

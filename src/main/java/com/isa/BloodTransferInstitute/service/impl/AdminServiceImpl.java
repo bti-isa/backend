@@ -1,4 +1,5 @@
 package com.isa.BloodTransferInstitute.service.impl;
+import com.isa.BloodTransferInstitute.dto.user.admin.AdminProfileUpdateDTO;
 import com.isa.BloodTransferInstitute.dto.user.admin.NewAdminDTO;
 import com.isa.BloodTransferInstitute.dto.user.admin.UpdateAdminDTO;
 import com.isa.BloodTransferInstitute.enums.Gender;
@@ -49,6 +50,23 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public Optional<User> getById(Long id) {
         return userRepository.findById(id);
+    }
+
+    @Override
+    public Boolean adminProfileUpdate(AdminProfileUpdateDTO dto) {
+        var admin = userRepository.findById(dto.getId()).get();
+        if(admin == null)
+            return false;
+
+        admin.setFirstname(dto.getEnteredFirstName());
+        admin.setLastname(dto.getEnteredLastName());
+        admin.setPhoneNumber(dto.getEnteredPhone());
+        admin.getAddress().setCity(dto.getEnteredCity());
+        admin.getAddress().setStreet(dto.getEnteredStreet());
+        admin.getAddress().setNumber(dto.getEnteredNumber());
+        admin.getAddress().setPostalCode(dto.getEnteredPostalCode());
+        userRepository.save(admin);
+        return true;
     }
 
     @Override
