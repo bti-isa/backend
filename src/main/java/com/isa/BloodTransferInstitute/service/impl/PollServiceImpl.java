@@ -5,6 +5,8 @@ import com.isa.BloodTransferInstitute.repository.PollRepository;
 import com.isa.BloodTransferInstitute.service.PollService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class PollServiceImpl implements PollService {
@@ -12,6 +14,7 @@ public class PollServiceImpl implements PollService {
     @Autowired
     PollRepository pollRepository;
 
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     public void add(Poll poll){
         pollRepository.save(poll);
     }

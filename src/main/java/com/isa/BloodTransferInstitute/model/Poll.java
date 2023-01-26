@@ -47,6 +47,9 @@ public class Poll {
     @Column(nullable = false)
     Boolean other;
 
+    @Version
+    Long version;
+
     public Boolean checkCriteria(){
         if(!weightOver50kg || commonCold || skinDiseases || problemWithPressure
            || antibiotics || menstruation || dentalIntervention || other){
