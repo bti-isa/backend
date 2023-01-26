@@ -1,52 +1,26 @@
-<!--<config-->
-<!--        xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'-->
-<!--        xmlns='http://www.ehcache.org/v3'-->
-<!--        xsi:schemaLocation="http://www.ehcache.org/v3-->
-<!--            http://www.ehcache.org/schema/ehcache-core-3.7.xsd"-->
-<!--&gt;-->
+<config
+        xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+        xmlns='http://www.ehcache.org/v3'
+        xsi:schemaLocation="http://www.ehcache.org/v3
+            http://www.ehcache.org/schema/ehcache-core-3.7.xsd"
+>
+    <persistence directory="cache-folder/cache" />
 
-<!--    <persistence directory="cache-folder/cache" />-->
-
-<!--    <cache-template name="default">-->
-<!--        &lt;!&ndash; ttl - TIME TO LIVE - ukupno vreme koje će objekti provesti u kešu bez obzira da li im se pristupa ili ne-->
-<!--            tti - TIME TO IDLE - ukupno vreme koje će objekti provesti u kešu ako im se ne pristupa &ndash;&gt;-->
-<!--        <expiry>-->
-<!--            <ttl unit="seconds">15</ttl>-->
-<!--        </expiry>-->
-<!--        &lt;!&ndash; Registruje se listener koji osluškuje svaku promenu u kešu:-->
-<!--        - CREATED - dodavanje objekta u keš-->
-<!--        - EXPIRED - detekcija da je objektu isteklo vreme u kešu (ttl, tti)-->
-<!--        - EVICTED - izbacivanje objekta iz keša (dešava se ili eksplicitnim pozivanjem evicta ili po principu LRU (Least Recently Used) kada se dodaje novi objekt u popunjen keš izbacuje se iz keša onaj koji se najmanje koristio)-->
-<!--        - REMOVED - uklanjanje objekta iz keša &ndash;&gt;-->
-<!--&lt;!&ndash;        <listeners>&ndash;&gt;-->
-<!--&lt;!&ndash;            <listener>&ndash;&gt;-->
-<!--&lt;!&ndash;                <class>rs.ac.uns.ftn.informatika.cache.logger.CacheLogger</class>&ndash;&gt;-->
-<!--&lt;!&ndash;                <event-firing-mode>ASYNCHRONOUS</event-firing-mode>&ndash;&gt;-->
-<!--&lt;!&ndash;                <event-ordering-mode>UNORDERED</event-ordering-mode>&ndash;&gt;-->
-<!--&lt;!&ndash;                <events-to-fire-on>CREATED</events-to-fire-on>&ndash;&gt;-->
-<!--&lt;!&ndash;                <events-to-fire-on>EXPIRED</events-to-fire-on>&ndash;&gt;-->
-<!--&lt;!&ndash;                <events-to-fire-on>EVICTED</events-to-fire-on>&ndash;&gt;-->
-<!--&lt;!&ndash;                <events-to-fire-on>REMOVED</events-to-fire-on>&ndash;&gt;-->
-<!--&lt;!&ndash;            </listener>&ndash;&gt;-->
-<!--&lt;!&ndash;        </listeners>&ndash;&gt;-->
-
-<!--        <resources>-->
-<!--            &lt;!&ndash; 1000 objekata na Java heapu &ndash;&gt;-->
-<!--            <heap>1000</heap>-->
-<!--            &lt;!&ndash; 10MB u RAMu se čuva &ndash;&gt;-->
-<!--            <offheap unit="MB">10</offheap>-->
-<!--            &lt;!&ndash; 100MB na disku se čuva &ndash;&gt;-->
-<!--            <disk persistent="true" unit="MB">100</disk>-->
-<!--        </resources>-->
-<!--    </cache-template>-->
-
-<!--    &lt;!&ndash; Cache configurations &ndash;&gt;-->
-<!--    <cache alias="product" uses-template="default">-->
-<!--        <key-type>java.lang.Long</key-type>-->
-<!--        <value-type>rs.ac.uns.ftn.informatika.cache.domain.Product</value-type>-->
-<!--        <resources>-->
-<!--            <heap>2</heap>-->
-<!--        </resources>-->
-<!--    </cache>-->
-
-<!--</config>-->
+    <cache-template name="default">
+        <expiry>
+            <tti unit="minutes">20</tti>
+        </expiry>
+        <resources>
+            <heap>1000</heap>
+            <offheap unit="MB">10</offheap>
+            <disk persistent="true" unit="MB">100</disk>
+        </resources>
+    </cache-template>
+    <cache alias="bank" uses-template="default">
+        <key-type>java.lang.Long</key-type>
+        <value-type>com.isa.BloodTransferInstitute.model.BloodBank</value-type>
+        <resources>
+            <heap>5</heap>
+        </resources>
+    </cache>
+</config>

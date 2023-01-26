@@ -9,6 +9,7 @@ import com.isa.BloodTransferInstitute.model.BloodBank;
 import com.isa.BloodTransferInstitute.repository.BloodBankRepository;
 import com.isa.BloodTransferInstitute.service.BloodBankService;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
 import java.util.ArrayList;
 import java.util.List;
@@ -106,6 +107,11 @@ public class BloodBankServiceImpl implements BloodBankService {
 	@Override
 	public Page<BloodBank> getAllWithPage(Pageable page){
 		return bloodBankRepository.findAll(page);
+	}
+
+	@Override
+	public void removeFromCache() {
+		System.out.println("REMOVED");
 	}
 
 

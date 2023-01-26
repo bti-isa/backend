@@ -73,6 +73,7 @@ public class BloodBankController {
 	}
 
 	@GetMapping("/{id}")
+	@PreAuthorize("hasAuthority('SYSTEM_ADMIN')")
 	public ResponseEntity<BloodBankDTO> getAById(@Valid @NotNull @PathVariable("id") final Long id) {
 		final var bloodBank = bloodBankService.getById(id);
 		if (bloodBank.isEmpty()) {
