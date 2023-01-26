@@ -32,7 +32,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -101,6 +103,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 	}
 
 	@Override
+	@Transactional
 	public Appointment schedule(final Long appointmentId, final Long patientId) {
 		Appointment appointment = appointmentRepository.findById(appointmentId).orElseThrow(NotFoundException::new);
 		User patient = userRepository.findById(patientId).orElseThrow(NotFoundException::new);
