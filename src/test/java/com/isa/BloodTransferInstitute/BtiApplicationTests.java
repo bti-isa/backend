@@ -2,6 +2,7 @@ package com.isa.BloodTransferInstitute;
 
 import static org.junit.Assert.assertEquals;
 
+import com.isa.BloodTransferInstitute.dto.appointment.NewAppointmentDTO;
 import com.isa.BloodTransferInstitute.dto.complaint.AnswerDTO;
 import com.isa.BloodTransferInstitute.dto.complaint.NewComplaintDTO;
 import com.isa.BloodTransferInstitute.enums.AppointmentStatus;
@@ -15,6 +16,9 @@ import com.isa.BloodTransferInstitute.repository.ComplaintRepository;
 import com.isa.BloodTransferInstitute.repository.UserRepository;
 import com.isa.BloodTransferInstitute.service.AppointmentService;
 
+import java.time.LocalDateTime;
+import java.time.Month;
+import java.util.Date;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -43,6 +47,8 @@ public class BtiApplicationTests {
 	private ComplaintService complaintService;
 	@Autowired
 	private ComplaintRepository complaintRepository;
+	@Autowired
+	private AppointmentService appointmentService;
 
 	@Test
 	public void multipleAppointmentScheduling() throws InterruptedException {
@@ -113,6 +119,28 @@ public class BtiApplicationTests {
 		t2.join();
 
 		complaintService.delete(complaint.getId());
+	}
+
+	@Test
+	public void Appointment_validaion() throws  InterruptedException {
+		Appointment appointment = appointmentRepository.findById(5L).get();
+		Thread t1 = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					Thread.sleep(6000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				try {
+					//2023-01-31 03:30:00.000000
+					LocalDateTime date = LocalDateTime.of(2023, Month.JANUARY, 31, 03, 30, 00);
+					appointmentService.create(new NewAppointmentDTO(date, "sys@gmail.com"));
+				} catch (OptimisticLockException exception) {
+					Assertions.assertEquals(exception.getCause().toString(), "OptimisticLockException");
+				}
+			}
+		});
 	}
 
 }
