@@ -7,6 +7,8 @@ import com.isa.BloodTransferInstitute.dto.user.admin.RegisteredDonorsDTO;
 import com.isa.BloodTransferInstitute.model.BloodBank;
 import com.isa.BloodTransferInstitute.model.BloodUnit;
 import com.isa.BloodTransferInstitute.model.User;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 
 import org.springframework.data.domain.Pageable;
@@ -18,6 +20,7 @@ public interface BloodBankService {
 
 	List<BloodBank> search(SearchDTO searchDTO);
 	BloodBank add(NewBloodBankDTO dto);
+	@Cacheable(value = "bank")
 	Optional<BloodBank> getById(Long id);
 	BloodBank update(UpdateBloodBankDTO dto);
 	List<BloodBank> getAll();
@@ -25,4 +28,6 @@ public interface BloodBankService {
 	List<RegisteredDonorsDTO> getRegisteredDonors(Long id);
 	Long getByAdminId(String email);
 	List<BloodUnit> getBloodUnits(Long id);
+	@CacheEvict(cacheNames = {"product"}, allEntries = true)
+	void removeFromCache();
 }

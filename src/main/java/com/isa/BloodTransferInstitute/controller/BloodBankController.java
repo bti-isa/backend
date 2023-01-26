@@ -71,6 +71,7 @@ public class BloodBankController {
 	}
 
 	@GetMapping("/{id}")
+	@PreAuthorize("hasAuthority('SYSTEM_ADMIN')")
 	public ResponseEntity<BloodBankDTO> getAById(@Valid @NotNull @PathVariable("id") final Long id) {
 		final var bloodBank = bloodBankService.getById(id);
 		if (bloodBank.isEmpty()) {
@@ -94,7 +95,7 @@ public class BloodBankController {
 	@PreAuthorize("hasAnyAuthority('INSTITUTE_ADMIN', 'SYSTEM_ADMIN', 'PATIENT')")
 	public ResponseEntity<List<SimpleBloodBankDTO>> getSimpleInformation() {
 		List<SimpleBloodBankDTO> returnList = new ArrayList<SimpleBloodBankDTO>();
-		for(BloodBank bloodBank : bloodBankService.getAll()) {
+		for (BloodBank bloodBank : bloodBankService.getAll()) {
 			var simple = BloodBankMapper.EntityToSimpleDTO(bloodBank);
 			returnList.add(simple);
 		}

@@ -16,6 +16,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -35,26 +38,35 @@ public class ComplaintServiceImpl implements ComplaintService {
         return complaintRepository.save(complaintMapper.DTOToEntity(dto));
     }
     @Override
-    public Complaint update(AnswerDTO dto) {
+    public Complaint updateComplicated(AnswerDTO dto) {
         Integer counter = 0;
-        Complaint complaint = getById(dto.getId()).get();
+        Complaint complaint = getById(dto.getId()).get();   //dobavljam
         complaint.setAnswer(dto.getAnswer());
-        complaint.setStatus(ComplaintStatus.ANSWERED);
+        complaint.setStatus(ComplaintStatus.ANSWERED);  //izmenim
         while(counter < 5) {
             try {
-                complaintRepository.save(complaint);
+                complaintRepository.save(complaint);    //save proveri verziju u bazi ako je veca od lokalne baci
                 break;
-            } catch (OptimisticLockingFailureException ex) {
-                complaint = getById(dto.getId()).get();
-                complaint.setAnswer(dto.getAnswer());
+            } catch (OptimisticLockingFailureException ex) {    //ovo
+                complaint = getById(dto.getId()).get(); //u tom slucaju opet dobavim
+                complaint.setAnswer(dto.getAnswer());   //opet izmenim
                 complaint.setStatus(ComplaintStatus.ANSWERED);
-                counter++;
+                counter++;  //ovo mi escape condicion
             }
         }
         if(counter == 5) {
             throw new RuntimeException("Update not successful!");
         }
         return complaint;
+    }
+    @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.SERIALIZABLE,
+    timeout = 5, readOnly = false)
+    public Complaint update(AnswerDTO dto) {
+        Complaint complaint = getById(dto.getId()).get();
+        complaint.setAnswer(dto.getAnswer());
+        complaint.setStatus(ComplaintStatus.ANSWERED);
+        return complaintRepository.save(complaint);
     }
     @Override
     public List<ComplaintDTO> getAllByStatus(ComplaintStatus status) {

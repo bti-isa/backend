@@ -18,6 +18,7 @@ import com.isa.BloodTransferInstitute.repository.BloodUnitRepository;
 import com.isa.BloodTransferInstitute.repository.UserRepository;
 import com.isa.BloodTransferInstitute.service.BloodBankService;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDateTime;
@@ -124,6 +125,10 @@ public class BloodBankServiceImpl implements BloodBankService {
 	}
 
 	@Override
+	public void removeFromCache() {
+		System.out.println("REMOVED");
+	}
+
 	public List<RegisteredDonorsDTO> getRegisteredDonors(Long id) {
 		List<Tuple> queryResult = new ArrayList<>(userRepository.getRegisteredDonorsForBloodBank(id));
 		if(queryResult.isEmpty())
@@ -162,5 +167,4 @@ public class BloodBankServiceImpl implements BloodBankService {
 	public List<BloodUnit> getBloodUnits(Long id) {
 		return bloodUnitRepository.getBloodUnits(id);
 	}
-
 }
