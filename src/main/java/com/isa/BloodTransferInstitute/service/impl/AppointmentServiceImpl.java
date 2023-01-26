@@ -62,8 +62,8 @@ public class AppointmentServiceImpl implements AppointmentService {
 	@Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.SERIALIZABLE, timeout = 5, readOnly = false)
 	public Appointment create(final NewAppointmentDTO appointmentDTO) {
 		User admin = userRepository.findByUsername(appointmentDTO.getUsername());
-		if(!appointmentValidation(appointmentDTO, admin)){
-			throw new  CreateAppointmentException();
+		if(appointmentValidation(appointmentDTO, admin)){
+			throw new CreateAppointmentException();
 		}
 
 		BloodBank bloodBank = bloodBankRepository.findById(admin.getBloodBank().getId()).orElseThrow(NotFoundException::new);
