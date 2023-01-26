@@ -62,8 +62,8 @@ public class AppointmentServiceImpl implements AppointmentService {
 	@Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.SERIALIZABLE, timeout = 5, readOnly = false)
 	public Appointment create(final NewAppointmentDTO appointmentDTO) {
 		User admin = userRepository.findByUsername(appointmentDTO.getUsername());
-		if(!appointmentValidation(appointmentDTO, admin)){
-			throw new  CreateAppointmentException();
+		if(appointmentValidation(appointmentDTO, admin)){
+			throw new CreateAppointmentException();
 		}
 
 		BloodBank bloodBank = bloodBankRepository.findById(admin.getBloodBank().getId()).orElseThrow(NotFoundException::new);
@@ -71,17 +71,17 @@ public class AppointmentServiceImpl implements AppointmentService {
 	}
 
 	private boolean appointmentValidation(final NewAppointmentDTO appointmentDTO, final User admin) {
-		var notHappenedAppointments = appointmentRepository.findByStatus(AppointmentStatus.AVAILIBLE);
-		notHappenedAppointments.addAll(appointmentRepository.findByStatus(AppointmentStatus.SCHEDULED));
-		return notHappenedAppointments.stream()
-			.anyMatch(appointment -> Objects.equals(admin.getBloodBank().getId(), appointment.getBloodBank().getId()) && appointmentDTO.getDateTime().isEqual(appointment.getDateTime()));
-//		var appointments = appointmentRepository.findByBloodBankId(admin.getBloodBank().getId());
-//		for(var appointment : appointments){
-//			if(appointment.getDateTime().isEqual(appointmentDTO.getDateTime())){
-//				return false;
-//			}
-//		}
-//		return true;
+//		var notHappenedAppointments = appointmentRepository.findByStatus(AppointmentStatus.AVAILIBLE);
+//		notHappenedAppointments.addAll(appointmentRepository.findByStatus(AppointmentStatus.SCHEDULED));
+//		return notHappenedAppointments.stream()
+//			.anyMatch(appointment -> Objects.equals(admin.getBloodBank().getId(), appointment.getBloodBank().getId()) && appointmentDTO.getDateTime().isEqual(appointment.getDateTime()));
+		var appointments = appointmentRepository.findByBloodBankId(admin.getBloodBank().getId());
+		for(var appointment : appointments){
+			if(appointment.getDateTime().isEqual(appointmentDTO.getDateTime())){
+				return false;
+			}
+		}
+		return true;
 	}
 
 	@Override
