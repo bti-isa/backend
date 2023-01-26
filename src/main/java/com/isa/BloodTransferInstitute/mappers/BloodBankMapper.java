@@ -1,10 +1,9 @@
 package com.isa.BloodTransferInstitute.mappers;
 
-import com.isa.BloodTransferInstitute.dto.bloodbank.NewBloodBankDTO;
-import com.isa.BloodTransferInstitute.dto.bloodbank.SimpleBloodBankDTO;
-import com.isa.BloodTransferInstitute.dto.bloodbank.UpdateBloodBankDTO;
+import com.isa.BloodTransferInstitute.dto.bloodbank.*;
 import com.isa.BloodTransferInstitute.model.Address;
 import com.isa.BloodTransferInstitute.model.BloodBank;
+import com.isa.BloodTransferInstitute.model.BloodUnit;
 import com.isa.BloodTransferInstitute.model.Location;
 import org.springframework.stereotype.Component;
 
@@ -65,6 +64,4 @@ public class BloodBankMapper {
                 .build();
         return simple;
     }
-
-
 }

@@ -49,4 +49,9 @@ public class UserController {
         var result = authService.changePassword(dto);
         return ResponseEntity.status(HttpStatus.OK).body(result.get());
     }
+
+    @GetMapping("/get-id-by-email/{email}")
+    public ResponseEntity<Long> getIdByEmail(@Valid @NotNull @PathVariable("email") final String email){
+        return ResponseEntity.status(HttpStatus.OK).body(authService.getIdByEmail(email));
+    }
 }

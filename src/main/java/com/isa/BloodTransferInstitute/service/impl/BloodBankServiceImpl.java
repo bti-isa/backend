@@ -1,21 +1,35 @@
 package com.isa.BloodTransferInstitute.service.impl;
 
 import com.isa.BloodTransferInstitute.dto.SearchDTO;
-import com.isa.BloodTransferInstitute.dto.bloodbank.NewBloodBankDTO;
-import com.isa.BloodTransferInstitute.dto.bloodbank.UpdateBloodBankDTO;
+import com.isa.BloodTransferInstitute.dto.bloodbank.*;
+import com.isa.BloodTransferInstitute.dto.user.admin.RegisteredDonorsDTO;
+import com.isa.BloodTransferInstitute.dto.user.patient.PatientDTO;
+import com.isa.BloodTransferInstitute.enums.BloodType;
 import com.isa.BloodTransferInstitute.exception.NotFoundException;
 import com.isa.BloodTransferInstitute.mappers.BloodBankMapper;
+import com.isa.BloodTransferInstitute.mappers.GetUserMapper;
+import com.isa.BloodTransferInstitute.mappers.PatientMapper;
 import com.isa.BloodTransferInstitute.model.BloodBank;
+import com.isa.BloodTransferInstitute.model.BloodUnit;
+import com.isa.BloodTransferInstitute.model.User;
 import com.isa.BloodTransferInstitute.repository.BloodBankRepository;
+import com.isa.BloodTransferInstitute.repository.BloodUnitRepository;
+import com.isa.BloodTransferInstitute.repository.UserRepository;
 import com.isa.BloodTransferInstitute.service.BloodBankService;
 
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
+
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Tuple;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -32,6 +46,8 @@ import lombok.RequiredArgsConstructor;
 public class BloodBankServiceImpl implements BloodBankService {
 
 	private final BloodBankRepository bloodBankRepository;
+	private final UserRepository userRepository;
+	private final BloodUnitRepository bloodUnitRepository;
 	private final EntityManager em;
 	private static final String NAME = "name";
 	private static final String ADDRESS = "address";
@@ -114,5 +130,63 @@ public class BloodBankServiceImpl implements BloodBankService {
 		System.out.println("REMOVED");
 	}
 
+	public List<RegisteredDonorsDTO> getRegisteredDonors(Long id) {
+		List<Tuple> queryResult = new ArrayList<>(userRepository.getRegisteredDonorsForBloodBank(id));
+		if(queryResult.isEmpty())
+			throw new NotFoundException();
 
+		List<RegisteredDonorsDTO> returnList = new ArrayList<>();
+		for(User user : userRepository.findAll()){
+			for(var it : convertFromQueryResult(queryResult)){
+				if(it.getPatientId().equals(user.getId())){
+					var temp = PatientMapper.EntityToPatientDTO(user);
+					temp.setDonateDate(it.getAppointmentDate());
+					returnList.add(temp);
+				}
+			}
+		}
+		return  returnList;
+	}
+
+	private List<DonorsQueryDTO> convertFromQueryResult(List<Tuple> queryResult){
+		List<DonorsQueryDTO> converted = queryResult.stream()
+				.map(t -> new DonorsQueryDTO(
+						t.get(0, Long.class),
+						t.get(1, LocalDateTime.class)
+				))
+				.collect(Collectors.toList());
+
+		return converted;
+	}
+
+	@Override
+	public Long getByAdminId(String email) {
+		return userRepository.getBloodBankByUserId(email);
+	}
+
+	@Override
+	public List<BloodUnitDTO> getBloodUnits(Long id) {
+		var result = new ArrayList<>(bloodUnitRepository.getBloodUnits(id));
+		return convertFromUnitQueryResult(result);
+	}
+
+	private List<BloodUnitDTO> convertFromUnitQueryResult(List<Tuple> queryResult){
+		List<BloodUnitWTFDTO> converted = queryResult.stream()
+				.map(t -> new BloodUnitWTFDTO(
+						t.get(0, BigInteger.class).longValue(),
+						t.get(1, Integer.class),
+						t.get(2, BigDecimal.class).intValue()
+				))
+				.collect(Collectors.toList());
+
+		return getBloodTypes(converted);
+	}
+
+	private List<BloodUnitDTO> getBloodTypes(List<BloodUnitWTFDTO> list){
+		List<BloodUnitDTO> retList = new ArrayList<>();
+		for(var it: list){
+			retList.add(new BloodUnitDTO(it.getId(),BloodType.values()[it.getBloodType()],it.getQuantity()));
+		}
+		return  retList;
+	}
 }

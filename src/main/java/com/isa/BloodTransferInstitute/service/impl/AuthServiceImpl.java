@@ -64,4 +64,13 @@ public class AuthServiceImpl implements AuthService, UserDetailsService {
         return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), user.isEnabled(), !user.isAccountExpired(), !user.isCredentialsExpired(), !user.isAccountLocked(), authorities);
     }
 
+    @Override
+    public Long getIdByEmail(String email) {
+        var user = userRepository.findByUsername(email);
+        if(user == null)
+            throw new NotFoundException();
+
+        return  user.getId();
+    }
+
 }

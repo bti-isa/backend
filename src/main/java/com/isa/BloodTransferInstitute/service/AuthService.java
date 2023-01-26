@@ -12,4 +12,6 @@ public interface AuthService {
     Optional<Boolean> changePassword(ChangePasswordDTO dto);
 
     UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException;
+
+    Long getIdByEmail(String email);
 }
