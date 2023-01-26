@@ -37,6 +37,9 @@ import org.springframework.stereotype.Service;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -54,11 +57,13 @@ public class AppointmentServiceImpl implements AppointmentService {
 	private EmailSenderService emailSenderService;
 
 	@Override
+	@Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.SERIALIZABLE, timeout = 5, readOnly = false)
 	public Appointment create(final NewAppointmentDTO appointmentDTO) {
 		User admin = userRepository.findByUsername(appointmentDTO.getUsername());
-		if(appointmentValidation(appointmentDTO, admin)) {
+		if(!appointmentValidation(appointmentDTO, admin)){
 			throw new  CreateAppointmentException();
 		}
+
 		BloodBank bloodBank = bloodBankRepository.findById(admin.getBloodBank().getId()).orElseThrow(NotFoundException::new);
 		return appointmentRepository.save(AppointmentMapper.NewDTOToEntity(appointmentDTO, bloodBank));
 	}
@@ -68,6 +73,13 @@ public class AppointmentServiceImpl implements AppointmentService {
 		notHappenedAppointments.addAll(appointmentRepository.findByStatus(AppointmentStatus.SCHEDULED));
 		return notHappenedAppointments.stream()
 			.anyMatch(appointment -> Objects.equals(admin.getBloodBank().getId(), appointment.getBloodBank().getId()) && appointmentDTO.getDateTime().isEqual(appointment.getDateTime()));
+//		var appointments = appointmentRepository.findByBloodBankId(admin.getBloodBank().getId());
+//		for(var appointment : appointments){
+//			if(appointment.getDateTime().isEqual(appointmentDTO.getDateTime())){
+//				return false;
+//			}
+//		}
+//		return true;
 	}
 
 	@Override
