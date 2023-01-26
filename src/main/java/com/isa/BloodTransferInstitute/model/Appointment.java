@@ -24,7 +24,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
-@Entity
+@Entity(name="appointments")
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder(toBuilder = true)

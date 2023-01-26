@@ -4,17 +4,16 @@ import com.isa.BloodTransferInstitute.enums.AppointmentStatus;
 import com.isa.BloodTransferInstitute.dto.appointment.NewAppointmentDTO;
 import com.isa.BloodTransferInstitute.dto.appointment.FinishedAppointmentDTO;
 import com.isa.BloodTransferInstitute.dto.appointment.ScheduleAppointmentDTO;
+import com.isa.BloodTransferInstitute.enums.BloodType;
 import com.isa.BloodTransferInstitute.enums.Role;
 import com.isa.BloodTransferInstitute.exception.*;
 import com.isa.BloodTransferInstitute.mappers.AppointmentMapper;
 import com.isa.BloodTransferInstitute.mappers.PollMapper;
 import com.isa.BloodTransferInstitute.model.Appointment;
 import com.isa.BloodTransferInstitute.model.BloodBank;
+import com.isa.BloodTransferInstitute.model.BloodUnit;
 import com.isa.BloodTransferInstitute.model.User;
-import com.isa.BloodTransferInstitute.repository.AppointmentRepository;
-import com.isa.BloodTransferInstitute.repository.BloodBankRepository;
-import com.isa.BloodTransferInstitute.repository.PollRepository;
-import com.isa.BloodTransferInstitute.repository.UserRepository;
+import com.isa.BloodTransferInstitute.repository.*;
 import com.isa.BloodTransferInstitute.service.AppointmentService;
 
 import java.time.LocalDateTime;
@@ -40,6 +39,9 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -49,6 +51,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 	private final BloodBankRepository bloodBankRepository;
 	private final UserRepository userRepository;
 	private final PollRepository pollRepository;
+	private final BloodUnitRepository bloodUnitRepository;
 
 	private final PatientService patientService;
 
@@ -56,11 +59,13 @@ public class AppointmentServiceImpl implements AppointmentService {
 	private EmailSenderService emailSenderService;
 
 	@Override
+	@Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.SERIALIZABLE, timeout = 5, readOnly = false)
 	public Appointment create(final NewAppointmentDTO appointmentDTO) {
 		User admin = userRepository.findByUsername(appointmentDTO.getUsername());
-		if(appointmentValidation(appointmentDTO, admin)) {
+		if(!appointmentValidation(appointmentDTO, admin)){
 			throw new  CreateAppointmentException();
 		}
+
 		BloodBank bloodBank = bloodBankRepository.findById(admin.getBloodBank().getId()).orElseThrow(NotFoundException::new);
 		return appointmentRepository.save(AppointmentMapper.NewDTOToEntity(appointmentDTO, bloodBank));
 	}
@@ -70,6 +75,13 @@ public class AppointmentServiceImpl implements AppointmentService {
 		notHappenedAppointments.addAll(appointmentRepository.findByStatus(AppointmentStatus.SCHEDULED));
 		return notHappenedAppointments.stream()
 			.anyMatch(appointment -> Objects.equals(admin.getBloodBank().getId(), appointment.getBloodBank().getId()) && appointmentDTO.getDateTime().isEqual(appointment.getDateTime()));
+//		var appointments = appointmentRepository.findByBloodBankId(admin.getBloodBank().getId());
+//		for(var appointment : appointments){
+//			if(appointment.getDateTime().isEqual(appointmentDTO.getDateTime())){
+//				return false;
+//			}
+//		}
+//		return true;
 	}
 
 	@Override
@@ -117,7 +129,49 @@ public class AppointmentServiceImpl implements AppointmentService {
 	@Override
 	public Appointment finish(final FinishedAppointmentDTO appointmentDTO) {
 		Appointment appointment = appointmentRepository.findById(appointmentDTO.getId()).orElseThrow(NotFoundException::new);
+		if(!handleEquipment(appointmentDTO.getEquipment(),appointment.getBloodBank().getId()))
+			throw new NoEquipmentException();
+
+		handleBloodUnits(appointmentDTO.getBloodQuantity(),appointment);
 		return appointmentRepository.save(AppointmentMapper.FinishDTOToEntity(appointmentDTO, appointment));
+	}
+
+	private boolean handleEquipment(Integer equipment, Long bloodBankId){
+		BloodBank bloodBank = bloodBankRepository.findById(bloodBankId).orElseThrow(NotFoundException::new);
+		if(bloodBank.getEquipment() < equipment)
+			return false;
+
+		bloodBank.setEquipment(bloodBank.getEquipment()-equipment);
+		bloodBankRepository.save(bloodBank);
+		return true;
+	}
+
+	private void handleBloodUnits(Integer bloodQuantity, Appointment appointment){
+		BloodType patientBloodType = appointment.getPatient().getBloodType();
+		var bloodBankId = appointment.getBloodBank().getId();
+		List<BloodUnit> bloodUnits = bloodUnitRepository.getByBankAndBloodType(bloodBankId,patientBloodType);
+
+		if(bloodUnits.isEmpty()) {
+			createNewBloodUnit(bloodQuantity, patientBloodType, bloodBankId);
+			return;
+		}
+
+		increaseBloodQuantity(bloodQuantity,bloodUnits,patientBloodType);
+	}
+
+	private void increaseBloodQuantity(Integer bloodQuaintity, List<BloodUnit> bloodUnits, BloodType patientBloodType){
+		for(BloodUnit unit: bloodUnits){
+			if(unit.getBloodType().equals(patientBloodType)){
+				unit.setQuantity(unit.getQuantity()+bloodQuaintity);
+				bloodUnitRepository.save(unit);
+			}
+		}
+	}
+
+	private void createNewBloodUnit(Integer bloodQuantity, BloodType patientBloodType, Long bloodBankId){
+		var newUnit = new BloodUnit(bloodQuantity,patientBloodType);
+		newUnit.setBloodBank(bloodBankRepository.findById(bloodBankId).get());
+		bloodUnitRepository.save(newUnit);
 	}
 
 	@Override

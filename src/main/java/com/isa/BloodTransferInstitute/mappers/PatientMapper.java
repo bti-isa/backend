@@ -1,6 +1,8 @@
 package com.isa.BloodTransferInstitute.mappers;
 
+import com.isa.BloodTransferInstitute.dto.user.admin.RegisteredDonorsDTO;
 import com.isa.BloodTransferInstitute.dto.user.patient.NewPatientDTO;
+import com.isa.BloodTransferInstitute.dto.user.patient.PatientDTO;
 import com.isa.BloodTransferInstitute.dto.user.patient.UpdatePatientDTO;
 import com.isa.BloodTransferInstitute.model.Address;
 import com.isa.BloodTransferInstitute.model.Location;
@@ -81,6 +83,21 @@ public class PatientMapper {
 			.address(updatedAddress)
 			.bloodType(dto.getBloodType())
 			.build();
+	}
+
+	public static RegisteredDonorsDTO EntityToPatientDTO(User user){
+		final var dto = RegisteredDonorsDTO.builder()
+				.id(user.getId())
+				.firstname(user.getFirstname())
+				.lastname(user.getLastname())
+				.username(user.getUsername())
+				.jmbg(user.getJmbg())
+				.gender(user.getGender())
+				.phoneNumber(user.getPhoneNumber())
+				.bloodType(user.getBloodType())
+				.build();
+
+		return dto;
 	}
 
 }

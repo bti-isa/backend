@@ -1,5 +1,6 @@
 package com.isa.BloodTransferInstitute.service;
 
+import com.isa.BloodTransferInstitute.dto.user.admin.AdminProfileUpdateDTO;
 import com.isa.BloodTransferInstitute.dto.user.admin.NewAdminDTO;
 import com.isa.BloodTransferInstitute.dto.user.admin.UpdateAdminDTO;
 import com.isa.BloodTransferInstitute.model.User;
@@ -12,4 +13,6 @@ public interface AdminService {
     User add(NewAdminDTO dto);
     List<User> getAll();
     Optional<User> getById(Long id);
+
+    Boolean adminProfileUpdate(AdminProfileUpdateDTO dto);
 }

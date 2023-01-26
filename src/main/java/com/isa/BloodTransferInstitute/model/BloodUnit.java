@@ -33,7 +33,7 @@ public class BloodUnit {
 	@Column(nullable = false, updatable = false, unique = true)
 	Long id;
 
-	@Column(nullable = false, unique = true)
+	@Column(nullable = false)
 	BloodType bloodType;
 
 	@Column(nullable = false)
@@ -42,4 +42,9 @@ public class BloodUnit {
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "bloodbank_id", referencedColumnName = "id")
 	BloodBank bloodBank;
+
+	public BloodUnit(Integer bloodQuantity, BloodType patientBloodType) {
+		bloodType = patientBloodType;
+		quantity = bloodQuantity;
+	}
 }
