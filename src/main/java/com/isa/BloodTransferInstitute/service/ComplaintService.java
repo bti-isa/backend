@@ -19,4 +19,6 @@ public interface ComplaintService {
     Complaint update(AnswerDTO dto);
     List<ComplaintDTO> getAllAnswered();
     List<ComplaintDTO> getAllByStatus(ComplaintStatus status);
+
+    void delete(Long id);
 }
