@@ -23,6 +23,6 @@ public interface BloodBankService {
 	List<BloodBank> getAll();
 	Page<BloodBank> getAllWithPage(Pageable page);
 	List<RegisteredDonorsDTO> getRegisteredDonors(Long id);
-	Long getByAdminId(Long id);
+	Long getByAdminId(String email);
 	List<BloodUnit> getBloodUnits(Long id);
 }

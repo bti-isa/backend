@@ -29,6 +29,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	@Query("SELECT u.id, a.dateTime FROM appointments a LEFT JOIN users u ON a.patient.id = u.id WHERE a.bloodBank.id = ?1 AND a.finished = 1 AND a.status = 2 AND u.enabled = 1")
 	Collection<Tuple> getRegisteredDonorsForBloodBank(Long bloodBankId);
 
-	@Query("SELECT u.bloodBank.id FROM users u WHERE u.id = ?1")
-	Long getBloodBankByUserId(Long id);
+	@Query("SELECT u.bloodBank.id FROM users u WHERE u.username = ?1")
+	Long getBloodBankByUserId(String email);
 }

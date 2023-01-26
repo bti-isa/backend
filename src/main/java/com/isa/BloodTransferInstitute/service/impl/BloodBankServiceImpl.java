@@ -154,8 +154,8 @@ public class BloodBankServiceImpl implements BloodBankService {
 	}
 
 	@Override
-	public Long getByAdminId(Long id) {
-		return userRepository.getBloodBankByUserId(id);
+	public Long getByAdminId(String email) {
+		return userRepository.getBloodBankByUserId(email);
 	}
 
 	@Override

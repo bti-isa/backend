@@ -101,20 +101,20 @@ public class BloodBankController {
 		return ResponseEntity.status(HttpStatus.OK).body(returnList);
 	}
 
-	@GetMapping("/registered-donors/{id}")
+	@GetMapping("/registered-donors/{email}")
 	@PreAuthorize("hasAnyAuthority('INSTITUTE_ADMIN')")
-	public ResponseEntity<List<RegisteredDonorsDTO>>getRegisteredDonors(@Valid @NotNull @PathVariable("id") final Long id){
-		Long bloodBankId = bloodBankService.getByAdminId(id);
+	public ResponseEntity<List<RegisteredDonorsDTO>>getRegisteredDonors(@Valid @NotNull @PathVariable("email") final String email){
+		Long bloodBankId = bloodBankService.getByAdminId(email);
 		if(bloodBankId == null){
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		}
 		return ResponseEntity.status(HttpStatus.OK).body(bloodBankService.getRegisteredDonors(bloodBankId));
 	}
 
-	@GetMapping("/get-by-admin/{id}")
+	@GetMapping("/get-by-admin/{email}")
 	@PreAuthorize("hasAnyAuthority('INSTITUTE_ADMIN')")
-	public ResponseEntity<BloodBankDTO> getByAdminId(@Valid @NotNull @PathVariable("id") final Long id){
-		Long bloodBankId = bloodBankService.getByAdminId(id);
+	public ResponseEntity<BloodBankDTO> getByAdminId(@Valid @NotNull @PathVariable("email") final String email){
+		Long bloodBankId = bloodBankService.getByAdminId(email);
 		if(bloodBankId == null){
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		}
