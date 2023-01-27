@@ -29,4 +29,5 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
 
 	@Query(value = "SELECT * FROM appointments a WHERE a.bloodbank_id = ?1 AND a.finished = 0", nativeQuery = true)
 	List<Appointment> getAllScheduledAppointmentsByBloodBank(Long bloodBankId);
+	List<Appointment> findByDateTimeAndStatus(LocalDateTime dateTime, AppointmentStatus status);
 }

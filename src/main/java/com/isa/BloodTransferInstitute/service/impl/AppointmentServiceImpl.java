@@ -71,17 +71,17 @@ public class AppointmentServiceImpl implements AppointmentService {
 	}
 
 	private boolean appointmentValidation(final NewAppointmentDTO appointmentDTO, final User admin) {
-		var notHappenedAppointments = appointmentRepository.findByStatus(AppointmentStatus.AVAILIBLE);
-		notHappenedAppointments.addAll(appointmentRepository.findByStatus(AppointmentStatus.SCHEDULED));
-		return notHappenedAppointments.stream()
-			.anyMatch(appointment -> Objects.equals(admin.getBloodBank().getId(), appointment.getBloodBank().getId()) && appointmentDTO.getDateTime().isEqual(appointment.getDateTime()));
-//		var appointments = appointmentRepository.findByBloodBankId(admin.getBloodBank().getId());
-//		for(var appointment : appointments){
-//			if(appointment.getDateTime().isEqual(appointmentDTO.getDateTime())){
-//				return false;
-//			}
-//		}
-//		return true;
+//		var notHappenedAppointments = appointmentRepository.findByStatus(AppointmentStatus.AVAILIBLE);
+//		notHappenedAppointments.addAll(appointmentRepository.findByStatus(AppointmentStatus.SCHEDULED));
+//		return notHappenedAppointments.stream()
+//			.anyMatch(appointment -> Objects.equals(admin.getBloodBank().getId(), appointment.getBloodBank().getId()) && appointmentDTO.getDateTime().isEqual(appointment.getDateTime()));
+		var appointments = appointmentRepository.findByBloodBankId(admin.getBloodBank().getId());
+		for(var appointment : appointments){
+			if(appointment.getDateTime().isEqual(appointmentDTO.getDateTime())){
+				return false;
+			}
+		}
+		return true;
 	}
 
 	@Override
@@ -127,8 +127,13 @@ public class AppointmentServiceImpl implements AppointmentService {
 		return appointmentRepository.save(appointment);
 	}
 	@Override
+	@Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.SERIALIZABLE, timeout = 5, readOnly = false)
 	public Appointment finish(final FinishedAppointmentDTO appointmentDTO) {
 		Appointment appointment = appointmentRepository.findById(appointmentDTO.getId()).orElseThrow(NotFoundException::new);
+		List<Appointment> appointments = appointmentRepository.findByDateTimeAndStatus(appointment.getDateTime(),AppointmentStatus.SCHEDULED);
+		if(appointments.size()!=1){
+			throw new FinishAppointmentException();
+		}
 		if(!handleEquipment(appointmentDTO.getEquipment(),appointment.getBloodBank().getId()))
 			throw new NoEquipmentException();
 

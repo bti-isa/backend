@@ -15,7 +15,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @ControllerAdvice
 public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
 
-	@ExceptionHandler(value = { NotFoundException.class, CreateAppointmentException.class, ScheduleException.class, UserHasNoRoleException.class, UsernameNotFoundException.class,MapException.class, ParameterStrategyException.class, CancelException.class, PastAppointmentException.class, PenaltyException.class })
+	@ExceptionHandler(value = { NotFoundException.class, CreateAppointmentException.class, ScheduleException.class, UserHasNoRoleException.class, UsernameNotFoundException.class,MapException.class, ParameterStrategyException.class,FinishAppointmentException.class, CancelException.class, PastAppointmentException.class, PenaltyException.class })
 	protected ResponseEntity<Object> handleException(BaseException ex, WebRequest request) {
 		String bodyOfResponse = ex.getMessage();
 		return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), ex.getStatus(), request);
